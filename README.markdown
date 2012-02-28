@@ -1,4 +1,8 @@
-# holman does dotfiles
+# kabturek does dotfiles too
+
+This is a fork of holmans great dotfiles repo http://github.com/holman/dotfiles
+with my configs
+original README follows
 
 ## dotfiles
 
