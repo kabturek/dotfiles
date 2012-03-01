@@ -1,0 +1,38 @@
+class PlaylistItemsController < ApplicationController
+    before_filter :get_playlist
+
+    def get_playlist
+        @playlist = Playlist.find(params[:playlist_id])
+    end
+
+    def create
+        video = Video.find(params[:video_id])
+        video_title = params[:video_title] ? params[:video_title] : video.title
+        @item = @playlist.playlist_items.build(:video_id => video.id, :video_title => video_title)
+        if @item.save
+            flash[:notice] = t(".video_added_to_playlist")
+        else
+            flash[:error] = t(".cant_add_video_to_playlist")
+        end
+        redirect_to :back
+    end
+
+    def destroy
+        playlist_item = PlaylistItem.find(params[:id])
+        playlist_item.destroy
+        flash[:notice] = t(".video_deleted_from_playlist")
+        redirect_to :back
+    end
+
+    ## still used when is is disabled and jq ui sortable isnt working
+    def move_up
+        playlist_item = PlaylistItem.find(params[:id])
+        playlist_item.move_higher
+        redirect_to :back
+    end
+    def move_down
+        playlist_item = PlaylistItem.find(params[:id])
+        playlist_item.move_lower
+        redirect_to :back
+    end
+end

@@ -1,0 +1,96 @@
+# encoding: UTF-8
+# Kontroler odpowiedzialny za przetworzenie i wysłanie wniosku o rejestrację danych do 
+# portalu.
+# W przypadku gdy użytkownik nie zakończy rejestracji poprawnie w bazie zostaje rekord
+# który należy usunąć. Do tego celu dodana jest reguła dla whenever czyszcząca bazę danych.
+class CrmApplication::RegistrationController < ApplicationController
+  layout 'guest'
+
+  before_filter :logged_in_restriction, :only => [:new]
+  before_filter :get_registration_from, :except => [:new, :confirmation]
+
+  # /GET
+  # Akcja wyświetla formularz z danymi potrzebnymi do rejestracji.
+  # Po wejściu na akcję new tworzony jest w bazie danych pusty wniosek rejestracyjny a do
+  # sesji zapisane zostaje jego id
+  def new
+    @registration_form = CrmApplication::Registration.new(params[:crm_application_registration])
+    @registration_form.representatives.build
+    @registration_form.save
+    session[:crm_application_registration_id] = @registration_form.id
+  end
+
+  # /GET
+  # Akcja wyświetla formularz edycji danych. 
+  def edit
+    @registration_form.correct_data
+    render :new
+  end
+
+  # /POST
+  # Akcja wyświetla podsumowanie wypełnionego wniosku o rejestrację. W przypadku gdy 
+  # wniosek jest prawidłowy wyświetlany jest formularz pozwalający poprawić dane.
+  # Transition display_data_confirmation waliduje obiekt registration_form przy zapisie
+  def confirm_data
+    @registration_form.assign_attributes(params[:crm_application_registration])
+    unless @registration_form.display_data_confirmation
+      render :new and return
+    end
+    session[:crm_registratiorn_form_id] = @registration_form.id
+  end
+
+  # /POST
+  # W tej akcji walidowane są trzy pozostałe elementy tj. captcha i akceptacja regulaminów
+  # W przypadku pozytywnej walidacji wniosek jest wysyłany.
+  def create
+    @registration_form.assign_attributes(params[:crm_application_registration])
+
+    captacha_result = verify_recaptcha(:model => @registration_form, :message => t("flashes.alert.incorrect_captcha"))
+    agreements_result = @registration_form.validate_agreements
+    unless captacha_result && agreements_result
+      render :confirm_data and return
+    end
+
+    @registration_form.submit
+    redirect_to thank_you_crm_application_registration_path
+  end
+
+  # /GET
+  def confirmation
+    # TODO do poprawki
+    unless CrmApplication::Registration.confirm_application(params[:token])
+      render 'already_activated_account' and return
+    end
+  end
+
+  # /GET
+  # Akcja wyświetla podziękowanie za rejestrację i usuwa niepotrzebny już wniosek z bazy.
+  def thank_you
+    @registration_form.destroy
+  end
+  
+  def remove_representative
+    if params[:id] != 'undefined'
+      representative = CrmApplication::Representative.find(params[:id])
+      representative.destroy if representative
+    end
+  end
+  
+  private
+  # Metoda znajduje wniosek o id ustawionym w sesji, a jeśli w sesji nie ma żadnego wniosku - tworzy 
+  # nowy. W przypadku gdy w sesji jest id wniosku, ale sam wniosek został usunięty 
+  # najprawdopodobniej mamy do czynienia z próbą wysłania po raz drugie tego samego wniosku.
+  def get_registration_from
+    if session[:crm_application_registration_id].present?
+      @registration_form = CrmApplication::Registration.find(session[:crm_application_registration_id])
+    else
+      @registration_form = CrmApplication::Registration.new(params[:crm_application_registration])
+      @registration_form.representatives.build
+      @registration_form.save
+      session[:crm_application_registration_id] ||= @registration_form.id
+    end
+  rescue ActiveRecord::RecordNotFound
+    session[:crm_application_registration_id] = nil
+    redirect_to new_crm_application_registration_path, :notice => t('flashes.notice.registration_refresh')
+  end
+end

@@ -1,0 +1,65 @@
+pl:
+  activerecord:
+    errors:
+      models:
+        crm_application/registration:
+          attributes:
+            company_name:
+              blank: "Nazwa nie może być pusta."
+            password:
+              blank: "Hasło nie może być puste."
+              confirmation: "Hasła nie zgadzają się ze sobą."
+            city:
+              blank: "Miasto nie może być puste."
+            phone:
+              blank: "Numer telefonu nie może być pusty."
+            post_code:
+              blank: "Kod pocztowy nie może być pusty."
+            street_name:
+              blank: "Ulica nie może być pusta."
+            street_number:
+              blank: "Numer domu nie może być pusty."
+            nip:
+              blank: "Numer NIP nie może być pusty."
+              not_a_number: "Numer NIP powinien składać się wyłącznie z cyfr."
+            regon:
+              blank: "Numer REGON nie może być pusty."
+              not_a_number: "Numer REGON powinien składać się wyłącznie z cyfr."
+            krs:
+              blank: "Numer KRS nie może być pusty."
+              not_a_number: "Numer KRS powinien składać się wyłącznie z cyfr."
+            user_email:
+              blank: "Adres email nie może być pusty."
+            regulations:
+              accepted: "Musisz zaakceptować regulamin serwisu."
+            agreement:
+              accepted: "Musisz wyrazić zgodę na przetwarzanie danych osobowych."
+  simple_form:
+    labels:
+      company:
+        company_name: 'Nazwa firmy'
+        street_name: 'Ulica'
+        name: 'Nazwa firmy'
+        password: 'Hasło'
+        password_confirmation: 'Potwierdź hasło'
+        city: 'Miasto'
+        phone: 'Telefon'
+        post_code: 'Kod pocztowy'
+        street: 'Ulica'
+        street_number: 'Nr domu'
+        flat_number: 'Nr lokalu'
+        nip: 'NIP'
+        regon: 'REGON'
+        krs: 'KRS'
+        email: 'Email'
+  documents:
+    status:
+      Uploaded: "Nieodebrane przez odbiorcę"
+      Downloaded: "Nieodebrane przez odbiorcę"
+      Accepted: "Odebrany"
+    history_type:
+      AcceptationStateSetAccepted: "Zaakceptowany"
+      AcceptationStateSetRejected: "Odrzucony"
+      DocumentDownloaded: "Pobrany"
+      DocumentUploaded: "Wysłany"
+      Archived: "Zarchiwizowany"

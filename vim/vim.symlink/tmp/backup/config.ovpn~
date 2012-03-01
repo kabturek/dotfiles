@@ -1,0 +1,14 @@
+remote nl1.vpnizer.com 443
+redirect-gateway def1
+resolv-retry infinite
+proto tcp-client
+cert client.crt
+key client.key
+persist-key
+persist-tun
+tls-client
+ca ca.crt
+comp-lzo
+dev tun
+nobind
+pull

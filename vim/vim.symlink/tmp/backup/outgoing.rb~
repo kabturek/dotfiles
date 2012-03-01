@@ -1,0 +1,15 @@
+# encoding: utf-8
+class Document::Outgoing < Document
+
+  # todo
+  def cancel
+    API_PROXY.cancel(uuid)
+  end
+
+  def date
+    @created_at
+  end
+  def company
+    @recipient
+  end
+end

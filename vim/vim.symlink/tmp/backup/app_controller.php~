@@ -1,0 +1,153 @@
+<?php
+/* SVN FILE: $Id: app_controller.php 383 2008-10-03 10:53:40Z k.rakowski $ */
+/**
+ * Short description for file.
+ *
+ * This file is application-wide controller file. You can put all
+ * application-wide controller-related methods here.
+ *
+ * PHP versions 4 and 5
+ *
+ * CakePHP(tm) :  Rapid Development Framework <http://www.cakephp.org/>
+ * Copyright 2005-2008, Cake Software Foundation, Inc.
+ *								1785 E. Sahara Avenue, Suite 490-204
+ *								Las Vegas, Nevada 89104
+ *
+ * Licensed under The MIT License
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @filesource
+ * @copyright		Copyright 2005-2008, Cake Software Foundation, Inc.
+ * @link				http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
+ * @package			cake
+ * @subpackage		cake.cake.libs.controller
+ * @since			CakePHP(tm) v 0.2.9
+ * @version			$Revision: 7296 $
+ * @modifiedby		$LastChangedBy: gwoo $
+ * @lastmodified	$Date: 2008-06-27 02:09:03 -0700 (Fri, 27 Jun 2008) $
+ * @license			http://www.opensource.org/licenses/mit-license.php The MIT License
+ */
+/**
+ * This is a placeholder class.
+ * Create the same file in app/app_controller.php
+ *
+ * Add your application-wide methods in the class below, your controllers
+ * will inherit them.
+ *
+ * @package		cake
+ * @subpackage	cake.cake.libs.controller
+ */
+//include_once("synchro-test/mainSynch.php");
+class AppController extends Controller {
+	
+	var $helpers = array('Html', 'Javascript', 'Form','Ajax', 'Image', 'Text', 'Time');
+	var $components = array('RequestHandler', 'Auth', 'Cookie', 'Session');
+	
+	function beforeRender() {
+        /* ustawianie tytulu stron */
+	    if(isset($this->pageTitle) && !empty($this->pageTitle)) {
+	        $this->pageTitle = $this->pageTitle;
+	    } else {
+	        $this->pageTitle = Configure::read('Page.title');
+	    }
+        
+    // pokaz selecta z wyborem sklepu za pierwszym razem
+    $show_select = true;
+    // sprawdz cookie
+    if($this->Cookie->read('showed_shop_select')){
+      $show_select = false;
+    }
+    // sprawdz sesje
+    if($this->Session->check('showed_shop_select')){
+      $show_select = false;
+    }
+
+    $this->set('show_select', $show_select);
+    if($show_select){
+      $this->loadModel('Shop');
+      $this->set('shops', $this->Shop->find('list', array('order' => 'Shop.name ASC')));
+      $this->Cookie->write('showed_shop_select', 1);
+      $this->Session->write('showed_shop_select', 1);
+    }
+        
+	}
+	
+	function beforeFilter()
+	{
+        /* BugFix
+         * Przekierowanie na odpowiednia strone po zalogowaniu
+         * @author Wojciech Ciołko
+         * @modified 20.02.2009
+         */
+        $this->Auth->loginRedirect = array('controller' => 'accounts', 'action' => 'index');
+	    
+		/* zaladowanie odpowiedniego layoutu */
+
+		if ((isset($this->params['admin']) AND $this->params['admin'] == 1) OR (rtrim($this->here,'/') == '/admin'))
+		{
+
+			$this->layout = 'admin';
+			/* uwaga - parametry autoryzacji dla admina nie sa tutaj ustawiane, bo sa standardowe dla komponentu Auth */
+			/* wyglada na to, ze panel administracyjny jest z gory dostepny jedynie dla zalogowanych uzytkownikow */
+				
+		}
+		elseif ((rtrim($this->here,'/') == '/users/logout') OR (rtrim($this->here,'/') == '/users/login'))
+		{
+			$this->Auth->allow();
+			$this->layout = 'admin';
+			/* TODO: moze to przerzucic wyzej? */
+		} else {
+			/* inne parametry autoryzacji dla Customer */
+			$this->Auth->userModel = 'Customer';
+			$this->Auth->fields = array(
+				'username' => 'login',
+				'password' => 'password'
+				);
+			$this->Auth->logoutRedirect = '/';
+			if (!empty($_SERVER['HTTP_REFERER']))
+			{
+				//$this->Auth->autoRedirect = false; 
+			}
+			
+			
+				/* pozwolenia _dla_uzytkownikow_ w zaleznosci od kontrolera (komponent to glupio definiuje, wiec nie da sie inaczej) */
+				/* TODO: sprawdzic, czy dziala */
+				$this->Auth->deny();
+				switch($this->params['controller'])
+				{
+					
+					case 'customers':
+						$this->Auth->allow('edit_password_code', 'reset_password', /*'edit_password',??*/ 'ajax_login');
+					break;
+					
+					
+					case 'infopages':
+                        $this->Auth->allow('index', 'view', 'send', 'confirm');
+                    break;
+					case 'newsitems':
+					case 'products':
+					case 'gift_products':
+						$this->Auth->allow('index', 'view');
+					break;
+					
+					case 'catalogues':
+					case 'gift_catalogues':
+					case 'pages':
+					case 'links':
+						$this->Auth->allow('*');
+					break;
+					
+					case 'register_forms':
+					case 'register_customers':
+					case 'subscriptions':
+						$this->Auth->allow('add', 'confirm');
+					break;
+				}
+		}
+		
+		$this->set('userId', $this->Auth->user('id'));
+		$this->set('userLogin', $this->Auth->user('login'));
+	}
+
+}
+?>

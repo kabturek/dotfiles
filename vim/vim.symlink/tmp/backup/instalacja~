@@ -1,0 +1,2 @@
+PostgreSQL, PostGIS, GEOS, Proj
+If you need to build and install from source, you can download PostGIS from http://www.postgis.org/ and review the instructions in the documentation section there. You will first need to build and install PostgreSQL (http://www.postgresql.org/), GEOS (http://geos.osgeo.org/) and Proj (http://proj.osgeo.org/).

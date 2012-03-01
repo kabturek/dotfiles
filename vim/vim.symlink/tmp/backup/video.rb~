@@ -1,0 +1,72 @@
+class Video < ActiveRecord::Base
+
+    before_validation :prepare_source_file
+    after_save :delete_disk_file
+
+    belongs_to :director
+    # if you want to get back to encoding the videos to flv in ruby
+    # use :processors => "delay_encoding" to use delayed_job processor that
+    # encodes the videos and creates thumbnail 
+    has_attached_file :source,
+        :styles => { :small    => '36x36#',
+            :medium   => '72x72#',
+            :large    => '500x340#' },
+        :processors => [:video_thumbnail ], # we now use only the video thumbnailer as we want flv files
+        :path => ':rails_root/public/:class/:id/:style.:extension',
+        :url => '/:class/:id/:style.:extension'
+
+
+    has_many :playlist_items, :order => "position", :dependent => :destroy
+    has_many :playlists, :through => :playlist_items, :order => 'playlists_items.position'
+
+   # validates_attachment_presence :source, :message => :attachment_presence
+    validates_attachment_content_type :source, :content_type => ['video/x-flv', 'video/mp4'], :message => :attachment_type
+
+    validates_presence_of :title
+
+    @@per_page = 10
+    cattr_reader :per_page
+    @delete_file = false
+    attr_accessor :existing_source_filename, :delete_file
+
+    def duration=(new_duration)
+        write_attribute :duration, new_duration
+    end
+
+    def duration
+        seconds = read_attribute :duration
+        Time.at(seconds).gmtime.strftime('%R:%S')
+    end
+
+    def self.default_dimension
+        '438x356'
+    end
+
+    def self.flvtool2_binary
+        'flvtool2'
+    end
+    def self.upload_dir
+        RAILS_ROOT + "/tmp/uploads/"
+    end
+
+    def self.existing_files
+        Dir.chdir(upload_dir ){
+            files = Dir.glob("*")
+        }
+    end
+
+    def to_s
+        self.title
+    end
+    private
+    def prepare_source_file
+        if !source.file? && !existing_source_filename.blank?
+            self.source = File.new(Video.upload_dir + self.existing_source_filename)
+            self.delete_file = true
+        end
+        true
+    end
+    def delete_disk_file
+        File.delete(Video.upload_dir + self.existing_source_filename) if self.delete_file
+    end
+end

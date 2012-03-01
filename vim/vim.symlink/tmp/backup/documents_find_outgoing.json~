@@ -1,0 +1,40 @@
+
+{
+  "Page": 1,
+  "TotalPages": 1,
+  "Total": 2,
+  "Data": [
+    {
+      "UUID": "38373938-3439-3131-3535-00000023213",
+      "Name": "Przykladowy dokument",
+      "Size": "123323",
+      "SenderUUID": "3833938-3439-3131-3535-238989898",
+      "SenderNIP": "10930-23-99923-3",
+      "RecipientUUID": "38373938-3439-3131-3535-99999999",
+      "RecipientNIP": "3232-323-3323",
+      "DownloadedByForte": true,
+      "Archived": false,
+      "Status": "Accepted",
+      "History": [
+        {
+          "CreatedOn": "2011-11-02T01:00:00+01:00",
+          "CreatedBy": "<login>",
+          "CreatorType": "Recipient",
+          "Type": "AcceptationStateSent" 
+        },
+        {
+          "CreatedOn": "2011-11-02T01:00:00+01:00",
+          "CreatedBy": "<login>",
+          "CreatorType": "Sender | Recipient | System",
+          "Type": "DocumentDownloaded" 
+        },
+        {
+          "CreatedOn": "2011-11-01T00:12:00+01:00",
+          "CreatedBy": "<login>",
+          "CreatorType": "Sender | Recipient | System",
+          "Type": "DocumentUploaded" 
+        }
+      ]
+    }
+  ]
+}

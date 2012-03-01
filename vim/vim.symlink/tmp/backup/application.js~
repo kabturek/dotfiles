@@ -1,0 +1,51 @@
+// This is a manifest file that'll be compiled into including all the files listed below.
+// Add new JavaScript/Coffee code in separate files in this directory and they'll automatically
+// be included in the compiled file accessible from http://example.com/assets/application.js
+// It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
+// the compiled file.
+//
+//= require jquery
+//= require jquery_ujs
+//= require jquery-ui
+//= require plugins
+//= require script
+//= require contractors
+//= require jquery.validate.min
+//= require libs/modernizr-2.0.6.min
+//= require registration_form
+//= require ui.achtung
+//= require application
+//= require swfobject
+//= require jquery.uploadify.v2.1.4.min
+//= require jquery.maskedinput.js
+//= require jquery.forcenumeric.js
+//= require json2.js
+//= require companies.js
+
+$(function() {
+    $('a.question').simpletooltip({
+        click: true,
+        hideOnLeave: false
+    });
+    $(".numberinput").forceNumeric();
+
+    $("#file").change(function() {
+        var ext = $('#file').val().split('.').pop().toLowerCase();
+        if(ext != 'csv') {
+            alert('Tylko pliki csv!');
+        }
+        else {
+            $(this).parents('form').submit();
+        }
+    });
+
+    $('.ico-import').live('click', function(e) {
+        e.preventDefault();
+        if(jQuery.browser.msie == true){
+          $("#send-csv-form").toggle("slow");
+        } else {
+          $("#file").click();
+        }
+    })
+
+});

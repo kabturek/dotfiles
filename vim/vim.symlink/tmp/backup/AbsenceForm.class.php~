@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * Absence form.
+ *
+ * @package    ptclean
+ * @subpackage form
+ * @author     Marcin Domański <marcin+ptclean@kabturek.info>
+ * @version    SVN: $Id: sfDoctrineFormTemplate.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
+ */
+class AbsenceForm extends BaseAbsenceForm
+{
+  public function configure()
+  {
+    unset($this['created_at'], $this['updated_at']);
+    $this->widgetSchema['date_start'] = new sfWidgetFormDatePicker();
+    $this->widgetSchema['date_end'] = new sfWidgetFormDatePicker();
+    $this->widgetSchema->setHelp('rate','Number of days (you can use 0.2, 0.5 or 2.5 etc)');
+    $this->widgetSchema->setHelp('date_end',"Empty if one day or less");
+    $this->widgetSchema['employee_id'] = new sfWidgetFormDoctrineChoice(array(
+      'model' => 'Employee',
+      'query' => Doctrine::getTable('Employee')->getCurentEmployeesQuery(),
+      'order_by' => array('last_name', 'ASC'),
+      'add_empty' => true
+    ));
+    $this->widgetSchema['employee_id']->setOption('order_by', 'last_name ASC, first_name ASC');
+  }
+  public function hideEmployee(){
+    $this->widgetSchema['employee_id'] = new sfWidgetFormInputHidden();
+  }
+  public function setDefault($field, $value){
+    if($field == 'employee_id'){
+      $this->hideEmployee();
+    }
+    return parent::setDefault($field, $value);
+  }
+}

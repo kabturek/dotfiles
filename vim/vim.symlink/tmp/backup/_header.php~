@@ -1,0 +1,106 @@
+<div id="nav_top">        
+    <div class="container_24">
+        <div class="grid_24 alpha omega">
+            <ul class="navi main">
+                <li>
+                    <?php echo link_to(image_tag('nav_top-home.gif'), '@homepage'); ?>
+                </li>
+
+                <?php if ($sf_user->isAuthenticated()): ?>
+                    <?php if ($sf_user->hasCredential('recruit')): ?>
+                        <li>
+                            <?php echo link_to(__('New Candidate'), 'candidate/new'); ?>
+                        </li>
+                    <?php endif; ?>
+                    <?php if ($sf_user->hasCredential('recruit')): ?>
+                      <li>
+                          <?php echo link_to(__('Employees'), 'employee/index'); ?>
+                          <ul>
+                            <li>
+                              <?php echo link_to(__('Search all'), 'employee/search'); ?>
+                            </li>
+                            <li>
+                              <?php echo link_to(__('Candidates'), 'employee/index?current_stage=2'); ?>
+                            </li>
+                            <li>
+                              <?php echo link_to(__('Candidates to interview'), 'employee/index?current_stage=3'); ?>
+                            </li>
+                            <li>
+                              <?php echo link_to(__('Candidates to theoretical training'), 'employee/index?current_stage=4'); ?>
+                            </li>
+                            <li>
+                              <?php echo link_to(__('Candidates during trial period'), 'employee/index?current_stage=5'); ?>
+                            </li>
+                            <li>
+                              <?php echo link_to(__('Current Employees'), 'employee/index?current_stage=6'); ?>
+                            </li>
+                          </ul>
+                      </li>
+                    <?php endif;?>
+                      <li>
+                          <?php echo link_to(__('Messages') . " (". $sf_user->hasNewMessages() ." new)", 'messages/index', array('title' => 'Inbox')); ?>
+                          <ul>
+                            <li>
+                                <?php echo link_to(__('Inbox') , 'messages/index', array('title' => 'Inbox')); ?>
+                            </li>
+                            <?php if ($sf_user->hasCredential('recruit')): ?>
+                                <li>
+                                    <?php echo link_to(__('Create New'), 'message/new'); ?>
+                                </li>
+                                <li>
+                                    <?php echo link_to(__('Sent'), 'message/index'); ?>
+                                </li>
+                            <?php endif;?>
+                          </ul>
+                      </li>
+                    <?php if($sf_user->getEmployee()): ?>
+                      <li>
+                          <?php echo link_to(__('Tests') . " (". $sf_user->hasNewTests() .")", 'default/tests'); ?>
+                      </li>
+                      <li>
+                          <?php echo link_to(__('Materials') . " (". $sf_user->hasNewMaterials() . " new)", 'document/index'); ?>
+                      </li>
+                      <li>
+                          <?php echo link_to(__('Profile'), 'default/profile'); ?>
+                          <ul>
+                            <li>
+                              <?php echo link_to(__('History of absenteeism'), 'default/absence'); ?>
+                            </li>
+                          </ul>
+                      </li>
+                    <?php endif;?>
+                    <?php if ($sf_user->hasCredential('recruit')): ?>
+                        <li>
+                            <a href="/backend.php"><?php echo __('Administration')?></a>
+                        </li>
+                    <?php endif; ?>
+                <?php endif; ?>
+
+                <li class="secondary">
+                    <?php if ($sf_user->isAuthenticated()): ?>
+                      <?php if ($sf_user->hasNewMessages()): ?>
+                          <?php echo link_to(image_tag('poczta_off.gif'), 'messages/index'); ?>
+                      <?php endif; ?>
+                    <?php endif; ?>
+                    
+                    <?php if ($sf_user->isAuthenticated()): ?>
+                        <a title="" href="#"><?php echo $sf_user->getUsername(); ?></a>
+                        <?php echo link_to(image_tag('login.png'), '@sf_guard_signout'); ?>
+                    <?php else: ?>
+                        <?php echo link_to(image_tag('login.png'), '@sf_guard_signin'); ?>
+                    <?php endif; ?>
+                </li>
+                <li class="secondary">
+                    <?php
+                    if ($sf_user->getCulture() == 'en') {
+                        echo link_to('pl', 'default/set_culture?language=pl', array('title' => 'Switch language to Polish'));
+                    } else {
+                        echo link_to('en', 'default/set_culture?language=en', array('title' => 'Switch language to English'));
+                    }
+                    ?>
+                </li>
+            </ul>
+        </div><!--end grid_24-->
+    </div><!--end container_24-->
+</div>
+<div class="clear"></div>

@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+require 'test/unit'
+require_relative 'test_helper'
+require 'conways'
+
+include Test::Unit
+
+class CellTest < TestCase
+  def setup
+    cell = Cell.new(true)
+  end
+  def cell_lives_when_alive_with_2_neighbors
+    cell.neighbors = 2
+    cell.next!
+    assert cell.alive?
+  end
+  def cell_lives_when_alive_with_3_neighbors
+    cell.neighbors = 3
+    cell.next!
+    assert cell.alive?
+  end
+  def cell_dies_when_
+end
+  

@@ -1,0 +1,47 @@
+jQuery(document).ready(function($){
+  var list = $("#unassociated_message_recipients_list");
+  list.parent().parent().append('<div id="recipients_filter"><div class="double_list_label">Filters</div></div>');
+  var recipients_filter = $("#recipients_filter");
+  //fill stages
+  $.getJSON('/index.php/employee/stages', function(data) {
+    var items = [];
+
+    $.each(data, function(key, val) {
+      items.push('<option value="' + key + '">' + val + '</option>');
+    });
+
+    $('<select/>', {
+      'id': 'stages_filter',
+      'class': 'recipients_filters',
+      'name' : 'filter_stages',
+      html: items.join('')
+    }).appendTo(recipients_filter);
+  });
+  //fill positions
+  $.getJSON('/index.php/employee/positions', function(data) {
+    var items = [];
+
+    $.each(data, function(key, val) {
+      items.push('<option value="' + key + '">' + val + '</option>');
+    });
+
+    $('<select/>', {
+      'id': 'positions_filter',
+      'class': 'recipients_filters',
+      'name' : 'filter_postions',
+      html: items.join('')
+    }).appendTo(recipients_filter);
+  });
+  $(".recipients_filters").live('change', function(){
+    var get_data = {
+      position_id : $("#positions_filter").val(),
+      stage : $("#stages_filter").val()
+    }
+    $.get('/index.php/employee/filter_select', get_data, function(data){
+      list.html(data);
+
+    });
+
+  });
+
+});

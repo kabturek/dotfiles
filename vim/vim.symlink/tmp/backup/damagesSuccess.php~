@@ -1,0 +1,48 @@
+<?php use_helper('Text'); ?>
+<div id="sf_admin_container">
+<?php include_partial('employee', array('employee' => $employee)); ?>
+<h1>Damages</h1>
+<table>
+  <tr>
+    <th>
+      <?php echo __('Date'); ?>
+    </th>
+    <th>
+      <?php echo __('Address'); ?>
+    </th>
+    <th>
+      <?php echo __('Details'); ?>
+    </th>
+    <th>
+      <?php echo __('Cost'); ?>
+    </th>
+      <th>
+        Actions
+      </th>
+  </tr>
+<?php foreach($damages as $damage): ?>
+  <tr>
+    <td>
+      <?php echo $damage->date; ?>
+    </td>
+    <td>
+      <?php echo $damage->address; ?>
+    </td>
+    <td>
+      <?php echo truncate_text($damage->details); ?>
+    </td>
+    <td>
+      <?php echo $damage->cost; ?>
+    </td>
+    <td>
+    <?php if(isset($sf_user) && $sf_user->hasCredential('recruit')): ?>
+      <?php echo link_to('Edit', 'employee_damage/edit?id='. $damage->id); ?>
+    <?php endif;?>
+      <?php echo link_to('Show', 'employee_damage/show?id='. $damage->id); ?>
+    </td>
+  </tr>
+<?php endforeach; ?>
+</table>
+<?php echo link_to('Add new damage', 'employee_damage/new?employee_id='. $employee->id); ?>
+
+</div>

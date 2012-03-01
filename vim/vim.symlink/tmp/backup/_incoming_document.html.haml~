@@ -1,0 +1,14 @@
+%tr
+  %td.select
+    %input{:type => 'checkbox'}
+  %td
+    = incoming_document.sent_date
+  %td
+    = incoming_document.senderr
+  %td
+    = incoming_document.name
+  %td
+    = incoming_document.size
+  %td
+    %a opcje
+

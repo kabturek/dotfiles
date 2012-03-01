@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+<xliff version="1.0">
+    <file orginal="global" source-language="en_US" datatype="plaintext">
+        <body>
+            <trans-unit>
+                <source>Forgot your password?</source>
+                <target>Zapomniałeś hasła?</target>
+            </trans-unit>
+            <trans-unit>
+                <source>sign in</source>
+                <target>Zaloguj</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Username</source>
+                <target>Login</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Password</source>
+                <target>Hasło</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Remember</source>
+                <target>Zapamiętaj mnie</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Login form</source>
+                <target>Formularz logowania</target>
+            </trans-unit>
+            <trans-unit>
+                <source>You don't have the required permission to access this page.</source>
+                <target>Nie masz wystarczających uprawnień aby zobaczyć tę stronę.</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Required.</source>
+                <target>Pole wymagane</target>
+            </trans-unit>
+            <trans-unit>
+                <source>The username and/or password is invalid.</source>
+                <target>Login i/lub hasło jest niepoprawne</target>
+            </trans-unit>
+            <trans-unit>
+                <source>New Password</source>
+                <target>Nowe hasło</target>
+            </trans-unit>
+            <trans-unit>
+                <source>New Password Again</source>
+                <target>Powtórz nowe hasło</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Actual Password</source>
+                <target>Aktualne hasło</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

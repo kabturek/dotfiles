@@ -1,0 +1,141 @@
+<?php use_helper('I18N', 'Date') ?>
+<script type="text/javascript">
+jQuery(document).ready(function($){
+  var colNames = [];
+  colNames.push("User"); 
+  colNames.push("Position"); 
+  colNames.push("Stage"); 
+  colNames.push("Appr."); 
+  colNames.push("Int."); 
+  colNames.push("First name"); 
+  colNames.push("Last name"); 
+  colNames.push("E-mail address"); 
+  colNames.push("Entry date"); 
+          colNames.push('<?php echo __('Actions', array(), 'sf_admin') ?>');
+
+var colModel = [];
+  colModel.push( {name: 'User', index:'User' , width: 120, sortable: false, search: false}); 
+  colModel.push( {name: 'Position', index:'category_id' , width: 120, sortable: false, search: true, stype: 'select',
+    searchoptions: {
+      value: <?php echo json_encode(Doctrine::getTable('Category')->getForSelect()); ?>
+    }
+  }); 
+  colModel.push( {name: 'current_stage', index:'current_stage' , width: 50, sortable: true, search: true}); 
+  colModel.push( {name: 'approved', index:'approved' , width: 45, sortable: true, search: true, stype: 'select',
+    editoptions:{value:" : ; 1:Yes; 0: No"}
+  }); 
+  colModel.push( {name: 'interview_approved', index:'interview_approved' , width: 35, sortable: true, search: true, stype: 'select',
+    editoptions:{value:" : ; 1:Yes; 0: No"}
+  }); 
+  colModel.push( {name: 'first_name', index:'first_name' , width: 120, sortable: true, search: true}); 
+  colModel.push( {name: 'last_name', index:'last_name' , width: 120, sortable: true, search: true}); 
+  colModel.push( {name: 'email_address', index:'email_address' , width: 120, sortable: true, search: true}); 
+  colModel.push( {name: 'entry_date', index:'entry_date' , width: 150, sortable: true, search: false}); 
+          colModel.push( {name: 'actions', sortable : false, search: false});
+
+jQuery("#list").jqGrid({
+  url:'<?php echo url_for("@employee"); ?>',
+	datatype: "json",
+  prmNames: {page:'page',rows:'rows', sort: 'sort', order: 'sort_type', search:'_search', nd:'nd', id:'id', oper:'oper', editoper:'edit', addoper:'add', deloper:'del', subgridid:'id', npage: null, totalrows:'totalrows'},
+  colNames: colNames,
+  colModel: colModel,
+  postData:{
+<?php if($sf_request->getParameter('current_stage')): ?>
+    current_stage: <?php echo $sf_request->getParameter('current_stage'); ?>
+<?php endif;?>
+      },
+  rowNum:10,
+  height: '500',
+  rowList:[10,20,30],
+  pager: '#pager',
+  sortname: 'id',
+  viewrecords: true,
+  sortorder: "desc",
+  multiselect: true,
+  forceFit : true
+
+});
+jQuery("#list").jqGrid('navGrid','#pager',{edit:false,add:false,del:false,search:false});
+jQuery("#list").jqGrid('filterToolbar');
+
+                jQuery("#t_list").prepend("<input type='button' value='Clear filters' id='clrFilter' />");
+                jQuery("#t_list").prepend("<input type='button' value='Reload' id='rfshFilter' />");
+                jQuery("#t_list").prepend("<input type='button' value='Add tests' id='batch_tests' />");
+                jQuery("#t_list").prepend("<input type='button' value='Add materials' id='batch_materials' />");
+                jQuery("#clrFilter","#t_list").click(function(){ grid[0].clearToolbar(); });
+                jQuery("#rfshFilter","#t_list").click(function(){ jQuery("#list").trigger("reloadGrid") });
+
+                jQuery("#batch_tests").click( function() {
+                    var s = jQuery("#list").jqGrid('getGridParam','selarrrow');
+                    if(!s.length){
+                      alert("Select at least one Employee");
+                      return false;
+                    }
+
+                    $.ajax({
+                        type: "get",
+                        url: '<?php echo url_for("employee/batch_tests"); ?>',
+                        data: {ids: s},
+                        dataType: "text",
+                        success: function(data) {
+                            jQuery("#dialog-confirm").dialog("destroy");
+                            jQuery("#dialog-confirm").html(data);
+                            jQuery("#dialog-confirm").dialog({
+                                title: "Add tests to selected Employees",
+                                modal: true
+                            });
+                        }
+                    });
+                });
+                jQuery("#batch_materials").click( function() {
+                    var s = jQuery("#list").jqGrid('getGridParam','selarrrow');
+
+                    if(!s.length){
+                      alert("Select at least one Employee");
+                      return false;
+                    }
+                    $.ajax({
+                        type: "get",
+                        url: '<?php echo url_for("employee/batch_materials"); ?>',
+                        data: {ids: s},
+                        dataType: "text",
+                        success: function(data) {
+                            jQuery("#dialog-confirm").dialog("destroy");
+                            jQuery("#dialog-confirm").html(data);
+                            jQuery("#dialog-confirm").dialog({
+                                title: "Add materials to selected Employees",
+                                modal: true
+                            });
+                        }
+                    });
+                });
+            datePick = function(elem)
+            {
+                jQuery(elem).datepicker();
+            }
+
+
+<?php if($sf_request->getParameter('current_stage')): ?>
+jQuery("input#gs_current_stage").val("<?php echo $sf_request->getParameter('current_stage'); ?>");
+<?php endif;?>
+});
+</script>
+<?php include_partial('employee/assets') ?>
+
+<div id="sf_admin_container">
+  <h1><?php echo __('Employee List', array(), 'messages') ?></h1>
+
+  <?php include_partial('employee/flashes') ?>
+
+ <div id="dialog-confirm"></div>
+   <form action="<?php echo url_for('employee_collection', array('action' => 'batch')) ?>" method="post">
+  <table id="list"></table>
+  <div id="pager"></div>
+  <div id="t_list"></div>
+  <div id="sf_admin_content">
+    <ul class="sf_admin_actions">
+      <?php include_partial('employee/list_actions', array('helper' => $helper)) ?>
+    </ul>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+# encoding: utf-8
+class Document::Received < Document::Incoming
+  API_DOC_TYPE = "DocumentAccepted"
+    
+  def date
+    @created_at
+  end
+
+  def company
+    @sender
+  end
+
+  def accept_reject_allowed?
+    !(document_status == 'Accepted' or document_status == 'Rejected')
+  end
+  def history_available?
+    true
+  end
+
+  def archive 
+    API_PROXY.archive(@uuid)
+  end
+
+  def self.archive_selected(documents)
+    documents.each do |document_uuid|
+      API_PROXY.archive document_uuid
+    end
+  end
+
+end

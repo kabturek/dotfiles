@@ -1,0 +1,42 @@
+# encoding: UTF-8
+class UploadController < ApplicationController
+  before_filter :login_required!
+
+  authorize! :upload_document
+
+  # POST: /upload/create
+  def create
+    upload = Upload.new({
+      :document => params[:document],
+      :sender_uuid => current_user.account.uuid
+    })
+    if upload.save
+      render :json => {
+        :id => upload.id
+      }
+    else
+      head :bad_request
+    end
+  end
+
+  # DELETE: /upload/delete
+  def delete
+    upload = Upload.find(params[:id])
+    if upload.sender_uuid == current_user.account.uuid and upload.delete
+      head :ok
+    else
+      head :bad_request
+    end
+  end
+
+  # POST: /upload/send_documents
+  def send_documents
+    @documents = Upload.find(params[:documents])
+    @documents.each do |document| 
+      document.recipient_uuid = params[:recipient_uuid]
+      document.save
+    end
+    #TODO:walidacje
+    redirect_to documents_outgoing_documents_path, :notice => "Dokumenty zostały wysłane"
+  end
+end

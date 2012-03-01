@@ -1,0 +1,5 @@
+- if(collection.page > 1)
+  = link_to :page => collection.page - 1 
+- if(collection.per_page > collection.results 
+  = link_to :page => collection.page + 1
+

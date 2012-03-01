@@ -1,0 +1,9 @@
+pl:
+  documents:
+    index:
+      documents/incoming_documents: Moje dokumenty - Przychodzące
+      documents/received_documents: Moje dokumenty - Odebrane
+      documents/outgoing_documents: Moje dokumenty - Wychodzące
+      documents/sent_documents: Moje dokumenty - Wysłane
+      documents/archive/received_documents: Moje dokumenty - Archiwum - Odebrane
+      documents/archive/sent_documents: Moje dokumenty - Archiwum - Wysłane

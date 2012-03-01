@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+first_john_notification:
+  order: johns_order
+  message: test notification
+  user: john
+
+second+john_notification:
+  order: johns_order
+  message: MyText
+  user: john

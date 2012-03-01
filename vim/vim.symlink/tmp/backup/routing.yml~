@@ -1,0 +1,136 @@
+employee_damage:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                EmployeeDamage
+    module:               employee_damage
+    prefix_path:          /employee_damage
+    column:               id
+    with_wildcard_routes: true
+
+employee_contact:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                EmployeeContact
+    module:               employee_contact
+    prefix_path:          /employee_contact
+    column:               id
+    with_wildcard_routes: true
+
+client_comment:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                ClientComment
+    module:               client_comment
+    prefix_path:          /client_comment
+    column:               id
+    with_wildcard_routes: true
+
+alert:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                Alert
+    module:               alert
+    prefix_path:          /alert
+    column:               id
+    with_wildcard_routes: true
+
+absence:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                Absence
+    module:               absence
+    prefix_path:          /absence
+    column:               id
+    with_wildcard_routes: true
+
+# You can find more information about this file on the symfony website:
+# http://www.symfony-project.org/reference/1_4/en/10-Routing
+employee:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                Employee
+    module:               employee
+    prefix_path:          /employee
+    column:               id
+    with_wildcard_routes: true
+
+employee_comments:
+  url:   /employee/:id/comments
+  param: { module: employee, action: comments }
+  requirements:
+    id: \d+
+
+employee_update_index:
+  url:   /employee/:id/updateInterview
+  param: { module: employee, action: updateInterview }
+  requirements:
+    id: \d+
+
+message:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                Message
+    module:               message
+    prefix_path:          /message
+    column:               id
+    with_wildcard_routes: true
+
+employee_document:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                EmployeeDocument
+    module:               employee_document
+    prefix_path:          /employee_document
+    column:               Array
+    with_wildcard_routes: true
+
+employee_training_report:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                EmployeeTrainingReport
+    module:               employee_training
+    prefix_path:          /employee_training
+    column:               id
+    with_wildcard_routes: true
+
+employee_inquiry:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                EmployeeInquiry
+    module:               employee_inquiry
+    prefix_path:          /employee_inquiry
+    column:               id
+    with_wildcard_routes: true
+
+
+sf_guard_signin:
+  url:   /login
+  param: { module: sfGuardAuth, action: signin }
+
+sf_guard_signout:
+  url:   /logout
+  param: { module: sfGuardAuth, action: signout }
+sf_guard_change_password:
+  url:   /change_password
+  param: { module: sfGuardAuth, action: change_password }
+
+# default rules
+homepage:
+  url:   /
+  param: { module: default, action: index }
+
+username_expired:
+  url:   /
+  param: { module: default, action: usernameExpired }
+change_language:
+  url:   /change_language
+  param: { module: language, action: changeLanguage }
+
+# generic rules
+# please, remove them by adding more specific rules
+default_index:
+  url:   /:module
+  param: { action: index }
+
+default:
+  url:   /:module/:action/*

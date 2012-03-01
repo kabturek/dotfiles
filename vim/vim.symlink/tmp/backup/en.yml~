@@ -1,0 +1,84 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+en:
+  Invalid email or password: Invalid email or password
+  You will receive an email with instructions about how to reset your password in a few minutes: You will receive an email with instructions about how to reset your password in a few minutes
+  Signed in successfully: Signed in successfully
+  Order was successfully created: Order was successfully created
+  Shipping address: Shipping address
+  You need to sign in or sign up before continuing: You need to sign in or sign up before continuing
+  ago: ago
+  show: Show
+  edit: Edit
+  destroy: Delete
+  delete: Delete
+  title: Title
+  description: Description
+  user: User
+  order: Order
+  comment: Comment
+  price: Price
+  state: State
+  actions: Actions
+  quantity: Quantity
+  items: Items
+  name: Name
+  save: Save
+  total: Total
+  register: Register
+  no_comment: None
+  sum: Sum
+  flash:
+      added_notification: "Added the message"
+      joined_order: "You've successfully joined the group buy. You will be notified about the next step"
+      already_joined: "You already joined this order - you can edit it now"
+      cannot_add_notification: "You can't add a notification to this order"
+  layouts:
+    application:
+        menu_orders: Orders
+        menu_orders_mine: My orders
+        menu_orders_participating: Participations
+        logged_as: Logged as
+        log_out: Log out
+        log_in: Log in
+  orders:
+    form:
+        add_item: Add item
+    index:
+        new_order: Add order
+    show:
+        participants: Participants
+        participant_list_empty: No participants
+        participant_list:
+        join: Join order
+        edit: Edit entry
+        item_list_empty: No items
+        close: Close order
+        add_notification: Add message
+        notifications: Messages
+        total_sum: Total
+    states:
+        open: Open
+    states_description:
+        open: The order is open and accepting new participants.
+  participants:
+    new:
+        title: Join Order
+    form: 
+        sum: Sum
+    show:
+        page_title: Participation
+    states:
+        signed: Signed
+    mine:
+        page_title: Orders i'm participating in
+        
+  activerecord:
+    attributes:
+        participant:
+            comment: Comment (only visible for order creator)
+        user:
+            name: Screen name
+
+        

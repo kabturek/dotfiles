@@ -1,0 +1,50 @@
+# == Schema Information
+#
+# Table name: track_points
+#
+#  id           :integer         not null, primary key
+#  track_id     :integer
+#  time         :datetime
+#  elevation    :decimal(, )
+#  speed        :decimal(, )
+#  latlon       :spatial({:srid=
+#  created_at   :datetime
+#  updated_at   :datetime
+#  distance     :decimal(, )
+#  elapsed_time :integer
+#
+
+class TrackPoint < ActiveRecord::Base
+  belongs_to :track
+
+  set_rgeo_factory_for_column(:latlon,
+    RGeo::Geographic.spherical_factory(:srid => 4326))
+
+  def self.point(lat, lon)
+    latlon_factory = self.rgeo_factory_for_column(:latlon)
+    latlon_factory.point(lat, lon)
+  end
+
+  def self.create_from_xml(xml)
+    pt = self.new
+    pt.time = DateTime.parse(xml.at_css('time').content)
+    pt.latlon = self.point(xml.attribute('lat').value, xml.attribute('lon').value)
+    pt.elevation = xml.at_css('ele').content
+    pt
+  end
+
+  def lat
+    latlon.lat
+  end
+  def lon
+    latlon.lon
+  end
+
+  #def as_json(options={})
+    #super(:only => [:time, :speed, :elevation, :distance], :methods => [:lat, :lon])
+  #end
+  def elevation_json
+    as_json
+  end
+
+end

@@ -1,0 +1,46 @@
+# encoding: utf-8
+module ApplicationHelper
+  def home_content?
+    params[:controller] == 'home'
+  end
+  
+  def tabs_container?
+    # return false if (params[:controller] == 'my_profile/company' && params[:action] == 'edit')
+    params[:controller] == 'companies' || params[:controller] == 'business_partners' || params[:controller] == 'account' || params[:controller] == 'crm_application/update_data'
+  end
+
+  def number_to_nip(nip)
+    nip = nip.to_s
+    nip.insert(3, '-').insert(7, '-').insert(10, '-')
+  end
+
+  def nip_to_number(nip)
+    nip.gsub(/[^\d]/, '')
+  end
+  
+  def humanize_event_type(type)
+    case type
+    when 'DECLINE_CONTRACT'
+      'Wypowiedzenie umowy'
+    when 'DATA_MODIFICATION'
+      'Modyfikacja danych'
+    when 'REQUEST_CONTRACT_DOCUMENT'
+      'Przesłanie dokumentu'
+    when 'REMOVE_DATA'
+      'Usunięcie konta'
+    when 'REGISTRATION'
+      'Rejestracja'
+    else
+      type
+    end
+  end
+  def my_pooh_controllers
+    ['account', 'business_partners', 'crm_application/update_data', 'documents/incoming_documents', 'documents/received_documents',
+     'documents/outgoing_documents', 'documents/sent_documents', 'documents/archive/received_documents', 'documents/archive/sent_documents', 'crm_application/users',
+     'passwords', 'crm_application/notification'] 
+  end
+  def my_account_controllers
+    ['account', 'passwords', 'crm_application/notification', 'crm_application/users', 'crm_application/update_data']
+  end
+  
+end

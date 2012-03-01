@@ -1,0 +1,302 @@
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include <stdlib.h> 
+#include "main.h"
+#include "avr_compat.h"
+#include "io_macro.h"
+#define delay()           asm volatile("nop")
+
+
+
+
+// IO declaration 
+#define VFD_CLK         B,5
+#define VFD_DATA        B,3
+#define VFD_LOAD        C,0
+#define VFD_BLK         C,3
+#define CRYSTAL		D,4
+
+#define TEST		D,6
+#define BTN1		A,0
+#define BTN2		A,1
+
+
+
+
+// Gobal vars
+uchar current_digit;
+uchar display_update;
+
+uchar hours;
+uchar minutes;
+uchar seconds;
+unsigned int tic;
+
+
+uchar buff[8];
+
+
+// 8 bits for the segments 
+const uchar font[] =
+  {
+    235,  // 0
+    33,	  // 1
+    186,  // 2 
+    179,  // 3
+    113,  // 4
+    211,  // 5 
+    91,   // 6
+    161,  // 7 
+    251,  // 8
+    241,  // 9
+    16,   // - 
+    89,   // h 
+    //121, // H
+
+  };
+
+
+// 9 bits for the digits (8 + sign)
+// for routing convenient I haven't wired them in the right
+// order. so change this for your pcb.
+const int digits[] = 
+  {
+    16,
+    32,
+    64,
+    8,
+    128,
+    4,
+    256,
+    2,
+  };
+
+
+
+
+//----------------------------------------------------------------------------------
+// VFD Driver for MAX6921
+//----------------------------------------------------------------------------------
+void vfd_on()
+{
+  clr_output(VFD_BLK);
+}
+
+void vfd_off()
+{
+  set_output(VFD_BLK);
+}
+
+void vfd_clock()
+{
+  set_output(VFD_CLK);
+  delay();
+  clr_output(VFD_CLK);
+  delay();
+}
+
+void vfd_write(int digit,int value)
+{
+  int i;
+
+  clr_output(VFD_LOAD);
+  delay();
+
+  // here comes the 8 segments
+  for (i = 7; i>=0 ;i--)
+    {
+      if  (value & (1<<i) ) {set_output(VFD_DATA);}
+      else { clr_output(VFD_DATA); }
+      vfd_clock();
+    }
+
+  // unsed bit in the middle
+  clr_output(VFD_DATA);
+  vfd_clock();
+
+  // here comes the 9 digits
+  for (i = 8; i>=0 ;i--)
+    {
+      if  (digit & (1<<i) ) {set_output(VFD_DATA);}
+      else { clr_output(VFD_DATA); }
+      vfd_clock();
+    }
+
+  set_output(VFD_LOAD);
+  delay();
+  clr_output(VFD_LOAD);
+
+}
+
+
+
+
+
+
+//----------------------------------------------------------------------------------
+// Main Timer
+//----------------------------------------------------------------------------------
+SIGNAL(SIG_OVERFLOW0)
+{
+  // this is the update clock stuff
+  // 32.768 Khz crystal used 
+  // 32768 / 256 = 128
+
+  tic ++;
+
+  if (tic > 127 ) { 
+    tic = 0;
+    seconds ++;
+    display_update = 1;
+  }
+
+  if (seconds > 59) { 
+    seconds = 0;
+    minutes ++;
+  }
+  
+  if (minutes > 59) {
+    minutes = 0;
+    hours ++;
+  }
+  
+  if (hours > 23) { 
+     hours = 0;
+  }
+
+
+
+}
+
+
+
+//----------------------------------------------------------------------------------
+// Init required timers and 
+//----------------------------------------------------------------------------------
+void init_timers()
+{ 
+  // Timer 0 is used crystal interrupt
+
+  sbi(TCCR0B,CS02);
+  sbi(TCCR0B,CS01);
+  sbi(TCCR0B,CS00);
+  //set the interrupt handle
+  sbi(TIMSK,TOIE0);
+
+
+
+  //cbi(TCCR1B,CS12);
+  //sbi(TCCR1B,CS11);
+  //cbi(TCCR1B,CS10);
+  
+
+
+}
+
+
+
+
+//----------------------------------------------------------------------------------
+// General IN/OUT init
+//----------------------------------------------------------------------------------
+void initOutput()
+{
+  drive(VFD_CLK);
+  drive(VFD_DATA);
+  drive(VFD_LOAD);
+  drive(VFD_BLK);
+  drive(TEST);
+  tristate(CRYSTAL);
+  tristate(BTN1);
+  tristate(BTN2);
+
+}
+
+
+
+
+//----------------------------------------------------------------------------------
+// Main programm
+//----------------------------------------------------------------------------------
+int main(void)
+{
+  int sleep;
+  uchar btn1;
+  uchar btn2;
+  
+
+  current_digit = 0;
+
+  hours = 0;
+  minutes = 0;
+  seconds = 0;
+
+
+  btn1 = btn2 = 0;
+
+
+  initOutput();
+  init_timers();
+
+  sei();
+
+  vfd_on();
+  //vfd_off();
+
+  
+  while (1) 
+    {
+  
+      vfd_write(digits[current_digit],font[buff[current_digit]]);
+      current_digit ++;
+
+      if  (current_digit > 7) {  current_digit = 0; }
+
+      if (get_input(BTN1) == 0 ) {btn1 =1;}
+      if (get_input(BTN2) == 0 ) {btn2 =1;}
+      
+      if (get_input(BTN2) && btn2)
+	{
+	  minutes = minutes + 1;
+	  seconds = 0;
+	  btn2 = 0;
+	  display_update = 1;
+	}
+
+
+      if (get_input(BTN1) && btn1)
+	{
+	  hours = hours + 1;
+	  btn1 = 0;
+	  display_update = 1;
+	}
+
+
+
+      if (display_update !=0)
+	{
+	  buff[0] = hours / 10;
+	  buff[1] = hours % 10;
+	  buff[2] = 11;
+	  buff[3] = minutes / 10;
+	  buff[4] = minutes % 10;
+	  buff[5] = 10;
+	  buff[6] = seconds / 10;
+	  buff[7] = seconds % 10;
+	  display_update = 0;
+	}
+
+      for (sleep = 0;sleep < 1500;sleep++)
+	{
+	  delay();
+	  delay();
+	  delay();
+	}
+
+
+
+
+    }
+  
+  return 0;
+}

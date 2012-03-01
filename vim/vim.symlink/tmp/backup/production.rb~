@@ -1,0 +1,27 @@
+# Prompt to make really sure we want to deploy
+puts "\n\e[0;31m   ######################################################################"
+puts "   #\n   #       Are you REALLY sure you want to deploy to production?"
+puts "   #\n   #               Enter y/N + enter to continue\n   #"
+puts "   ######################################################################\e[0m\n"
+proceed = STDIN.gets[0..0] rescue nil
+exit unless proceed == 'y' || proceed == 'Y'
+
+role :app, "46.229.150.165:8010"
+role :web, "46.229.150.165:8010"
+role :db, "46.229.150.165:8010", :primary => true
+
+set :deploy_to, "/var/www/puchatek"
+set :rails_env, "production"
+set :branch, "production"
+
+#TODO: zmienic jak bedzie user
+set :user, 'mdomanski'
+set :runner, 'mdomanski'
+
+
+#rvm
+$:.unshift(File.expand_path('./lib', ENV['rvm_path'])) # Add RVM's lib directory to the load path.
+require "rvm/capistrano"                  # Load RVM's capistrano plugin.
+set :rvm_ruby_string, '1.9.2@puchatek'        # Or whatever env you want it to run in.
+
+set :rvm_type, :user 

@@ -1,0 +1,146 @@
+#sf_admin_bar {
+    float: none;
+    margin-left: 20px;
+}
+.alerts ul li, .alerts ul li a{
+  list-style-type: none;
+  color: red;
+}
+.alerts {
+  color: red;
+}
+td.half, th.half {
+  width: 50%;
+}
+td.third, th.third {
+  width: 33%;
+}
+#absenteeism tr.low{
+  color: #D31;
+}
+#absenteeism tr.low a{
+  color: #D31;
+}
+.training_container{
+}
+table.training{
+  width: auto;
+  overflow: auto;
+}
+table.training th{
+  width: 240px;
+}
+table.training td{
+  width: 500px;
+}
+#recipients_filter{
+  float:left;
+  padding-left: 10px;
+}
+#recipients_filter select{
+  display:block;
+}
+.ui-jqgrid tr.jqgrow td {
+font-weight: normal;
+white-space: normal;
+}
+tr.unread td{
+  font-weight:bold;
+}
+.unread{
+  color:blue;
+}
+.unread a{
+  color:blue;
+}
+span.help{
+  margin-left:5px;
+  display: block;
+  font-weight: normal;
+}
+#employee_info{
+  border: 1px black solid;
+  margin: 2em;
+  padding: 1em;
+}
+#employee_info ul li{
+  list-style-type: none;
+  display: inline;
+  padding: 10px;
+}
+.employee_inquiry{
+  border: 1px black solid;
+  width: 400px;
+  margin: 2em;
+  padding: 1em;
+}
+#sf_admin_container label
+{
+  display: block;
+  padding: 0 1em 3px 0;
+  float: left;
+  text-align: left;
+  width: 23em;
+  color: #666;
+  font-weight: normal !important;
+}
+#sf_admin_container .sf_admin_boolean label{
+  width: 35em;
+}
+#sf_admin_container .sf_admin_form_row {
+  padding-bottom: 20px;
+}
+
+ul.form li {
+  list-style: none;
+}
+ul.form li input[type=text]{
+  display:block;
+}
+ul.form li textarea{
+  display:block;
+}
+
+
+/************ Shortcut Buttons ************/
+
+.shortcut-button {
+    border: 1px solid #ccc;
+    background: #f7f7f7 url('../images/shortcut-button-bg.gif') top left no-repeat;
+    display: block;
+    width: 120px;
+    margin: 0 0 20px 0;
+}
+
+.shortcut-button span {
+    border: 1px solid #fff;
+    display:block;
+    padding: 15px 10px 15px 10px;
+    text-align: center;
+    color: #555;
+    font-size: 13px;
+    line-height: 1.3em;
+}
+
+.shortcut-button span img {
+    margin-bottom: 10px;
+}
+
+.shortcut-button:hover {
+    background: #fff;
+
+}
+
+.shortcut-button span:hover {
+    color: #57a000; 
+}
+
+ul.shortcut-buttons-set li {
+    float: left;
+    margin: 0 15px 0 0;
+    padding: 0 !important;
+    background: 0;
+    list-style: none;
+}
+
+ul.shortcut-buttons-set li  a {text-decoration: none;}

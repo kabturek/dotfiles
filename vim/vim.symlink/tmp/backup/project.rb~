@@ -1,0 +1,11 @@
+class Project < ActiveRecord::Base
+  belongs_to :client
+  validates :name, presence: true, uniqueness: true
+  validates_presence_of :client
+  validates :commissioned_at, date: { after: Time.now - 10.years, before: Time.now + 10.years }
+
+  after_initialize do |project|
+    debugger
+    project.commissioned_at ||= Time.now if !project.persisted?
+  end
+end

@@ -1,0 +1,17 @@
+# Prompt to make really sure we want to deploy
+puts "\n\e[0;31m   ######################################################################"
+puts "   #\n   #       Are you REALLY sure you want to deploy to qas?"
+puts "   #\n   #               Enter y/N + enter to continue\n   #"
+puts "   ######################################################################\e[0m\n"
+proceed = STDIN.gets[0..0] rescue nil
+exit unless proceed == 'y' || proceed == 'Y'
+
+default_environment["PATH"] = "/var/lib/gems/1.8/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+role :app, "109.231.60.180:8050"
+role :web, "109.231.60.180:8050"
+role :db, "109.231.60.180:8050", :primary => true
+
+set :deploy_to, "/var/www/puchatek"
+set :rails_env, "production"
+set :branch, "quas"

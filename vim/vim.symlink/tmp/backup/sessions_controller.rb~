@@ -1,0 +1,35 @@
+# encoding: UTF-8
+# Kontroler zawiera akcje odpowiedzialne za autentykację użytkownika
+# tj. logowanie i wylogowanie
+class SessionsController < ApplicationController
+
+  before_filter :logged_in_restriction, :except => [:destroy]
+
+  # /GET
+  def new
+  end
+
+  # /POST
+  def create
+    email, password = params[:email], params[:password]
+    company_uuid    = User.authenticate(email, password)
+
+    if company_uuid
+      session[:user] = { :uuid => company_uuid, :email => email, :password => password, :creation_date => Time.now }
+      if params[:redirect_to].nil? or params[:redirect_to].empty?
+        redirect_to account_path, :notice => t('flashes.notice.login_successful')
+      else 
+        redirect_to CGI::parse(params[:redirect_to]), :notice => t('flashes.notice.login_successful')
+      end
+    else
+      redirect_to new_session_path, :alert => t('flashes.alert.wrong_email_or_password')
+    end
+  end
+
+  # /DELETE
+  def destroy
+    session[:user] = nil
+    redirect_to root_path, :notice => t('flashes.notice.logout_successful')
+  end
+
+end

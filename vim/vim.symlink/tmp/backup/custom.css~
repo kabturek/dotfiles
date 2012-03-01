@@ -1,0 +1,171 @@
+label.error, dd span.error {
+    color: #b60900 !important;
+    font-size: 11px !important;
+}
+
+label.error, .message div.error {
+    color: #b60900 !important;
+    font-size: 11px !important;
+}
+
+.data fieldset.leftfield,
+.data fieldset.rightfield {
+    height: auto;
+    width: 504px;
+    float: none;
+}
+
+.floatEditable .editable {
+    float: left;
+}
+
+.editable_default_hidden.text {
+    display: block;
+}
+
+#company_representative_section dl {
+	height: 95px;
+}
+
+.table table {
+	width: 100%;
+}
+
+.edit-form .reset {
+    color: #F68620 !important;
+}
+
+.edit-form input.text {
+    width: 218px !important;
+}
+
+.options ul li .blocked {
+    width: 20px;
+    height: 20px;
+    background: url("../assets/ico-options.png") no-repeat scroll -88px 0 transparent;
+}
+
+p span.block {
+    background: none repeat scroll 0 0 #F4841E;
+    border: 1px solid #C15C00;
+    color: #FFFFFF;
+    display: inline-block;
+    font-weight: bold;
+    line-height: 20px;
+    margin-right: 5px;
+    padding: 0 10px;
+}
+
+.invite_contractor.center {
+    margin: 10px auto;
+    width: 470px;
+}
+
+.invite_contractor form button {
+    float: right;
+    margin: 5px;
+}
+
+#contractor-invite-cancel {
+    border: 0px;
+    background: white;
+    color: #F68620;
+    padding-top: 6px;
+}
+
+.field_with_errors {
+	display: inline;
+}
+
+#edit-company .asterisk {
+	display: none;
+}
+
+#send-csv {
+  margin: 0;
+  padding: 0;
+  height: 0;
+  cursor: pointer;
+}
+
+#send-csv #file {
+  overflow: hidden;
+}
+#send-csv-form {
+  overflow:hidden;
+  margin: 0;
+  padding: 0;
+  height: 0;
+  cursor: pointer;
+}
+
+@media all and (-webkit-min-device-pixel-ratio:10000), not all and (-webkit-min-device-pixel-ratio:0) {
+  #send-csv #file{
+    position: relative;
+    top: -76px;
+    width: 232px;
+    display: block; 
+    left: 154px; 
+    height: 30px;
+    cursor: pointer;
+  }   
+}
+
+.options-1 .already-added {
+    margin: 15px;
+}
+
+#poprawDane {
+    position: relative;
+    top: 49px;
+    left: 209px;
+    font-size: 1.5em;
+}
+
+.search-results .customer .name h3 {
+    line-height: 35px !important;
+}
+.customer .nip p {
+    line-height: 19px;
+}
+
+a.question {
+    left: -3px;
+}
+
+#without-top-margin {
+  margin-top: 0 !important;
+}
+
+.already_activated {
+  padding: 40px;
+  padding-top: 20px;
+}
+
+.pagination_placeholder {
+    margin-bottom: 20px;
+}
+
+.pagination_placeholder .pager {
+    margin-bottom: -20px;
+}
+
+.content.static_page_center {
+    padding: 40px;
+}
+
+
+ul.steps li.current {
+    font-weight: bold;
+    color: #675C53;
+    font-family: Arial;
+}
+
+.thanks1.full.error {
+	background: #B30000;
+	color: #fff;
+}
+
+	.thanks1.full.error  a {
+    color: #fff;
+	{

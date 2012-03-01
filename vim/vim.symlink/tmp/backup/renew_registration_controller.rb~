@@ -1,0 +1,27 @@
+# encoding: utf-8
+# Kontroler odpowiada za wysłanie wniosku o ponowną rejestracje.
+class CrmApplication::RenewRegistrationController < ApplicationController
+  before_filter :login_required!, :renew_registration_required!
+  authorize! :user_management
+  # /GET
+  def new
+    @renew_registration_form = CrmApplication::RenewRegistration.new
+  end
+
+  # /POST
+  def create
+    @renew_registration_form = CrmApplication::RenewRegistration.new(params[:crm_application_renew_registration])
+    if @renew_registration_form.valid?
+      @renew_registration_form.submit 
+      flash[:success_message] = t("flashes.notice.renew_registration_request")
+      redirect_to crm_application_path
+    else
+      render :new
+    end
+  end
+  private
+  def renew_registration_required!
+    redirect_to(account_path, :notice => t('flashes.notice.renew_registration_failed')) unless current_user.account.registration_application_allowed? 
+  end
+
+end

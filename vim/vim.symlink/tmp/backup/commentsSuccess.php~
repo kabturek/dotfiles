@@ -1,0 +1,73 @@
+<?php use_helper('Text'); ?>
+<div id="sf_admin_container">
+<?php include_partial('employee', array('employee' => $employee)); ?>
+<h1>Clients' comments history</h1>
+<table>
+  <tr>
+    <th>
+      <?php echo __('Date'); ?>
+    </th>
+    <th>
+      <?php echo __("Client's address"); ?>
+    </th>
+    <th>
+      <?php echo __('Type'); ?>
+    </th>
+    <th>
+      <?php echo __('Subject'); ?>
+    </th>
+    <th>
+      <?php echo __("Client's comments"); ?>
+    </th>
+    <th>
+      <?php echo __('Valid?'); ?>
+    </th>
+    <th>
+      <?php echo __('Office comments'); ?>
+    </th>
+      <th>
+        Actions
+      </th>
+  </tr>
+<?php foreach($comments as $comment): ?>
+  <tr<?php echo $comment->EmployeeClientComment[0]->is_read ? '' : ' class="unread"'; ?>>
+    <td>
+      <?php echo $comment->date; ?>
+    </td>
+    <td>
+      <?php echo truncate_text($comment->address); ?>
+    </td>
+    <td>
+      <?php echo $comment->type; ?>
+    </td>
+    <td>
+      <?php foreach($comment->Areas as $area){
+        echo $area->name . ' ';
+      }?>
+    </td>
+    <td>
+      <?php echo truncate_text($comment->comment); ?>
+    </td>
+    <td>
+      <?php echo $comment->is_valid ? 'Yes' : 'No details'; ?>
+    </td>
+    <td>
+      <?php echo truncate_text($comment->office_comment); ?>
+    </td>
+    <td>
+    <?php if(isset($sf_user) && $sf_user->hasCredential('recruit')): ?>
+      <?php echo link_to('Edit', 'client_comment/edit?id='. $comment->id); ?>
+    <?php endif;?>
+      <?php echo link_to('Show', 'client_comment/show?id='. $comment->id); ?>
+    </td>
+  </tr>
+<?php endforeach; ?>
+</table>
+
+<h1> Filter</h1>
+<table>
+<?php echo form_tag('employee/comments?id='.$employee->id); ?>
+<?php echo $form; ?>
+</table>
+<input type="submit"  value="Filter"/>
+</div>

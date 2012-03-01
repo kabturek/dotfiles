@@ -1,0 +1,12 @@
+# ~/.tmuxinator/coding.yml
+# you can make as many tabs as you wish...
+
+project_name: Communication
+project_root: ~/
+tabs:
+  - IM:
+      panes:
+        - finch
+  - Twitter:
+      panes:
+        - earthquake

@@ -1,0 +1,70 @@
+# encoding: utf-8
+module DocumentsHelper
+  
+  class DocumentsTable
+    attr_accessor :header_columns, :data_columns
+    
+    def initialize(args)
+      @data_columns = args[:columns] 
+      @header_columns = args[:header_columns] || @data_columns
+    end
+        
+    def self.factory( document_queue_name )
+      case document_queue_name
+        when /archive/
+          new( :columns => %w(empty date main options ) )
+        when /incoming/
+          new( :columns => %w(select date main options) )
+        when /received/
+          new( :columns => %w(select date main options) )
+        when /outgoing/
+          new( :columns => %w(empty date main options) )
+        when /sent/
+          new( :columns => %w(select date main options) )
+        else
+          new( :columns => %w(date main options) )  
+      end
+    end    
+  end
+  
+  def setup_table( document_queue_name )
+    @table ||= DocumentsTable.factory( document_queue_name )
+  end
+
+  def sortable_th(title, column = nil )
+    column ||= title
+    ordered_actually = column == params[:order_by]
+    ordered_asc = params[:direction] == 'asc'
+    html_class = column.downcase + ' '
+    if ordered_actually
+      if ordered_asc
+        html_class+= 'header-sort-down '
+      else
+        html_class+= 'header-sort-up '
+      end
+    end
+    direction = (column == params[:order_by] && params[:direction] == "asc") ? "desc" : "asc"
+    content_tag('th', :class => html_class) do
+      link_to title,  params.merge(:order_by => column, :direction =>  direction, :page => nil)
+    end
+  end
+
+  def create_batch_form(url, &block)
+    if ['documents/received_documents', 'documents/sent_documents', 'documents/incoming_documents'].include? url[:controller]
+      form_tag url, &block
+    else
+      content = capture(&block)
+      output = ActiveSupport::SafeBuffer.new
+      output << content
+    end
+  end
+
+  def format_nip(nip)
+    nip.gsub(/(\d\d\d)(\d\d)(\d\d)(\d\d\d)/, '\1-\2-\3-\4')
+  end
+  
+  def paginator(collection)
+    render :partial => "paginator", :locals => {:collection => collection}
+  end
+    
+end

@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+john:
+  name: john
+  email: admin@example.com
+  password: password
+  fullname: John Doe
+  address: Al. Jrezolimskie 1/1
+  postcode:  00-123
+  city: Warsaw
+
+mike:
+  name: mike
+  email: participator@example.com
+  password: password
+  fullname: Mike
+  address: Kołłątaja 3/2
+  postcode: 18-400
+  city: Łomża

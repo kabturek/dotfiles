@@ -1,0 +1,16 @@
+# encoding: UTF-8
+module CrmApplication
+  class Representative < ActiveRecord::Base
+
+    has_one :registration_form, :class_name => "Registration"
+
+    def to_puchatek_json
+      {"FirstName" => firstname, "LastName" => lastname, "Position" => position}
+    end
+
+    def fulfilled?
+      [firstname, lastname, position].all?(&:"present?")
+    end
+
+  end
+end

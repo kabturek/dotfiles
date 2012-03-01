@@ -1,0 +1,58 @@
+# encoding: utf-8
+# Moduł zawierający metody mapujące nazwy pól w API na nazwy pól odpowiadające konwencji Rails
+# np. "StreetNo" -> :street_number
+module PuchatekApi
+  module PuchatekJson
+    extend ActiveSupport::Concern
+
+    module InstanceMethods
+      def to_puchatek_json
+        as_puchatek_json.to_json
+      end
+
+      def as_puchatek_json
+        mappings = {
+            :company_name  => "Name",
+            :user_email    => "Email",
+            :password      => "Password",
+            :street_number => "StreetNo",
+            :street_name   => "Street",
+            :post_code     => "PostCode",
+            :city          => "City",
+            :phone         => "Phone",
+            :nip           => "NIP",
+            :krs           => "KRS",
+            :regon         => "REGON",
+            :flat_number   => "FlatNo",
+            :sage_serial_number => "SageSerialNumber",
+            :sage_serial_number_hash => "SageSerialNumberHash",
+            :permissions   => "Permissions",
+            :email         => "Email"
+        }
+
+        mapped_hash = { }
+        mapped_hash["PersonList"] = representatives.map do |representative|
+          representative.to_puchatek_json if representative.fulfilled?
+        end.compact if representatives.present?
+        mapped_hash["ContractorUUID"] = attributes.delete(:uuid)
+        attributes.deep_symbolize_keys.each do |attr_name, attr_value|
+          if mappings[attr_name] 
+            value = attr_value.to_s.strip
+            mapped_hash[mappings[attr_name]] = case 
+                                                 when value.empty? 
+                                                   nil
+                                                 when attr_name == :krs
+                                                   "%010d" %  attr_value
+                                                 when attr_name == :regon
+                                                   "%09d" %  attr_value
+                                                 when attr_name == :nip
+                                                   "%010d" %  attr_value
+                                                 else value
+                                                 end
+          end
+        end
+        mapped_hash
+      end
+    end
+  end
+end

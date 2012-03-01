@@ -1,0 +1,19 @@
+- table = setup_table( params[:controller] )
+
+= create_batch_form :controller => params[:controller], :action => 'batch' do
+
+  %table.documents
+    = render "table_action"
+
+  %table.documents
+    %tr  
+      - table.header_columns.each do |column|
+        = render "th_" + column
+
+    - documents.each do |document|
+      %tr
+        - table.data_columns.each do |column|
+          = render "td_" + column, :document => document
+      = render "tr_document_info", :document => document
+
+= paginator(documents)

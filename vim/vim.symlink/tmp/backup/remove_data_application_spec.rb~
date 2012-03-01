@@ -1,0 +1,26 @@
+require 'spec_helper'
+
+describe CrmApplication::RemoveData do
+  before do
+    @user_email                   = "email@example.com"
+    @user_password                = "password_example"
+    PuchatekApi::Base.credentials = {
+        :email    => @user_email,
+        :password => @user_password,
+        :uuid     => "12345"
+    }
+    @remove_data_form             = CrmApplication::RemoveData.new
+  end
+
+  it "submit request to remove data for given user" do
+    PuchatekApi.should_receive(:rest_request).with(
+        :post,
+        '/contractor/application/removeData',
+        :login    => @user_email,
+        :password => @user_password,
+        :headers  => { :content_type => :json }
+    )
+    @remove_data_form.submit
+  end
+end
+

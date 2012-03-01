@@ -1,0 +1,14 @@
+%nav#topUser
+  %ul
+    %li    
+    - unless current_user
+      %li= link_to 'zarejestruj się', new_crm_application_registration_path
+      %li#loginBtn= link_to 'zaloguj się'
+    - else
+      %li
+        = link_to current_user.email, account_path
+        %li
+          %li
+            = link_to 'wyloguj się', session_path, :method => :delete
+%address#topPhone
+  22 678 234 567

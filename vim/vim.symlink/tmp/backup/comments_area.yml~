@@ -1,0 +1,13 @@
+CommentsArea:
+  bathroom:
+    name: bathroom
+  kitchen:
+    name: kitchen
+  dusting:
+    name: dusting
+  vacuuming:
+    name: vacuuming
+  washing_floors:
+    name: washing floors
+  other:
+    name: other

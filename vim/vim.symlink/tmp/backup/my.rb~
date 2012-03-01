@@ -1,0 +1,107 @@
+#!/usr/bin/env ruby
+require 'ruby-debug'
+
+class Point
+  attr_accessor :neighbors, :state
+  def initialize(state)
+    @state = state
+  end
+  def alive? 
+    @state == 1
+  end
+  def life_or_death?
+    if alive?
+      if [2,3].include? @neighbors
+        return @state = 1
+      end
+    else
+      if @neighbors == 3
+        return @state = 1
+      end
+    end
+    @state = 0
+  end
+  def to_i
+    return 1 if alive?
+    0
+  end
+  def to_s
+    return 'o' if alive?
+    '.'
+  end
+end
+class Array2D < Array
+  def [](index)
+    super (index % self.length)
+  end
+end
+class Game
+  @iteration = 0
+  def initialize( width, height, iterations)
+    @width, @height, @iterations = width, height, iterations
+    @board = Array2D.new(@height) { Array2D.new(@width) {Point.new(0)} }
+  end
+  def start
+    print_board
+    @iterations.times do |i|
+      @iteration = i
+      calculate_neighbors
+      print_neighbors
+      life_or_death
+      print_board
+    end
+  end
+  def seed_glider
+    @board[0][0].state = 1
+    @board[0][1].state = 1
+    @board[0][2].state = 1
+    @board[1][0].state = 1
+    @board[2][1].state = 1
+  end
+  def calculate_neighbors
+    @board.each_with_index { |row, x|
+      row.each_with_index { |point, y|
+        point.neighbors = calculate_point_neighbors(x, y)
+      }
+    }
+  end
+  def life_or_death
+    @board.each_with_index { |row, y|
+      row.each_with_index { |point, x|
+        point.life_or_death?
+      }
+    }
+  end
+
+  def calculate_point_neighbors(x, y)
+    neighbors = 0
+    surrounding = [[-1, -1], [-1, 0], [-1, 1],
+                   [0, -1],          [0, 1],
+                   [1, -1], [1, 0], [1, 1]]
+    surrounding.each do |mod_x, mod_y|
+      neighbors += @board[ (x + mod_x) ][ (y + mod_y) ].to_i
+    end
+    #puts "x: #{x} y: #{y} neighbors: #{neighbors}"
+    neighbors
+  end
+  def print_board
+    puts "Iteration #{@iteration}"
+    @board.each { |row|
+      row.each { |point|
+        print point
+      }
+      puts 
+    }
+  end
+  def print_neighbors
+    @board.each { |row|
+      row.each { |point|
+        print point.neighbors
+      }
+      puts 
+    }
+  end
+end
+game = Game.new(10, 10, 10)
+game.seed_glider
+game.start

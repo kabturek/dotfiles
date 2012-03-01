@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+require 'nokogiri'
+require 'csv'
+require 'bigdecimal'
+
+def banker_round(value, precision)
+end
+class Trade
+  attr_accessor :rates, :transactions
+  def initialize(xml_file = nil, transactions_file = nil)
+    @rates = {}
+    @transactions = {}
+    load_rates(xml_file) if xml_file
+    load_transactions(transactions_file) if transactions_file
+  end
+  def load_rates(xml_file)
+    xml = Nokogiri.parse(File.read(xml_file))
+    xml.xpath('//rates/rate').each do |rate|
+      @rates[rate.at('from').content.upcase + '->' + rate.at('to').content.upcase] = BigDecimal(rate.at('conversion').content)
+    end
+  end
+  def get_rate(from, to)
+    rate = @rates[from.to_s.upcase + '->' + to.to_s.upcase]
+    rate ||= (1/ get_rate(to, from)).round(4)
+  end
+  def load_transactions(file)
+    CSV.foreach(file) do |row|
+      @transactions[row[1]] = row[2]
+    end
+    transactions
+  end
+end

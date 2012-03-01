@@ -1,0 +1,15 @@
+# Prompt to make really sure we want to deploy
+puts "\n\e[0;31m   ######################################################################"
+puts "   #\n   #       Are you REALLY sure you want to deploy to STAGING?"
+puts "   #\n   #               Enter y/N + enter to continue\n   #"
+puts "   ######################################################################\e[0m\n"
+proceed = STDIN.gets[0..0] rescue nil
+exit unless proceed == 'y' || proceed == 'Y'
+
+role :app, "109.231.60.180:8050"
+role :web, "109.231.60.180:8050"
+role :db, "109.231.60.180:8050", :primary => true
+
+set :deploy_to, "/var/www/puchatek-test"
+set :rails_env, "staging"
+set :branch, "staging"

@@ -1,0 +1,76 @@
+\section{Wstęp}
+\subsection{Systemy Informacji Geograficznej}
+Systemy Informacji Geograficznej jest to termin określający dziedzinę zajmujacą sie geoinformacją (informacja geograficzną). Z racji interdyscyplinarnego charakteru, oraz faktu, iż systemy te rozwijały sie w tym samym czasie ciężko podać jednolitą definicję nie definiując aplikacji i dziedziny. Systemy GIS są używane do wspomagania kartografii, geodezji, przetwarzania obrazów, planowania przestrzeni, wykorzystania zasobów czy planowania środków transportu. Piotr Werner  w ``Wprowadzenie do systemów geoinformacyjnych''\cite{wprowadzeniedogis} podaje jedną z definicji :
+  \begin{quote}
+  ``System geoinformacyjny (GIS) jest narzędziem zbierania, przechowywania, analizy, przetwarzania i wizualizacji danych związanych z określoną lokalizacją w środowisku geograficznym.''
+  \end{quote}
+  Definicja ta przedstawia GIS jako proces - pokazuje jakie etapy przechodzą dane. 
+
+  %IMG rysunek z ksiazki rozwazaniaogis strona 2
+  Rysunek 1 przedstawia ogólny zarys Elementów Systemu Informacji Geograficznej.\cite{rozwazaniaogis}[str. 2] Podzielony on jest na 3 części. Częścia pierwszą są ``Dane przestrzenne''. Tradycyjnymi żródłami danych są mapy papierowe (aby ich użyć w systemie muszą przejść proces digitalizacji\footnote{Digitalizacja jest przekształceniem na dane w postaci cyfrowej}), ortofotomapy\footnote{Ortofotomapa to mapa obrazowa utworzona ze zdjęć lotniczych dopasowanych od jednolitej skali} i obrazy satelitarne (które muszą zostać podane obróbce przed umieszczeniem ich w systemie). Aktualnie wiele z danych jest dostępne w formie numerycznej - istnieje możliwość kupna takich danych lub uzyskania dostępu do takich danych przez sieć Internet. Część z tych danych udostępniana jest bez opłat. Dane geograficzne można też pozyskać podczas pomiarów geodezyjnych oraz z urządzeń GPS\footnote{Global Positioning System - system nawigacji satelitarnej składający się z 31 satelit umożliwiający określenie pozycji odbiornika}. Wszystkie dane pozyskane z tych źródeł muszą być zintegrowane i skonwertowane do jednego systemu koordynatów aby można było je umieścić i przechowywać w bazie danych.
+
+  Przechowywanie danych geograficznej w Relacyjnej Bazie Danych (RDBMS - Relational Database Management System) umożliwia łatwe ładowanie, zmianę, usuwanie danych, konwersje danych do innych formatów, migracje oraz przeprowadzenie wiele zaawansowanych operacji na tych danych umożliwiajacych przeprowadzenie złożonych analiz. Wyspecjalizowane programy komunikują się z bazami danych poprzez zapytania przeszukujące, porównujące oraz analizujace te dane geograficzne. 
+  
+  Ostatnim elementem systemu są informacje uzyskane dzięki działaniu programów. Mogą to być nowe mapy, tabele, schematy, różnego rodzaju wizualizacje (np. trójwymiarowe) lub dane numeryczne w odpowiednim formacie do dalszej analizy lub transmisji. Ogólnym celem jest wspomaganie procesu decyzyjnego dzięki wygenerowanym analizom.
+
+  
+  %IMG: więcej
+  \subsection{System GPS}
+  \begin{quote}
+    ``GPS słuzy do określania położenia, czasu oraz prędkości ruchu obiektów na podstawie sygnałów nadawanych przez krążące wokół Ziemi satelity.\cite{gps}''
+  \end{quote}
+  System GPS (and. Global Positioning System - globalny system pozycyjny) został stworzony w 1994 roku przez Departament Obrony Stanów Zjednoczonych. System składa się z trzech elementów: segmentu kosmizcnego, segmentu nadzoru oraz z segmentu użytkowników.
+  %IMG rysunek systemu GPS
+  Segement kosmiczny składa się z 31 satelitów krążacych wokół ziemi, które są nadzorowane przez stacje naziemne (z główną stacja znajdującą się w Colorado Springs). Satelity krążą wokół ziemi po 6 orbitach (po 4 satelity na każdej) co daje 24 satelity. Dodatkowe satelity dają redundantne dane i zwiększaja dokładność systemu. Z każdego punktu ziemi widozne jest minimum 4 satelity, a średnio około 9 satelit. 
+  Stacje naziemne są częścią segmentu nadzoru. Do ich funkcji należy: 
+  \begin{itemize}
+      \item Ustalanie i utrzymywanie orbit satelitów
+      \item Kontrola stanu technicznego satelitów
+      \item Zarządzanie systemem
+      \item Obróbka telemetryczcna danych z satelitów
+      \item Analiza odebranych danych telemetrycznych
+  \end{itemize}
+    Do segmentu użytkowników należą odbiorniki podzielone na różne ``statusy użytkowników'': ``użytkownicy autoryzowani'' sa to głównie uzytkownicy wojskowi, którzy mają dostęp do około 10 razy większej dokładności pomiaru oraz ``użytkownicy cywilni''. Dokładność systemu zależy od otoczenia i widocznośći satelit - zwykle wynosi od 1 do 3 metrów.
+    Odbiornik GPS oblicza swoją pozycję licząc czas jaki zajmuje dotarcia depesz z satelit do nadajnika. Do poprawnej pracy potrzebna jest widocczność minimum 4 satelit - 3 satelity umożliwiają określenie położenia w trójwymiarowej przestrzeni a czwarty satelita umożliwia obliczenie błedu czasu. Błąd ten wynika z niedoskonałości zegara umieszczonego w nadajniku (w porównianiu do zegara atomowego umieszczonego w satelicie). Czasem możliwe jest też obliczenie położenia uzywając danych z 3 satelit - gdy jedna z danych jest znana. Częśc codbiorników używa poprzednich odczytów pozycji, żeby podać przybliżoną pozycje gdy dostępne są mniej niż 4 satelity. Satelita przesyła do odbiornika GPS:
+    \begin{itemize}
+        \item bardzo dokładny znacznik czasu 
+        \item informacje o swoim położeniu i drodze (efemeryda)
+        \item informacje o układzie satelitów na niebie (almanach)
+    \end{itemize}
+
+  \subsection{Aplikacje internetowe}
+  W 1993 roku powstała pierwsza graficzna przegladarka internetowa Mosaic. Dzieki temu stało się możliwe wyświetlanie innych danych niż tylko tekst, jarobiły to, używane do tej pory, przegladarki tekstowe. Obsługiwała ona język HTML(Hypertext Markup Language), który zawierał odnośniki, tekst z róznym foramtowaniem, obrazki i wideo. Rysunek 3 przedstawia pierwszą wersje przegladarki Mosaic.
+  %IMG: obrazek przegladarki mosaicc, żródło: Wikipedia
+
+  Oprócz obsługiwanych technologii zasada jej działania oraz wygląd nie różni się znaccznie od aktualnych przegladarek. Posiadała pasek narzędziowy z ikonami i paskiem adresu, zapisywała historię, ulubione odnośniki i pracowała według modelu klient-serwer.
+  %IMG: obrazek komunikajci klient-serwer
+  Model klient-serwer polega na podziale ról między serwerem, który ma za zadanie dostarcza usługi oraz klientem, który zgłasza do klienta odpowiednie żadania dostępu lub modyfikacji danych. Komunikacja między nimi jest zdefiniowana przez protokół HTTP (ang. Hypertext Transfer Protocol - protokól przesyłania dokumentów hipertekstowych). 
+  \begin{quote}
+    ``HTTP to protokół do przekazywania żądań od klienta na serwer i przesyłania w odpowiedzi stron do przeglądarki.''\cite{serwisweb2.0}
+  \end{quote}
+  Protokół HTTP określa formę żądań klienta oraz odpowiedzi serwera. Szkic speyfikacji z 1992 roku określał 12 metod interfejsu, jednak wiekszośc nie jest aktualnie wykorzystywana - aplikacje standardowo obsługują 4 podstawowe metody: GET, POST, PUT i DELETE. Część aplikacji implementuje tylko dwie pierwsze metody. 
+
+  Metoda GET oznacza pobranie zdefiniowanym pod danym adresem URI(ang. Uniform Resource Identifier - unikalny identyfikator zasobu) zasobu. Metoda POST wysyła zdefiniowane dane w celu obsłużenia ich przez serwer (używany jest do przesyłania formularzy). Metoda PUT wysyła reprezentacje danego zasobu URI (zwykle służy do utworzenia danego zasobu pod adresem URI). Metoda DELETE usuwa dany zasób. 
+
+  Aplikacją internetową nazywamy program komputerowy pracujący na serwerze i komunikujący się z użytkownikiem poprzez sięć Internet. Komunikują się one z użytkownikiem przez przegladarkę internetową. Model taki nazywany jest ``Software as a Service''(SaaS, z ang. oprogramowanie jako usługa). Jest to model dystrybucji oprogramowania, w którym twórca oprogramowania instaluje je na serwerze aplikacyjnym i udostępniana aplikację użytkownikowi przez sieć Internet. 
+  Aplikacje internetowe zyskują popularność z kilku powodów:
+\begin{itemize}
+  \item Brak potrzeby instalacji oprogramowania na komputerze klienta
+  \item Użytkownik nie musi zarządzać aplikacją, ani dbać o jej aktualizację
+  \item Ułatwia dostawcy kontrolę nad oprogramowaniem i środowiskiem jego pracy
+\end{itemize}
+Główna zaletą aplikacji internetowym jest niska bariera wejścia - aby skorzystać z aplikaji wystarczy komputer z dostępem do Internetu oraz przeglądarka internetowa. Nie trzeba instalować dodatkowego oprogramowania - można korzystać od razu z funkcjonalności danego oprogramowania. Użytkownik może korzystać z oprogramowania z każdego komputera do którego ma dostęp - nie jest ogranizony tylko do tego komputera na którym zainstalował oprogramowanie.
+
+Użytkownik nie jest odpowiedzialny za zarządzanie aplikają, ani danymi nad którymi pracuje - wszystko jest przechowywane na centralnym serwerze. Ułatwia to aktualizację oprogramowania - możliwe jest uruchomienie nowej wersji aplikacje na odzielnym serwerze i po przejściu testów przełączenie używanego serwera transparentnie dla użytkownika. Dostawcy aplikacji mogą testować nowe wersje aplikacji poprzez udostępnianie ich testowej grupie użytkowników.
+
+Dostawca ma większa kontroler nad oprogramowaniem, nie musi udostępniać go osobom trzecim - dostęp mają tylko osby pracujące i zarządzajace aplikacją.  Aplikacja może pracować w kontrolowanym środowisku co zwiększa poziom bezpieczeństwa.
+
+Aplikacje internetowe działające w takim modelu są częścią ``Web 2.0``:
+\begin{quote}
+  ''Podejście zorientowane na funkcje i usługi, polegajace na tworzeniu nowych aplikajci przez łączenie innych, już istniejacych , oraz wzbogaccaniu doznań użytkowników sieci WWW. Związane jest to z rozwojem bogatych aplikaccji sieciowyhc(and. Rich Internet Appliations - RIA), a dostępne usługi umożliwiają stosowanie w siecci WWW funkcji obecnych kiedyś wyłaczcnie w aplikachach stacjonarnych.``\cite{serwisweb2.0}
+\end{quote}
+Dzieki takiemu podejściu aplikacje internetowe zyskują coraz wieksza popularność i stają się realną alternatywą dla tradycyjnych aplikacji działających na komputerach użytkowników.
+
+\subsection{Cele}
+Celem pracy jest analiza dostępnych narzędzi po kątem możliwości zastosowania ich w sytemie akwizycji i przedstawiania danych z treningów.
+\newpage

@@ -1,0 +1,168 @@
+<?php
+
+class Addclientcommentfk extends Doctrine_Migration_Base
+{
+  public function up()
+  {
+        $this->dropForeignKey('client_comment_area', 'client_comment_area_comment_id_client_comment_id');
+        $this->dropForeignKey('client_comment_area', 'client_comment_area_area_id_comment_area_id');
+        $this->dropForeignKey('employee_client_comment', 'employee_client_comment_employee_id_employee_id');
+        $this->dropForeignKey('employee_client_comment', 'employee_client_comment_comment_id_client_comment_id');
+        $this->removeIndex('client_comment_area', 'client_comment_area_comment_id', array(
+             'fields' => 
+             array(
+              0 => 'comment_id',
+             ),
+             ));
+        $this->removeIndex('client_comment_area', 'client_comment_area_area_id', array(
+             'fields' => 
+             array(
+              0 => 'area_id',
+             ),
+             ));
+        $this->removeIndex('employee_client_comment', 'employee_client_comment_employee_id', array(
+             'fields' => 
+             array(
+              0 => 'employee_id',
+             ),
+             ));
+        $this->removeIndex('employee_client_comment', 'employee_client_comment_comment_id', array(
+             'fields' => 
+             array(
+              0 => 'comment_id',
+             ),
+             ));
+        $this->createForeignKey('client_comment_area', 'client_comment_area_comment_id_client_comment_id', array(
+             'name' => 'client_comment_area_comment_id_client_comment_id',
+             'local' => 'comment_id',
+             'foreign' => 'id',
+             'foreignTable' => 'client_comment',
+             'onDelete' => 'CASCADE',
+             ));
+        $this->createForeignKey('client_comment_area', 'client_comment_area_area_id_comment_area_id', array(
+             'name' => 'client_comment_area_area_id_comment_area_id',
+             'local' => 'area_id',
+             'foreign' => 'id',
+             'foreignTable' => 'comment_area',
+             'onDelete' => 'CASCADE',
+             ));
+        $this->createForeignKey('employee_client_comment', 'employee_client_comment_employee_id_employee_id', array(
+             'name' => 'employee_client_comment_employee_id_employee_id',
+             'local' => 'employee_id',
+             'foreign' => 'id',
+             'foreignTable' => 'employee',
+             'onDelete' => 'CASCADE',
+             ));
+        $this->createForeignKey('employee_client_comment', 'employee_client_comment_comment_id_client_comment_id', array(
+             'name' => 'employee_client_comment_comment_id_client_comment_id',
+             'local' => 'comment_id',
+             'foreign' => 'id',
+             'foreignTable' => 'client_comment',
+             'onDelete' => 'CASCADE',
+             ));
+        $this->addIndex('client_comment_area', 'client_comment_area_comment_id', array(
+             'fields' => 
+             array(
+              0 => 'comment_id',
+             ),
+             ));
+        $this->addIndex('client_comment_area', 'client_comment_area_area_id', array(
+             'fields' => 
+             array(
+              0 => 'area_id',
+             ),
+             ));
+        $this->addIndex('employee_client_comment', 'employee_client_comment_employee_id', array(
+             'fields' => 
+             array(
+              0 => 'employee_id',
+             ),
+             ));
+        $this->addIndex('employee_client_comment', 'employee_client_comment_comment_id', array(
+             'fields' => 
+             array(
+              0 => 'comment_id',
+             ),
+             ));
+  }
+
+  public function down()
+  {
+        $this->dropForeignKey('client_comment_area', 'client_comment_area_comment_id_client_comment_id');
+        $this->dropForeignKey('client_comment_area', 'client_comment_area_area_id_comment_area_id');
+        $this->dropForeignKey('employee_client_comment', 'employee_client_comment_employee_id_employee_id');
+        $this->dropForeignKey('employee_client_comment', 'employee_client_comment_comment_id_client_comment_id');
+        $this->removeIndex('client_comment_area', 'client_comment_area_comment_id', array(
+             'fields' => 
+             array(
+              0 => 'comment_id',
+             ),
+             ));
+        $this->removeIndex('client_comment_area', 'client_comment_area_area_id', array(
+             'fields' => 
+             array(
+              0 => 'area_id',
+             ),
+             ));
+        $this->removeIndex('employee_client_comment', 'employee_client_comment_employee_id', array(
+             'fields' => 
+             array(
+              0 => 'employee_id',
+             ),
+             ));
+        $this->removeIndex('employee_client_comment', 'employee_client_comment_comment_id', array(
+             'fields' => 
+             array(
+              0 => 'comment_id',
+             ),
+             ));
+        $this->createForeignKey('client_comment_area', 'client_comment_area_comment_id_client_comment_id', array(
+             'name' => 'client_comment_area_comment_id_client_comment_id',
+             'local' => 'comment_id',
+             'foreign' => 'id',
+             'foreignTable' => 'client_comment',
+             ));
+        $this->createForeignKey('client_comment_area', 'client_comment_area_area_id_comment_area_id', array(
+             'name' => 'client_comment_area_area_id_comment_area_id',
+             'local' => 'area_id',
+             'foreign' => 'id',
+             'foreignTable' => 'comment_area',
+             ));
+        $this->createForeignKey('employee_client_comment', 'employee_client_comment_employee_id_employee_id', array(
+             'name' => 'employee_client_comment_employee_id_employee_id',
+             'local' => 'employee_id',
+             'foreign' => 'id',
+             'foreignTable' => 'employee',
+             ));
+        $this->createForeignKey('employee_client_comment', 'employee_client_comment_comment_id_client_comment_id', array(
+             'name' => 'employee_client_comment_comment_id_client_comment_id',
+             'local' => 'comment_id',
+             'foreign' => 'id',
+             'foreignTable' => 'client_comment',
+             ));
+        $this->addIndex('client_comment_area', 'client_comment_area_comment_id', array(
+             'fields' => 
+             array(
+              0 => 'comment_id',
+             ),
+             ));
+        $this->addIndex('client_comment_area', 'client_comment_area_area_id', array(
+             'fields' => 
+             array(
+              0 => 'area_id',
+             ),
+             ));
+        $this->addIndex('employee_client_comment', 'employee_client_comment_employee_id', array(
+             'fields' => 
+             array(
+              0 => 'employee_id',
+             ),
+             ));
+        $this->addIndex('employee_client_comment', 'employee_client_comment_comment_id', array(
+             'fields' => 
+             array(
+              0 => 'comment_id',
+             ),
+             ));
+  }
+}

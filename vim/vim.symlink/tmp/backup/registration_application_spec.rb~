@@ -1,0 +1,158 @@
+# encoding: UTF-8
+require 'spec_helper'
+
+describe CrmApplication::Registration do
+
+  before do
+    @registration_form = CrmApplication::Registration.new(
+        {
+            :company_name               => "Puchatek Sp. z o.o.",
+            :user_email                 => "email@example.com",
+            :password                   => "12345",
+            :street_number              => "10",
+            :flat_number                => "10",
+            :street_name                => "Krucza",
+            :post_code                  => "22-222",
+            :city                       => "Londek zdroj",
+            :phone                      => "+48 22 555-22-22-11",
+            :nip                        => "222233445",
+            :krs                        => "000001122",
+            :regon                      => "003456789",
+            :representatives_attributes => [
+                { :firstname => "Onufry", :lastname => "Pentelka", :position => "Capo" },
+                { :firstname => "Konik", :lastname => "Nabiegunach", :position => "Szef dzialu transportu" }
+            ]
+        })
+    stub_request(:get, "http://sg1.smtsoftware.com/puchatek_development/login/unique?email=email@example.com").
+        with(:headers => { 'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate' }).
+        to_return(:status => 200, :body => "", :headers => { })
+  end
+
+  it "validates regulations and agreement with validate_agreements" do
+    expect do
+      @registration_form.validate_agreements
+    end.to change(@registration_form.errors, :size).from(0).to(2)
+  end
+
+  context "submit method" do
+    it "sends the registration request" do
+      PuchatekApi.should_receive(:rest_request).with(
+          :post,
+          '/application/contractRequest',
+          :args    => @registration_form.to_puchatek_json,
+          :headers => { :content_type => :json }).and_return("")
+      @registration_form.submit
+    end
+  end
+
+  context "to_puchatek_json" do
+    it "generates json string that is understood by puchatek API" do
+      expected_hash      = { 
+          "ContractorUUID" => nil,
+          "Name"           => "Imie",
+          "Email"          => nil,
+          "Street"         => nil,
+          "Password"       => nil,
+          "StreetNo"       => nil,
+          "FlatNo"         => "Numer budynku",
+          "PostCode"       => nil,
+          "City"           => nil,
+          "Phone"          => nil,
+          "NIP"            => nil,
+          "REGON"          => nil,
+          "KRS"            => nil,
+          "SageSerialNumber" => nil,
+          "SageSerialNumberHash" => nil
+        }
+      @registration_form = CrmApplication::Registration.new(:company_name => "Imie", :flat_number => "Numer budynku")
+      JSON.parse(@registration_form.to_puchatek_json).should == expected_hash
+    end
+  end
+
+  context "as_puchatek_json" do
+    it "generates json that is undestood by puchatek API from attributes of form" do
+      expected_json = {
+          "ContractorUUID" => nil,
+          "Name"           => "Puchatek Sp. z o.o.",
+          "Email"          => "email@example.com",
+          "Password"       => "12345",
+          "Street"         => "Krucza",
+          "StreetNo"       => "10",
+          "FlatNo"         => "10",
+          "PostCode"       => "22-222",
+          "City"           => "Londek zdroj",
+          "Phone"          => "+48 22 555-22-22-11",
+          "NIP"            => "222233445",
+          "REGON"          => "003456789",
+          "KRS"            => "0000001122",
+          "SageSerialNumber" => nil,
+          "SageSerialNumberHash" => nil,
+          "PersonList"     => [
+              {
+                  "FirstName" => "Onufry",
+                  "LastName"  => "Pentelka",
+                  "Position"  => "Capo"
+              },
+              {
+                  "FirstName" => "Konik",
+                  "LastName"  => "Nabiegunach",
+                  "Position"  => "Szef dzialu transportu"
+              }
+          ]
+      }
+      @registration_form.as_puchatek_json.should == expected_json
+    end
+
+    it "generates json that is understood by puchatek API even when only representatives set" do
+      expected_json      = {
+          "ContractorUUID" => nil,
+          "Name"           => nil,
+          "Email"          => nil,
+          "Street"         => nil,
+          "Password"       => nil,
+          "StreetNo"       => nil,
+          "FlatNo"         => nil,
+          "PostCode"       => nil,
+          "City"           => nil,
+          "Phone"          => nil,
+          "NIP"            => nil,
+          "REGON"          => nil,
+          "KRS"            => nil,
+          "SageSerialNumber" => nil,
+          "SageSerialNumberHash" => nil,
+          "PersonList"     => [
+              { "FirstName" => "Imie", "LastName" => "Nazwisko", "Position" => "Stanowisko" }
+          ]
+      }
+      @registration_form = CrmApplication::Registration.new(
+          :representatives_attributes => [
+              { :firstname => "Imie", :lastname => "Nazwisko", :position => "Stanowisko" }
+          ]
+      )
+      @registration_form.as_puchatek_json.should == expected_json
+    end
+
+    it "generates json for puchatek API when only one or two attributes are set" do
+      expected_json      = {
+          "ContractorUUID" => nil,
+          "Name"           => nil,
+          "Email"          => nil,
+          "Street"         => nil,
+          "Password"       => nil,
+          "StreetNo"       => "22",
+          "FlatNo"         => nil,
+          "PostCode"       => "22-222",
+          "City"           => nil,
+          "Phone"          => nil,
+          "NIP"            => nil,
+          "REGON"          => nil,
+          "KRS"            => nil,
+          "SageSerialNumber" => nil,
+          "SageSerialNumberHash" => nil,
+      }
+      @registration_form = CrmApplication::Registration.new(:street_number => 22, :post_code => "22-222")
+      @registration_form.as_puchatek_json.should == expected_json
+    end
+  end
+
+end

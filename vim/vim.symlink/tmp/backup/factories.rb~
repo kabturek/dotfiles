@@ -1,0 +1,22 @@
+FactoryGirl.define do
+  factory :user do
+    first_name 'John'
+    last_name  'Doe'
+    email 'admin@example.com'
+    password 'password'
+    fullname 'John Doe'
+    address 'Al. Jrezolimskie 1/1'
+    postcode  '00-123'
+    city 'Warsaw'
+  end
+  factory :participator do
+    first_name 'Mike'
+    last_name  'Doe'
+    email 'admin@example.com'
+    password 'password'
+    fullname 'Mike Doe'
+    address 'Al. Jrezolimskie 1/1'
+    postcode  '00-123'
+    city 'Warsaw'
+  end
+end

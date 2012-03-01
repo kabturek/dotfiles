@@ -1,0 +1,11 @@
+require 'spec_helper'
+require 'conways'
+
+describe World do
+  before do
+    @world = World.new
+  end
+  it "contains Entities" do
+    @world.should respond_to(:entities
+  end
+end

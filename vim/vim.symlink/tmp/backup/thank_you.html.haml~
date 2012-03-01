@@ -1,0 +1,40 @@
+= render :partial => 'join_us', :locals => {:step => :third}
+.thanks1.full
+  .inner
+    %h3
+      =image_tag "headers/reg3_dziekujemy.png", :alt => "Dziękujemy za rejestrację w naszym serwisie"
+    %p
+      Na podane podczas rejestracji konto e-mail wyślemy potwierdzenie. 
+      %br/
+      = succeed "," do
+        %strong Potwierdź je
+      klikając na przesłanego linka, który pozwoli Ci zalogować się na swoje konto na Portalu.
+.thanks2
+  %h3= image_tag "headers/reg3_nastepne.png", :alt => "Następne kroki"
+  %ol
+    %li
+      Po potwierdzeniu rejestracji
+      %strong przygotujemy dla Ciebie umowę.
+    %li
+      %strong Wyślemy
+      umowę na Twój adres pocztowy.
+    %li
+      Masz
+      = succeed "." do
+        %strong 30 dni na odesłanie do nas podpisanej umowy
+    %li
+      Po otrzymaniu podpisanej umowy 
+      %strong aktywujemy
+      Twoje konto w serwisie.
+  %p W każdym momencie możesz śledzić status swojej umowy. Zaloguj się do serwisu i sprawdź w zakładce "Moje konto".
+.thanks3
+  .inner
+    %h3 Potrzebujesz więcej informacji?
+    %p
+      Poczytaj więcej w dziale
+      %a{:href => jak_to_dziala_path} Jak to działa?
+      %br/
+      %strong lub
+      %br/
+      Skontaktuj się z nami
+      %strong 22 678 234 567

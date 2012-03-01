@@ -1,0 +1,56 @@
+# encoding: UTF-8
+# Klasa reprezentująca firmę nie dodaną do znanych kontrahentów. Pozwala m.in. wysłać zaproszenie do udziału w portalu,
+# wyszukiwać firmę po nipie, dodawać do znanych kontrahentów.
+class Company
+  require 'csv'
+  
+  API_PROXY = PuchatekApi::Company.new
+  
+  attr_reader :uuid, :name, :nip, :is_in_cooperation, :on_blacklist, :waiting_for_addition, :waiting_for_removal, :has_valid_contract
+  
+  def initialize(args)
+    @uuid                 = args["ID"] || args[:uuid]
+    @id                   = @uuid
+    @name                 = args["FriendlyName"] || args[:name]
+    @nip                  = args["NIP"] || args[:nip]
+    @is_in_cooperation    = args["IsInCooperation"]
+    @waiting_for_addition = args["WaitingForAddition"]
+    @waiting_for_removal  = args["WaitingForRemoval"]
+    @on_blacklist         = args["OnBlacklist"]
+    @has_valid_contract   = args["HasValidContract"]
+  end
+  
+  def add_to_current_account
+    return false if @name.empty?    
+    API_PROXY.add_to_current_account(self)
+  end
+  
+  def self.find_by_nip(nips, csv)
+    nips = parse_csv(csv) if csv
+    nips = nips.split(',').map(&:strip) if nips.kind_of?(String)
+    API_PROXY.find_by_nip(nips)
+  end
+
+  def self.parse_csv(csv)
+    file = CSV::Reader.parse(csv)
+    nips = ""
+
+    begin
+      file.each do |row|
+        if row[0].to_s.split(';')[0]
+          nips += "#{row[0].to_s.split(';')[0].gsub('-', '').gsub(' ', '')},"
+        end
+      end
+
+      return nips
+    rescue
+      return nil
+    end
+
+  end
+  
+  def self.invite(emails)
+     API_PROXY.invite(emails)
+  end
+  
+end

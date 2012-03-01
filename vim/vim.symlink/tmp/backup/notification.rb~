@@ -1,0 +1,6 @@
+# encoding: utf-8
+# Klasa reprezentuje wniosek o zmiane powiadomienia
+module CrmApplication
+  class Notification
+  end
+end

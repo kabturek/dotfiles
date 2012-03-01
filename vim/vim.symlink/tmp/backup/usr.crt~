@@ -1,0 +1,71 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 144 (0x90)
+        Signature Algorithm: sha1WithRSAEncryption
+        Issuer: C=RN, ST=RN, L=RN, O=Rootnode, CN=Rootnode CA/emailAddress=admins@rootnode.net
+        Validity
+            Not Before: Sep 22 13:41:02 2011 GMT
+            Not After : Sep 19 13:41:02 2021 GMT
+        Subject: C=RN, ST=RN, L=RN, O=Rootnode, CN=vpn2446_client/emailAddress=admins@rootnode.net
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (1024 bit)
+                Modulus:
+                    00:ca:eb:93:75:be:c0:26:27:15:79:0c:35:c0:28:
+                    c4:bc:ed:7e:c1:6c:00:99:2f:12:b7:3b:d8:72:5f:
+                    7f:38:c8:73:16:be:85:5c:92:9f:53:fc:33:22:0b:
+                    3b:ec:f3:12:5a:75:31:58:4b:84:d9:96:b7:da:1b:
+                    73:d0:76:a5:2c:72:eb:63:ae:e1:ff:cd:8f:95:5e:
+                    49:46:c4:31:01:1f:7e:e8:79:da:f1:e0:13:fa:a9:
+                    25:da:9a:21:53:8c:fd:4b:14:6e:18:f3:53:55:76:
+                    6b:1b:73:4f:78:1a:d3:8e:f4:a2:ef:bb:5d:47:92:
+                    ba:71:48:1b:70:7f:59:03:65
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            Netscape Comment: 
+                Easy-RSA Generated Certificate
+            X509v3 Subject Key Identifier: 
+                E1:56:10:87:CC:E1:C8:1B:F7:53:98:99:77:09:00:A4:90:EC:6D:E8
+            X509v3 Authority Key Identifier: 
+                keyid:56:E5:E7:6D:50:43:31:04:DA:29:90:09:D0:02:0E:2F:7E:42:AF:2E
+                DirName:/C=RN/ST=RN/L=RN/O=Rootnode/CN=Rootnode CA/emailAddress=admins@rootnode.net
+                serial:8A:6E:BE:CD:D5:4E:6B:A9
+
+            X509v3 Extended Key Usage: 
+                TLS Web Client Authentication
+            X509v3 Key Usage: 
+                Digital Signature
+    Signature Algorithm: sha1WithRSAEncryption
+        4c:ec:0d:e1:ac:f7:f0:3a:24:43:8d:f2:e6:7e:b5:ae:b8:47:
+        0b:16:12:03:8b:30:de:07:32:73:d3:c1:52:39:c3:d9:a9:42:
+        41:79:70:81:9a:79:73:e3:61:98:f2:d2:ad:5b:83:07:64:08:
+        f2:ec:dd:47:0f:ed:0a:44:9d:19:90:d5:52:5a:3a:1b:ef:ce:
+        f1:02:c4:96:df:0e:d7:6c:c2:d5:09:b3:15:97:af:1e:7e:e3:
+        9b:5e:bf:69:79:5f:81:95:d8:65:32:73:a9:5a:d4:13:63:98:
+        c7:96:e7:2a:21:62:7b:05:f1:9b:fd:d5:0b:1c:fb:d5:7a:76:
+        ba:93
+-----BEGIN CERTIFICATE-----
+MIIDjDCCAvWgAwIBAgICAJAwDQYJKoZIhvcNAQEFBQAwdDELMAkGA1UEBhMCUk4x
+CzAJBgNVBAgTAlJOMQswCQYDVQQHEwJSTjERMA8GA1UEChMIUm9vdG5vZGUxFDAS
+BgNVBAMTC1Jvb3Rub2RlIENBMSIwIAYJKoZIhvcNAQkBFhNhZG1pbnNAcm9vdG5v
+ZGUubmV0MB4XDTExMDkyMjEzNDEwMloXDTIxMDkxOTEzNDEwMlowdzELMAkGA1UE
+BhMCUk4xCzAJBgNVBAgTAlJOMQswCQYDVQQHEwJSTjERMA8GA1UEChMIUm9vdG5v
+ZGUxFzAVBgNVBAMUDnZwbjI0NDZfY2xpZW50MSIwIAYJKoZIhvcNAQkBFhNhZG1p
+bnNAcm9vdG5vZGUubmV0MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDK65N1
+vsAmJxV5DDXAKMS87X7BbACZLxK3O9hyX384yHMWvoVckp9T/DMiCzvs8xJadTFY
+S4TZlrfaG3PQdqUscutjruH/zY+VXklGxDEBH37oedrx4BP6qSXamiFTjP1LFG4Y
+81NVdmsbc094GtOO9KLvu11HkrpxSBtwf1kDZQIDAQABo4IBKDCCASQwCQYDVR0T
+BAIwADAtBglghkgBhvhCAQ0EIBYeRWFzeS1SU0EgR2VuZXJhdGVkIENlcnRpZmlj
+YXRlMB0GA1UdDgQWBBThVhCHzOHIG/dTmJl3CQCkkOxt6DCBpgYDVR0jBIGeMIGb
+gBRW5edtUEMxBNopkAnQAg4vfkKvLqF4pHYwdDELMAkGA1UEBhMCUk4xCzAJBgNV
+BAgTAlJOMQswCQYDVQQHEwJSTjERMA8GA1UEChMIUm9vdG5vZGUxFDASBgNVBAMT
+C1Jvb3Rub2RlIENBMSIwIAYJKoZIhvcNAQkBFhNhZG1pbnNAcm9vdG5vZGUubmV0
+ggkAim6+zdVOa6kwEwYDVR0lBAwwCgYIKwYBBQUHAwIwCwYDVR0PBAQDAgeAMA0G
+CSqGSIb3DQEBBQUAA4GBAEzsDeGs9/A6JEON8uZ+ta64RwsWEgOLMN4HMnPTwVI5
+w9mpQkF5cIGaeXPjYZjy0q1bgwdkCPLs3UcP7QpEnRmQ1VJaOhvvzvECxJbfDtds
+wtUJsxWXrx5+45tev2l5X4GV2GUyc6la1BNjmMeW5yohYnsF8Zv91Qsc+9V6drqT
+-----END CERTIFICATE-----
+

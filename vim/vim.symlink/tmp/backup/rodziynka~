@@ -1,0 +1,10 @@
+<VirtualHost *:80>
+  ServerName rodziynka.dev
+  DocumentRoot "/home/kabturek/projects/rodziynka/app/webroot"
+  DirectoryIndex index.php
+  <Directory "/home/kabturek/projects/rodziynka/app/webroot">
+    AllowOverride All
+    Allow from All
+  </Directory>
+
+</VirtualHost>

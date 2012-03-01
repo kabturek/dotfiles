@@ -1,0 +1,13 @@
+class CreateUserGoals < ActiveRecord::Migration
+  def change
+    create_table :user_goals do |t|
+      t.user :references
+      t.goal_type :references
+      t.datetime :start_date
+      t.datetime :end_date
+      t.integer :goal_value
+
+      t.timestamps
+    end
+  end
+end

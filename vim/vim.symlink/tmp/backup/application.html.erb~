@@ -1,0 +1,103 @@
+<!doctype html>
+<!--[if lt IE 7]>
+<html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Puchatek</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <!-- CSS concatenated and minified via ant build script-->
+  <%= stylesheet_link_tag "style", "custom", "achtung", 'jquery-ui', 'uploadify'%>
+  <!-- end CSS-->
+  
+  <!--[if IE]>
+  <%= stylesheet_link_tag "ie" %>
+  <![endif]-->
+
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+
+<body class="<%= home_content? ? "mainpage" : "page" %>">
+  <%= render :partial => 'shared/flashes' %>
+  <div id="topOuter">
+    <div id="topBg">
+      <header id="top" class="clearfix">
+        <div id="loginPanel">
+          <% if !current_user %>
+          <div id="loginPanelInner">
+            <div id="dolaczDoNasBox">
+              <p>Nie pracujesz jeszcze<br/>
+                z e-dokumentami?<br/>
+                <strong>Przyłącz się do nas!</strong></p>
+              <a href="<%= new_crm_application_registration_path %>" id="linkDolaczDoNas"><span>Dołącz do nas</span></a>
+
+            </div>
+
+            <%= form_tag session_path, :id => "zalogujSie" do %>
+                <%= text_field_tag :email, 'Email', :class => 'text default-value', :id => 'loginname', :size => 25 %>
+                <div id="loginPassWrapper">
+
+                  <%= password_field_tag :password, '', :class => 'text', :id => 'loginpass', :size => 25 %>
+                  <input class="text" name="loginpass" id="fakeloginpass" type="text" value="Hasło" size="25" maxlength="255"/><!-- Uwaga! Input #fakeloginpass powinien być ignorowany przy submicie. -->
+                  <br/><%= link_to "nie pamiętam hasła", remind_password_path %>
+                </div>
+                <input class="button" id="zalogujSieButton" type="submit" value="Zaloguj się"/>
+            <% end %>
+
+          </div>
+          <% end %>
+        </div>
+        <div id="logo">
+          <h1><a title="między firmami" href="/"><%= image_tag 'logo.png', :alt => 'między firmami' %></a></h1>
+        </div>
+
+        <%= render :partial => 'shared/top_user' %>
+        <%= render :partial => 'shared/top_menu' %>
+
+        <% if home_content? %>
+            <div id="topMainImg">
+              <p><%= image_tag 'top_txt_quote.gif' %></p>
+            </div>
+
+            <div id="topInfo">
+              <p><%= image_tag 'top_txt_teraz.gif' %></p>
+              <%= link_to image_tag('top_btn_join.gif'), new_crm_application_registration_path %>
+              <%= link_to 'dowiedz sie wiecej' %>
+            </div>
+        <% end %>
+      </header>
+    </div>
+  </div>
+
+<div id="mainBg">
+  <div id="main" role="main"
+  <% if @layout_has_tabs %> class="tabs"
+  <% end %>>
+    <div class="contentShTop">
+      <div class="contentShBottom">
+        <div class="contentSh">
+          <div id="content">
+            <%= yield %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= render :partial => 'shared/footer' %>
+
+</body>
+</html>

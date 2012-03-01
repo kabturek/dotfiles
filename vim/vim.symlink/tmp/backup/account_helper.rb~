@@ -1,0 +1,22 @@
+module AccountHelper
+
+  def contract_validity_type_name( status, from, to )
+    from = from.strftime("%d-%m-%Y") if from.respond_to?(:strftime)
+    to   = to.strftime("%d-%m-%Y")   if to.respond_to?(:strftime)
+    case status
+      when :not_valid
+        "Brak umowy."
+      when :valid
+        "Umowa aktywna."
+      when :valid_from_tomorrow
+        "Umowa aktywna od jutra."
+      when :valid_from_date
+        "Umowa aktywna od #{from}."
+      when :valid_to_date
+        "Umowa aktywna do #{to}."
+      else
+        "Brak umowy"
+    end
+  end
+
+end

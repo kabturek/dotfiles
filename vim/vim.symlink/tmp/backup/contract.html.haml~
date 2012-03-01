@@ -1,0 +1,38 @@
+= render :partial => 'shared/company_tabs'
+#content-col
+  %h2
+    %img{:alt => "Status umowy z Sage", :height => "19", :src => "/assets/headers/konto_status-umowy.png", :width => "178"}/
+  .border-box.info-box
+    .last-update
+      %dl
+        %dt 
+          = contract_validity_type_name( current_user.account.contract_validity_type, current_user.account.valid_from, current_user.account.valid_to )
+        %dd
+          - if current_user.account.registration_application_allowed?
+            = link_to "Zarejestruj się ponownie", new_crm_application_renew_registration_path, :class => 'orange-button'
+      - if current_user.account_active? and current_user.account.decline_contract_application_allowed?
+        %p
+          = link_to 'Wypowiedz umowę', crm_application_decline_contract_path, :method => :post, :class => 'orange-button', :confirm => "UWAGA! Obecna umowa będzie aktywna tylko do końca dzisiejszego dnia. Czy na pewno chcesz wypowiedzieć umowę?"
+          %a.question{:href => "#wypowiedzUmoweInfo"} ?
+          %span#wypowiedzUmoweInfo.tooltip
+            %span.innerTooltip
+              %strong W jakim celu zbieramy te informacje?
+              Lorem ipsum dolor sit amet, consectetur adipiscing
+              elit. Fusce facilisis nibh sit amet mi iaculis
+              fringilla. Morbi accumsan turpis ac justo tempor
+              malesuada ut sed augue.
+            %span.tooltipPointer  
+            %a.tooltipClose{:href => "#", :rel => "close"} Zamknij
+  .table
+    %h4 Historia wniosków do Sage
+    %table
+      %tr
+        %th
+          %span Data
+        %th
+          %span Rodzaj wniosku
+        %th{:style => "width: 270px;"}
+          %span Operacja
+        %th
+          %span Uwagi dodatkowe
+      = render :partial => "requests_history", :collection => current_user.account.requests_history, :as => :item

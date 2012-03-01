@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * EmployeeContact form.
+ *
+ * @package    ptclean
+ * @subpackage form
+ * @author     Marcin Domański <marcin+ptclean@kabturek.info>
+ * @version    SVN: $Id: sfDoctrineFormTemplate.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
+ */
+class EmployeeContactForm extends BaseEmployeeContactForm
+{
+  public function configure()
+  {
+    unset($this['created_at'], $this['updated_at']);
+    $this->widgetSchema['date'] = new sfWidgetFormDatePickerTime();
+    $this->widgetSchema['notes'] = new sfWidgetFormInputText();
+  }
+  public function hideEmployee(){
+    $this->widgetSchema['employee_id'] = new sfWidgetFormInputHidden();
+  }
+  public function setDefault($field, $value){
+    if($field == 'employee_id'){
+      $this->hideEmployee();
+    }
+    return parent::setDefault($field, $value);
+  }
+}

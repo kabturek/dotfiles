@@ -1,0 +1,44 @@
+<?php
+class BatchEmployeeMaterialForm extends sfForm{
+  public function configure(){
+    $this->setWidgets(array(
+      'document_id'   => new sfWidgetFormDoctrineChoice(array(
+        'model' => 'Document',
+        'add_empty' => false,
+        'multiple' => true
+      )),
+      'recipients_list' => new sfWidgetFormChoice(array(
+        'choices' => array(),
+        'multiple' => true
+      ), array(
+        'style' => 'display:none;'
+      ))
+    ));
+    $this->setValidators(array(
+      'document_id' => new sfValidatorPass(),
+      'recipients_list' => new sfValidatorChoice(array(
+        'multiple' => true,
+        'min' => 1,
+        'choices' => array_values(Doctrine::getTable('Employee')->createQuery()->execute()->getPrimaryKeys())
+      )),
+    ));
+    $this->widgetSchema->setNameFormat('batch_materials[%s]');
+    $this->widgetSchema['recipients_list']->setLabel(' ');
+    $this->widgetSchema['document_id']->setLabel(' ');
+    $this->widgetSchema['document_id']->setLabel('Material');
+    $this->disableLocalCSRFProtection();
+  }
+  public function setIds($ids){
+    $this->widgetSchema['recipients_list']->setOption('choices', array_combine($ids, $ids));
+    $this->setDefault('recipients_list', $ids);
+  }
+  public function save(){
+    foreach($this->getValue('recipients_list') as $recipient_id){
+      foreach($this->getValue('document_id') as $document_id){
+        Doctrine::getTable('EmployeeDocument')->addDocument($recipient_id, $document_id);
+      }
+    }
+    return true;
+  }
+}
+

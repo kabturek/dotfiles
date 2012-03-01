@@ -1,0 +1,7 @@
+module CrmApplication
+  class DeclineContract
+    def submit
+      PuchatekApi::CrmForms.new.submit_decline_contract_form
+    end
+  end
+end

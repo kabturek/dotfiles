@@ -1,0 +1,66 @@
+require 'capistrano_colors'
+require "bundler/capistrano"
+
+set :stages, %w(staging qas forte production)
+set :default_stage, "staging"
+require 'capistrano/ext/multistage'
+
+set :user, 'rails'
+set :runner, 'rails'
+
+set :application, "puchatek"
+
+set :scm, :git
+set :repository, "git@git.assembla.com:puchatek.git"
+set :deploy_via, :remote_cache
+set :copy_exclude, %w(.git doc config/database.yml)
+set :use_sudo, :false
+set :run_method, "run"
+
+set :keep_releases, 5
+ssh_options[:forward_agent] = true
+
+default_run_options[:pty]   = true
+
+namespace :deploy do
+
+  task :symlink_shared do
+    run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+    run "ln -nfs #{shared_path}/config/config.yml #{release_path}/config/config.yml"
+  end
+
+  task :migrate do
+    run "cd #{release_path}; bundle exec rake db:migrate RAILS_ENV=#{rails_env}"
+  end
+
+  desc "Symlink shared configs and folders on each release."
+  task :clear_cache, :roles => :app do
+    # desc "Clear memcached cache"
+    # run "cd #{release_path}; bundle exec rake cache:clear RAILS_ENV=#{rails_env}"
+  end
+
+  task :restart, :roles => :app, :except => { :no_release => true } do
+    # run "cd #{release_path} && #{rvm if rvm} RAILS_ENV=production rake ts:rebuild &"
+    run "touch #{release_path}/tmp/restart.txt"
+    run "touch #{release_path}/tmp/last_deploy"
+  end
+
+  after 'deploy:update_code' do
+    deploy.symlink_shared
+    run "cd #{release_path}; RAILS_ENV=#{rails_env} bundle exec rake assets:precompile"
+  end
+
+  after 'deploy:restart' do
+    deploy.migrate
+#    delayed_job.restart
+# thinking_sphinx.rebuild
+#deploy.clear_cache
+    deploy.cleanup
+    #deploy.enable_web
+  end
+
+  #Dir[File.join(File.dirname(__FILE__), '..', 'vendor', 'gems', 'hoptoad_notifier-*')].each do |vendored_notifier|
+  #  $: << File.join(vendored_notifier, 'lib')
+  #end
+
+end

@@ -1,0 +1,17 @@
+<script type="text/javascript">
+
+jQuery(document).ready(function(){
+tb_show(null, "#TB_inline?height=282&amp;width=700&amp;inlineId=choose_shop&amp;modal=true", false);
+jQuery('#ShopShopId').change(function(){
+  window.location = '/shops/select/' + jQuery(this).val();
+});
+});
+</script>
+                    <div id="choose_shop" style="display: none;" >
+                        <div id="layer-form">
+                            <h2>Wybierz swój sklep</h2>
+                            <a id="close-button-wide" onclick="" href="/"><img alt="zamknij" src="<?php echo $this->base; ?>/css/img/layer_form_close_img.gif" /></a>
+<?php echo $form->create('Shop', array('url' => '/shops/select')); ?>
+<?php echo $form->select('shop_id', $shops, null, null, false); ?>
+                        </div>
+                    </div>    

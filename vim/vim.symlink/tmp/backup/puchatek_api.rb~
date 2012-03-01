@@ -1,0 +1,12 @@
+# encoding: utf-8
+module PuchatekApi
+
+  GUID_REGEXP = /[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}/
+  NIP_WITH_DASHES_REGEXP  = /\d{3}-\d{3}-\d{2}-\d{2}/
+
+  include PuchatekApi::ApiMapping
+  include PuchatekApi::RequestHelpers
+
+  class Inva
+
+end

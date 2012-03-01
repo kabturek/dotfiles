@@ -1,0 +1,622 @@
+Employee:
+  actAs: 
+    Timestampable: ~
+    Searchable: 
+      fields: [first_name, last_name, cellphone]
+  columns:
+    user_id:
+      type: integer
+      notnull: false
+    category_id:
+      type: integer
+      notnull: false
+    user_type:
+      type: integer
+      notnull: true
+    language:
+      type: string(2)
+      notnull: true
+      default: en
+    current_stage:
+      type: integer
+      notnull: true
+    first_name:
+      type: string(255)
+      notnull: true
+    last_name: 
+      type: string(255)
+      notnull: true
+    cellphone: 
+      type: string(255)
+      notnull: true
+    email_address:
+      type: string(255)
+      notnull: true
+      unique: true
+    entry_date:
+      type: timestamp
+      notnull: true
+    source:
+      type: string(255)
+      notnull: true
+    source_details:
+      type: string(255)
+      notnull: false
+    status_id:
+      type: integer
+      notnull: true
+    status_notes:
+      type: string
+    valid_permit: boolean
+    valid_driving_license: boolean
+    insured_vehicle: boolean
+    acceptable_distance: boolean
+    full_time: boolean
+    max_absent: boolean
+    intermediate_english: boolean
+    internet_access: boolean
+    cell_phone: boolean
+    reference:
+      type: string
+    pet_problems:
+      type: string
+    quit_reason:
+      type: string
+    desired_income:
+      type: string
+    english_level:
+      type: string
+    cleaning_experience:
+      type: string
+    attendance_problems:
+      type: string
+    prev_responsibilities:
+      type: string
+    likes_dislikes:
+      type: integer
+    likes_dislikes_notes:
+      type: string
+    values_most:
+      type: integer
+    values_most_notes:
+      type: string
+    why_contacted:
+      type: integer
+    why_contacted_notes:
+      type: string
+    why_hire:
+      type: integer
+    why_hire_notes:
+      type: string
+    candidates_strengths:
+      type: integer
+    candidates_strengths_notes:
+      type: string
+    total_score:
+      type: integer
+    approved:
+      type: boolean
+    approved_notes:
+      type: string
+    address_street:
+      type: string(255)
+    address_city:
+      type: string(255)
+    address_state:
+      type: string(255)
+    address_zip:
+      type: string(255)
+    birthday:
+      type: date
+    emergency_contact:
+      type: string
+    first_impression:
+      type: integer
+    first_impression_notes:
+      type: string
+    enthusiasm:
+      type: integer
+    enthusiasm_notes:
+      type: string
+    trainable:
+      type: integer
+    trainable_notes:
+      type: string
+    interview_score:
+      type: integer
+    interview_approved:
+      type: boolean
+    interview_approved_notes:
+      type: string
+    position:
+      type: string
+    first_day:
+      type: date
+    absent_days:
+      type: decimal
+    absent_occurences:
+      type: integer
+    valid_complains:
+      type: integer
+      default: 0
+      notnull: true
+    all_complains:
+      type: integer
+      default: 0
+      notnull: true
+    damages_cost: decimal
+    damages_count: integer
+  relations:
+    User:
+      class: sfGuardUser
+      local: user_id
+      foreign: id
+      type: one
+      foreignType: one
+      foreignAlias: Employee
+      onDelete: SET NULL
+    Inquiries:
+      foreignAlias: Employees
+      class: Inquiry
+      refClass: EmployeeInquiry
+    Status:
+      class: EmployeeStatus
+      local: status_id
+      type: one
+      foreignType: many
+      foreign: id
+      foreignAlias: Employee
+    Position:
+      class: Category
+      local: category_id
+      foreign: id
+      foreignAlias: Employees
+    Comments:
+      refClass: EmployeeClientComment
+      class: ClientComment
+      local: employee_id
+      foreign: comment_id
+
+Absence:
+  actAs: [Timestampable]
+  columns:
+    employee_id: 
+      type: integer
+      notnull: false
+      default: null
+    date_start: date
+    date_end: 
+      type: date
+      notnull: false
+      default: null
+    advance_notice:
+      type: integer
+    advance_notice_type:
+      type: enum
+      values: [ hours, days]
+    reason:
+      type: string
+      notnull: false
+    rate:
+      type: decimal
+      notnull: true
+      scale: 1
+  relations:
+    Employee:
+      local: employee_id
+      foreignAlias: Absents
+
+Alert:
+  actAs: [Timestampable]
+  columns:
+    recipient_id:
+      type: integer
+      notnull: false
+      default: null
+    employee_id: 
+      type: integer
+      notnull: false
+      default: null
+    title: string(255)
+    text: string
+    is_read: 
+      type: boolean
+  relations:
+    Employee:
+      local: employee_id
+      foreignAlias: Absents
+      onDelete: CASCADE
+
+EmployeeStatusChange:
+  actAs: [Timestampable]
+  columns:
+    status_id:
+      type: string(255)
+      notnull: false
+    status_notes:
+      type: string
+
+ClientComment:
+  actAs: 
+    Timestampable: ~
+  columns:
+    date: date
+    address: string
+    comment: string
+    type: 
+      type: enum
+      values: [ complaint, praise, complaint and praise, N/A]
+    is_valid: boolean
+    office_comment: string
+  relations:
+    Employees:
+      refClass: EmployeeClientComment
+      class: Employee
+      foreign: employee_id
+      local: comment_id
+      onDelete: CASCADE
+    Areas:
+      refClass: ClientCommentArea
+      class: CommentArea
+      foreign: area_id
+      local: comment_id
+      onDelete: CASCADE
+
+EmployeeClientComment:
+  actAs: 
+    Timestampable: ~
+  columns:
+    employee_id: integer
+    comment_id: integer
+    is_read: 
+      type: boolean
+  relations:
+    Employee:
+      local: employee_id
+      foreign: id
+      foreignAlias: EmployeeClientComments
+      onDelete: CASCADE
+    ClientComment:
+      local: comment_id
+      foreign: id
+      foreignAlias: EmployeeClientComments
+      onDelete: CASCADE
+
+ClientCommentArea:
+  actAs: 
+    Timestampable: ~
+  columns:
+    comment_id: integer
+    area_id: integer
+  relations:
+    ClientComment:
+      local: comment_id
+      foreign: id
+      foreignAlias: ClientCommentAreas
+    CommentArea:
+      local: area_id
+      foreign: id
+      foreignAlias: ClientCommentAreas
+
+CommentArea:
+  columns:
+    name: string(255)
+
+EmployeeStatus:
+  actAs:
+    I18n:
+      fields: [name]
+  columns:
+    name:
+      type: string(255)
+    status:
+      type: string(40)
+
+
+EmployeeInquiry:
+  columns:
+    inquiry_id:
+      type: integer
+    employee_id:
+      type: integer
+    tries:
+      type: integer
+      default: 0
+    is_completed:
+      type: boolean
+      default: false
+    max_tries:
+      type: integer
+      default: 3
+    deadline:
+      type: timestamp
+      notnull: false
+      default: null
+  relations:
+    Inquiry:
+      foreignAlias: EmployeeInquiries
+      onDelete: CASCADE
+    Employee:
+      foreignAlias: EmployeeInquiries
+      onDelete: CASCADE
+
+EmployeeTrainingReport:
+  columns:
+    name:
+      type: string(50)
+    employee_id:
+      type: integer
+    day:
+      type: date
+    type_for:
+      type: enum
+      values: [day, week]
+      default: day
+    punctuality:
+      type: integer
+    attitude:
+      type: integer
+    following_directions:
+      type: integer
+    speed:
+      type: integer
+    quality:
+      type: integer
+    bathroom_speed:
+      type: integer
+    bathroom_quality:
+      type: integer
+    bathroom_comments:
+      type: string
+    kitchen_speed:
+      type: integer
+    kitchen_quality:
+      type: integer
+    kitchen_comments:
+      type: string
+    bedroom_speed:
+      type: integer
+    bedroom_quality:
+      type: integer
+    bedroom_comments:
+      type: string
+    dining_room_speed:
+      type: integer
+    dining_room_quality:
+      type: integer
+    dining_room_comments:
+      type: string
+    living_area_speed:
+      type: integer
+    living_area_quality:
+      type: integer
+    living_area_comments:
+      type: string
+    utility_room_speed:
+      type: integer
+    utility_room_quality:
+      type: integer
+    utility_room_comments:
+      type: string
+    dusting_speed:
+      type: integer
+    dusting_quality:
+      type: integer
+    dusting_comments:
+      type: string
+    vacuuming_speed:
+      type: integer
+    vacuuming_quality:
+      type: integer
+    vacuuming_comments:
+      type: string
+    notes:
+      type: string
+    decision:
+      type: string
+  relations:
+    Employee:
+      local: employee_id
+      foreign: id
+      foreignAlias: TrainingReport
+      onDelete: CASCADE
+
+InquiryGroup:
+  columns:
+    name:
+      type: string(255)
+    stage:
+      type: integer
+
+InquiryDocument:
+  columns:
+    inquiry_id:
+      type: integer
+      primary: true
+    document_id:
+      type: integer
+      primary: true
+  relations:
+    Inquiry:
+      foreignAlias: InquiryDocuments
+      onDelete: CASCADE
+    Document:
+      foreignAlias: InquiryDocuments
+      onDelete: CASCADE
+      
+InquiryCategory:
+  columns:
+    category_id:
+      type: integer
+      primary: true
+    inquiry_id:
+      type: integer
+      primary: true
+  relations:
+    Category:
+      foreignAlias: InquiryCategory
+    Inquiry:
+      foreignAlias: InquiryCategory
+
+EmployeeDocument:
+  actAs: 
+    Timestampable: ~
+  columns:
+    employee_id:
+      type: integer
+      primary: true
+    document_id:
+      type: integer
+      primary: true
+    read_time: timestamp
+  relations:
+    Employee:
+      foreignAlias: EmployeeDocuments
+      onDelete: CASCADE
+    Document:
+      foreignAlias: EmployeeDocuments
+      onDelete: CASCADE
+
+Document:
+  actAs:
+    I18n:
+      fields: [title, filename]
+  columns:
+    title:
+      type: string(255)
+    filename:
+      type: string(255)
+  relations:
+    Employee:
+      foreignAlias: Documents
+      refClass: EmployeeDocument
+    Inquiry:
+      foreignAlias: Documents
+      refClass: InquiryDocument
+    Category:
+      refClass: DocumentCategory
+      foreignAlias: Documents
+
+
+DocumentCategory:
+  columns:
+    category_id:
+      type: integer
+      primary: true
+    document_id:
+      type: integer
+      primary: true
+  relations:
+    Category:
+      foreignAlias: DocumentCategory
+      onDelete: CASCADE
+    Document:
+      foreignAlias: DocumentCategory
+      onDelete: CASCADE
+
+Category:
+  actAs: 
+    Timestampable: ~
+  columns:
+    title:
+      type: string(255)
+
+
+Page:
+  actAs: 
+    Timestampable: ~
+    I18n:
+      fields: [title, text]
+  columns:
+    title:
+      type: string(255);
+    text:
+      type: string
+    next_page_id:
+      type: integer
+    stage:
+      type: integer
+    position_id:
+      type: integer
+      notnull: false
+  relations:
+    NextPage:
+      class: Page
+      local: next_page_id
+      foreign: id
+    Position:
+      class: Category
+      local: position_id
+      foreign: id
+      foreignAlias: Information
+
+Message:
+  actAs:
+    Timestampable: ~
+  columns:
+    title: 
+      type: string(255)
+      notnull: true
+    text: 
+      type: string
+      notnull: true
+    from_id: integer
+  relations:
+    Sender:
+      class: sfGuardUser
+      local: from_id
+      foreign: id
+      foreignAlias: MessagesSent
+    Recipients:
+      class: sfGuardUser
+      foreign: user_id
+      refClass: MessageRecipient
+      foreignAlias: Messages
+
+MessageRecipient:
+  actAs:
+    Timestampable: ~
+  columns:
+    message_id:
+      type: integer
+      primary: true
+    user_id: 
+      type: integer
+      primary: true
+    read_time: timestamp
+  relations:
+    Message:
+      onDelete: CASCADE
+      foreignAlias: MessageRecipients
+    User:
+      onDelete: CASCADE
+      class: sfGuardUser
+      local: user_id
+      foreignAlias: MessageRecipients
+
+EmployeeContact:
+  actAs: [Timestampable]
+  columns:
+    employee_id: 
+      type: integer
+    date: timestamp
+    notes: text
+  relations:
+    Employee:
+      local: employee_id
+      foreignAlias: Contacts
+
+EmployeeDamage:
+  actAs: [Timestampable]
+  columns:
+    employee_id: 
+      type: integer
+    date: timestamp
+    address: text
+    details: text
+    cost: decimal
+  relations:
+    Employee:
+      local: employee_id
+      foreignAlias: Damages
+  

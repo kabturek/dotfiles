@@ -1,0 +1,6 @@
+%tr
+  %td
+    %span.date= Time.parse(detail[:operation_date]).strftime('%d-%m-%Y')
+  %td= kind
+  %td= detail[:operation_code] if detail[:operation_code] 
+  %td= detail[:operation_description]  if detail[:operation_description] 

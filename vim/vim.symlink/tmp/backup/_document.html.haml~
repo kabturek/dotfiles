@@ -1,0 +1,7 @@
+%tr
+  - table_columns(document).each do |table_column|
+    %td{:class => table_column}
+      - if document.respond_to? table_column
+        = document.send(table_column) 
+      - else
+        = render :partial => table_column, :locals => { :document => document}

@@ -1,0 +1,60 @@
+\section{Analiza Dostępnych technologii celem wybrania najbardziej odpowiedniej do zrealizowania systemu}
+\subsection{Standardy obsługi danych geograficznych w bazach danych}
+Są dwa standardy obsługi danych geograficznych w bazach danych: ``OpenGIS/OGC'' i ``SQL/MM''. Open Geospatial Consortium jest organizacją skupiajaca ponad 400 komercyjnych, rządowych i badawczych organizacji. Celem jej jest wypracowanie oraz implementacja otwartych standardów umozliwiających wymiane danych geograficznych. Jednym z 30 ustanowionych standardów organizacji OGC jest Simple Feature Access (SFS), który jest także standardem ISO. Definiuje on obiekty i ich atrybuty, wspólny model przechowywania danych geograficznych używająć współrzędnych zapisanych w formie tekstowej (WKT - Well Known Text) lub w formie binarnej (WKB - Well Known Binary), operacje na obiektach i indeksy. Opisuje tylko dane w układzie dwuwymiarowym.
+    Standard WKT opisuje dane w formie tekstowej. Przykłady zapisy:
+    \begin{verbatim}
+    POINT( 3.4563 48.5432 )
+    LINESTRING( 37.0625 -95.677068, 42.310334 78.662109 )
+    MULTIPOINT( 32.12 3, 4 5, 12.2 12.2 )
+    \end{verbatim}
+    Standard WKB przedstawia te same dane w postaci binarnej. Podstawoą tego standardu jest punkt przedstawiony jako dwie wartości zmiennoprzecinkowe. Inne geometrie są zbiorami takich punktów. 
+    %IMG: obrazek WKB
+
+    %IMG: obrazek specyfikacji Opengis img/opengis.png (ze standardu)
+    SQL/MM (SQL Multimedia and Application Packages) jest rozszerzeniem standardu SQL umożliwiających przetwarzanie danych tekstowych, przestrzennych i obrazów w bazie danych. Standard ten jest opublikowany i opracowany przez ISO. Standard ma wiele luźno połączonych specyfikacji. Został stworzony ponieważ standard SQL99 nie zwierał konstrukcji do obsługi danych multimedialnycz, dużych danych tekstowych czy danych przestrzennych. Rozszerzenia które były tworzone przez środowiska zainteresowane przechowywaniem takich danych w bazach danych były ze sobą niekompatybilne i występowały konflikty (na przykład na poziomie nazw funkcji i obiektów). W wyniku tego postanowiono stworzyć nowy standard który uporządkuje te rozszerzenia. Specyfikacja składa się z sześciu części:
+    \begin{itemize}
+      \item Część 1: Framework - podstawowe definicje i koncepcje dla pozostałych części
+      \item Część 2: Full-Text - przetwarzanie danych tekstowych
+      \item Część 3: Spatial - dane przestrzenne
+      \item Część 5: Still images - przechowywanie i obróbka obrazy
+      \item Część 6: Data Mining - eksploracja danych
+      \item Część 7: History - dane historyczne
+    \end{itemize}
+    SQL/MM jest rozszerzeniem standardu OpenGIS i implementuje wszystkie jego funkcje. Standard ten nie jest ograniczony do danych dwuwymiarowych. Dzieki wykorzystania przedrostka ``ST\_`` dla typów i operacji zdefiniowanych w standardzie wyeliminowano możliwość kolizji naz z innymi rozszerzeniami. Przykładem tu może być funkcja CONTAINS, która może oznaczać zawieranie się danego elementu geograficznego w innym ale jest także używana dla danych tekstowych - do sprzwdzenia czy dany łańcuch znaków zawiera tekst. Tabela TODO przedstawia porównianie typów danych i funkcji standardu OpenGIS i SQL/MM
+    %IMG: dodac tabele typów danych (opracowanie własne)
+    Hierarchia typów danych nie różnie się znacznie od hierachii przedstawioenj w standardzie OpenGIS:
+    %IMG: obrazek typt_danych_sql_mm.jpg z standardu
+    %TODO: wiecej o systemach ?
+
+\subsection{Bazy danych przechowywujące dane geograficzne}
+Większość z najpopularniejszych silników bazodanowych umożliwiające przechowywanie danych geograficznych lub posiada rozszerzenia dodające tą funkcjonalność.
+\subsubsection{PostgreSQL (PostGIS)}
+PostgreSQL jest obiektowo-relacyjną bazą danych. %TODO:definiccja bazy obiektowo-Relacyjnej
+Powstała ona z rozwijanego na Uniwersytecie Kalifornijskim\footnote{Uniwersytet Kalifornijski w Berkeley, zwany także ``Berkley'' lub ``Cal``}  projektu badawczego ``Ingres''. Prace nad projektem ``Postgres'' trwały na uniwersytecie od 1985 do 1994 roku. Dzięki temu, że jego żródła zostały wypuszczone na licencji MIT\footnote{licencja wolnego oprogramowania pochądzoca z Massachusetts Institute of Technology (MIT)} był rozwijany przez poza uczelnią. W 1995 roku Andrew Yu i Jolly Chen dodali do bazy ``Postgres`` obsługę języka SQL tworząc ''Postgre95'', a w 1996 roku projekt zmienił nazwę na ``PostgreSQL'' aby podkreślić wsparcie języka SQL. Od tamtego czasu projekt jest aktywnie rozwijany przez społeczność Open Source. Ostatnią wersją jest PostgreSQL 9.1 wydana 12.09.2011 roku.
+
+``PostGIS'' jest rozszerzeniem dodającym ponad 300 funkcji, operatorów i typów geograficzne do basy PostgreSQL. Rozszerzenie rozwijane jest na licencji GNU GPL od 2001 roku przez firmę Refractions Research. PostGIS implementuje standard Simple Feature Access (SFS) według konsorcjum OGC\footnote{Open Geospatial Consortium } oraz standard SQL/MM Spatial. Głównym powodem dla którego twórcy PostGIS wybrali bazę PostgreSQL ponieważ miała najwieksze możliwości rozszerzenia i budowania nowych typów danych oraz operatorów.  Innymi funkcjami którymi wyróżnia się PostgreSQL są:
+
+\begin{itemize}
+    \item Możliwość pisania funkcji w różnych językach (od wbudowanych SQL, PL/PGSQL, C do takich jak PL/Perl, PL/Python czy PL/Java)
+    \item Wsparcie dla tablic jako podstawowego typu danych - przydatne przy definiowaniu typów matrycowych
+    \item Dziedziczenie tablic - możliwe jest trakotwanie kilku tablic jakby były jedną tablicą 
+  \end{itemize}
+PostGIS takżę posiada rozszerzenia, które dodają dodatkowe funkcje geograficzne takie jak wsparcie dla projekcji (Proj4) czy wsparie dla zaawansowanych operacji geograficznych (GEOS). Dodając do tego wszystkie rozszerzenia dostępne dla bazy PostgreSQL tworzy to rozległy ekosystem oparty na rozwiązaniach komercyjnych oraz Open Source. Dzięki dostępowi do źródeł możliwe jest poznanie sposobu implementacji konkretnych funkcji i operatorów. 
+%TODO
+    \subsubsection{Oracle (Oracle Locator i Oracle Spatial Extensions)}
+    Oracle jest komercyjną bazą danych rozwijana jest przez Oracle Corporation. Jest uważana za bazę danych klasy ``enterprise''\footnote{Oprogramowani klasy ``Enterprise'' używane jest przez rządy i firmy, w przeciwieństwie do oprogramowania dla użytkowników indywidualnych}, przez co duży nacisk podczas rozwoju kładziony jest na wydajność, bezpieczeństwo i maksymalizacje dostępności. Dostępne są wersje Oracle na różne systemy operacyjne: Linux, Microsof Windows, HP-UX, Solaris, AIX. Razem z kupnem systemu bazy danych Oracle użytkownik otrzymuje wsparcie techniczne poprzez stronę internetową i telefon. Firma Oracle posiada system certyfikacji ``Oracle Certyfication Program'' dla administratorów baz danych. 
+
+    Oracle daje dwie możliwości przechowywania danych geograficznych w swoje bazie danych: Oracle Locator, który jest zintegorwany w Oracle Standard Edition oraz Oracle Enterprise Edition, oraz Oracle Spatial Extensions, który jest dodatkowym rozszerzeniem do wersji Enterprise Edition. Oracle Locator jest okrojona wersją Oracle Spatial pozbawioną większości bardziej zaawansowanych funckji geograficznych.
+Koszty użytkowania bazy danycch Oracle przedstawiają się następująco: 950\$ (około 3000 PLN) za licencje na jednego użytkownika plus koszt uaktualnień i wsparcia -  209\$ (około 630PLN) rocznie. Dodatkowo rozszerzenie Oracle Spatial kosztuje 350\$(około 1000PLN) za licencje oraz 77\$ (około 250 PLN) rocznie.
+
+%TODO: wsparcie geospatial ?
+
+
+\subsubsection{Mysql (MySQL Spatial Extension)}
+  %TODO: O MySQL
+  W przypadku MySQL pakiet MySQL Spatial jest zintegorowany z bazą danych - dostępny jest od razu po instalacj i jest integralną częścia bazy. Można ich używać w każdym silniku baz danych (MyISAM, InnoDB), ale indeksyna kolumnach przestrzennych można tylko tworzyć w silniku MyISAM. Niestety MySQL wspiera tylko część standardu OGC i wspiera tylko planarny układ odniesienia. Wszystkie funkcje MySQL operują tylko na modelu MBR (Minimum Bounding Rectangles) - operują na prostokątach. Metody te są szybsze, ale niedokładne - ich dokładnoś zależy od tego jak bardzo dany obiekt wypełnia prostokąt do którego jest aproksymowany. Działanie takie jest niezgodne z żadnym ze standardów, przez co przydatność bazy danych MySQL do obsługi danych geograficznych jest niska. 
+
+\subsection{Podsumowanie oraz wybór technologii}
+Istnieje wiele firm oferującch komercyjne wsparcie dla PostGIS, a wsparcie społezności Open Source jest wieksze niż innych rozwiązań.
+%TODO tabelka porównująca wsparcie
+\newpage

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+FILES=(`find . -name '*.rb' | \
+  xargs chardet | \
+  grep -v ascii | \
+  cut -d: -f1 -s | \
+  xargs -n1 ruby -0777 -ne 'puts $FILENAME if $_ !~ /#.*coding:\s*utf/i'`)
+
+for file in $FILES
+do
+  echo "Changing : $file"
+  sed -i '1i\
+# encoding: utf-8' $file 
+done
+

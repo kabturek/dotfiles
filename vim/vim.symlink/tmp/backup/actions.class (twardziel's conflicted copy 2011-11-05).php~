@@ -1,0 +1,260 @@
+<?php
+
+require_once dirname(__FILE__).'/../lib/employeeGeneratorConfiguration.class.php';
+require_once dirname(__FILE__).'/../lib/employeeGeneratorHelper.class.php';
+
+/**
+ * employee actions.
+ *
+ * @package    ptclean
+ * @subpackage employee
+ * @author     Your name here
+ * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
+ */
+class employeeActions extends autoEmployeeActions
+{
+  protected function processForm(sfWebRequest $request, sfForm $form)
+  {
+    $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
+    if ($form->isValid())
+    {
+      $notice = $form->getObject()->isNew() ? 'The item was created successfully.' : 'The item was updated successfully.';
+
+
+      try {
+        $employee = $form->save();
+      } catch (Doctrine_Validator_Exception $e) {
+
+        $errorStack = $form->getObject()->getErrorStack();
+
+        $message = get_class($form->getObject()) . ' has ' . count($errorStack) . " field" . (count($errorStack) > 1 ?  's' : null) . " with validation errors: ";
+        foreach ($errorStack as $field => $errors) {
+            $message .= "$field (" . implode(", ", $errors) . "), ";
+        }
+        $message = trim($message, ', ');
+
+        $this->getUser()->setFlash('error', $message);
+        return sfView::SUCCESS;
+      }
+
+      if($employee->created_new_user){
+        $notice = 'User account was created. Username: '. $employee->username .' Password: '. $employee->user_password;
+      }
+      $this->dispatcher->notify(new sfEvent($this, 'admin.save_object', array('object' => $employee)));
+
+      if ($request->hasParameter('_save_and_add'))
+      {
+        $this->getUser()->setFlash('notice', $notice.' You can add another one below.');
+
+        $this->redirect('@employee_new');
+      }
+      else
+      {
+        $this->getUser()->setFlash('notice', $notice);
+
+        $this->redirect(array('sf_route' => 'employee_edit', 'sf_subject' => $employee));
+      }
+    }
+    else
+    {
+      $this->getUser()->setFlash('error', 'The item has not been saved due to some errors.', false);
+    }
+  }
+  public  function executeShow( sfWebRequest $request){
+    $this->employee = $this->getRoute()->getObject();
+  }
+  public function executeTests(sfWebRequest $request){
+    $this->employee = $this->getRoute()->getObject();
+    $this->inquiries = Doctrine::getTable('Inquiry')->findAll();
+    $this->form = new EmployeeInquirySelectForm();
+    $this->form->setDefault('employee_id', $this->employee->id);
+  }
+  public function executeTraining(sfWebRequest $request){
+    $this->employee = $this->getRoute()->getObject();
+    $this->reports = $this->employee->getReports('day');
+    $this->trial_reports = $this->employee->getReports('week');
+  }
+  public function executeMaterials(sfWebRequest $request){
+    $this->employee = $this->getRoute()->getObject();
+    $this->documents = $this->employee->getDocuments();
+    $this->form = new EmployeeDocumentSelectForm();
+    $this->form->setDefault('employee_id', $this->employee->id);
+  }
+  public function executeMessages(sfWebRequest $request){
+    $this->employee = $this->getRoute()->getObject();
+    $this->pager = new sfDoctrinePager('Message',10);
+    $this->pager->getQuery()
+      ->from('Message m')
+      ->leftJoin('m.MessageRecipient mr')
+      ->where('mr.user_id = ?', $this->employee->User->id)
+      ->orderBy('mr.created_at DESC');
+    $this->pager->setPage($request->getParameter('page',1));
+    $this->pager->init();
+    $this->form = new EmployeeMessageSelectForm();
+    $this->form->setDefault('recipients_list', $this->employee->User->id);
+    $this->form->hideRecipientsList();
+    $this->form->setDefault('from_id', $this->getUser()->getUserId());
+  }
+  public function executeInterview(sfWebRequest $request)
+  {
+    $this->forward404Unless($employee = Doctrine_Core::getTable('Employee')->find(array($request->getParameter('id'))), sprintf('Object employee does not exist (%s).', $request->getParameter('id')));
+    $this->form = new InterviewForm($employee);
+    $this->employee = $employee;
+  }
+
+  public function executeUpdateInterview(sfWebRequest $request)
+  {
+    $this->forward404Unless($request->isMethod(sfRequest::POST) || $request->isMethod(sfRequest::PUT));
+    $this->forward404Unless($employee = Doctrine_Core::getTable('Employee')->find(array($request->getParameter('id'))), sprintf('Object employee does not exist (%s).', $request->getParameter('id')));
+    $this->form = new InterviewForm($employee);
+    $this->employee = $employee;
+
+    $this->form->bind($request->getParameter($this->form->getName()), $request->getFiles($this->form->getName()));
+    if ($this->form->isValid())
+    {
+      $employee = $this->form->save();
+      if($employee->interview_approved){
+        $employee->current_stage = 4;
+        $employee->getUser()->unblockUser();
+        $this->getUser()->setFlash('notice', 'The user has been approved at the interview');
+      } else {
+        $employee->getUser()->blockUser();
+        $this->getUser()->setFlash('notice', 'The candidate wasnt approved and has been blocked');
+      }
+      $employee->save();
+
+      $this->redirect('employee/index');
+    }
+
+    $this->setTemplate('interview');
+  }
+  protected function parseSearch(sfWebRequest $request){
+    $filters = array();
+    foreach($this->configuration->getFilterDisplay() as $i => $filter){
+      if($request->getParameter($filter)){
+        $column = Doctrine::getTable('Employee')->getColumnDefinition($filter);
+        $type = 'text';
+        if($filter == 'category_id'){
+          $filters[$filter] = array($request->getParameter($filter));
+          continue;
+        }
+        if ($column['type'] == 'boolean'){
+          if( $request->getParameter($filter) != ' '){
+            $filters[$filter] = $request->getParameter($filter);
+          }
+        } else {
+          $filters[$filter] = array($type => $request->getParameter($filter));
+        }
+      }
+    }
+    $this->filters = $this->configuration->getFilterForm($this->getFilters());
+    $request->setParameter($this->filters->getName(), $filters);
+
+    $this->filters->bind($request->getParameter($this->filters->getName()));
+    if ($this->filters->isValid())
+    {
+      $this->setFilters($this->filters->getValues());
+    }
+  }
+  public function executeSearch(sfWebRequest $request){
+    $this->results = null;
+    $this->form = new SearchForm();
+    if ($request->isMethod('post')) {
+      $this->form->bind($request->getParameter('search'));
+      $query = $this->form->getValue('query');
+      $query = explode(" ", $query);
+      foreach($query as &$word){
+        $word .= '*';
+      }
+      $query = implode(" OR ", $query);
+      $q = Doctrine::getTable('Employee')->createQuery('e');
+      $status = $this->form->getValue('status');
+      if($status){
+        $q->andWhere('e.status_id = ?', $status);
+      }
+
+      $q = Doctrine::getTable('Employee')
+        ->search($query, $q);
+      $this->results = $q->execute();
+    }
+  }
+  public function executeStages(sfWebRequest $request){
+    $stages = Employee::getStages();
+    $stages = array_merge( array( 0 => " "), $stages);
+    echo json_encode($stages);
+    return sfView::NONE;
+  }
+  public function executePositions(sfWebRequest $request){
+    $positions = Doctrine::getTable('Category')->getForSelect();
+    echo json_encode($positions);
+    return sfView::NONE;
+  }
+  public function executeFilter_select(sfWebRequest $request){
+    $this->positions = Doctrine::getTable('sfGuardUser')->getForSelect(
+      $request->getParameter('position_id', null), 
+      $request->getParameter('stage', null));
+  }
+  public function executeBatch_tests(sfWebRequest $request){
+    $this->form = new BatchEmployeeInquiryForm();
+    $ids = $request->getParameter('ids');
+    if($ids){
+      $this->form->setIds($ids);
+    }
+    if ($request->isMethod('post')) {
+      $this->form->bind($request->getParameter('batch_tests'));
+      if($this->form->isValid()){
+        if($this->form->save()){
+          $this->getUser()->setFlash('notice', 'Assigned tests to selected Employees');
+          return $this->redirect('@employee');
+        }
+      } else {
+        $this->getUser()->setFlash('error', 'There was an error assigning tests.');
+        $this->redirect('@employee');
+      }
+    } 
+  }
+  public function executeBatch_materials(sfWebRequest $request){
+    $this->form = new BatchEmployeeMaterialForm();
+    $ids = $request->getParameter('ids');
+    if($ids){
+      $this->form->setIds($ids);
+    } else {
+      if ($request->isMethod('post')) {
+        $this->form->bind($request->getParameter('batch_materials'));
+        if($this->form->isValid()){
+          if($this->form->save()){
+            $this->getUser()->setFlash('notice', 'Assigned materials to selected Employees');
+            return $this->redirect('@employee');
+          }
+        } else {
+          $this->getUser()->setFlash('error', 'There was an error assigning materials.');
+          $this->redirect('@employee');
+        }
+      } 
+    }
+  }
+  public function executeAbsence(sfWebRequest $request){
+    $this->employee = $this->getRoute()->getObject();
+    $this->absences = $this->employee->getAbsences();
+  }
+  public function executeComments(sfWebRequest $request){
+    $this->employee = Doctrine::getTable('Employee')->find($request->getParameter('id'));
+    $this->form = new ClientCommentsFilter();
+    $filters = $request->getParameter('comment_filter');
+    $this->form->bind($filters);
+    $filters['employee_id'] = $this->employee->id;
+    $this->comments = Doctrine::getTable('ClientComment')->filterEmployee($filters);
+  }
+  public function executeContacts(sfWebRequest $request){
+    $this->employee = $this->getRoute()->getObject();
+    $this->contacts = $this->employee->getContacts();
+  }
+  public function executeDamages(sfWebRequest $request){
+    $this->employee = Doctrine::getTable('Employee')->find($request->getParameter('id'));
+    $this->form = new EmployeeDamagesFilter();
+    $filters = $request->getParameter('damages_filter');
+    $this->form->bind($filters);
+    $filters['employee_id'] = $this->employee->id;
+    $this->damages = Doctrine::getTable('EmployeeDamage')->filterEmployee($filters);
+  }
+}

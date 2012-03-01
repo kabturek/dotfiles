@@ -1,0 +1,36 @@
+<?php //use_helper('ysJQueryRevolutions') ?>
+<?php //use_helper('ysJQueryUISortable')  ?>
+
+        <script type="text/javascript">
+        $(function(){
+            $('<?php echo $sortable_id; ?>').sortable({
+                items: '<?php echo $sortable_items ?>',
+                update: function(event, ui) {
+                    // grabs the new positions now that we've finished sorting and updates the form
+                    $.each($(this).sortable('toArray'), function(index, value) {
+                      console.log(index);
+                      console.log(value);
+                      console.log($('#inquiry_question_'+ value +'_position'));
+                        $('#inquiry_question_'+ value +'_position').val(index);
+                    });
+                }
+            });
+        });
+
+        </script>
+<?php
+/**add_jquery_support(
+        '#save_order',  
+        'click' ,  
+        like_function('
+            $.post("'. $submit_url .'",
+                { sortable_list: $("'. $sortable_id .'").sortable("serialize") },
+                function(data, textStatus, XMLHttpRequest){
+                  $(".sf_admin_actions").append("<div id=\"msg\">Zapisano kolejność odpowiedzi</div>");
+                  $("msg").hide().show("highlight", {}, 500);
+                    setTimeout(function(){ $("#msg").fadeOut("slow", function(){ $("#msg"). remove()}); }, 5000);
+                }
+            );
+            return false;
+            ')); 
+            **/?>

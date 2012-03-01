@@ -1,0 +1,45 @@
+<table>
+  <tr>
+    <th>
+      <?php echo __('Date'); ?>
+    </th>
+    <th>
+      <?php echo __('Reason'); ?>
+    </th>
+    <th>
+      <?php echo __('Advance notice'); ?>
+    </th>
+    <th>
+      <?php echo __('Rate (days)'); ?>
+    </th>
+    <?php if(isset($sf_user) && $sf_user->hasCredential('recruit')): ?>
+      <th>
+        Actions
+      </th>
+    <?php endif;?>
+  </tr>
+<?php foreach($absences as $absence): ?>
+  <tr>
+    <td>
+      <?php echo $absence->date_start; ?>
+      <?php echo $absence->date_end ? ' - ' .$absence->date_end : ''; ?>
+      <?php echo $absence->date_end ? '' : '('.date('l', strtotime($absence->date_start)) .')'; ?>
+    </td>
+    <td>
+      <?php echo $absence->reason; ?>
+    </td>
+    <td>
+      <?php echo $absence->advance_notice . ' ' . $absence->advance_notice_type; ?>
+    </td>
+    <td>
+      <?php echo $absence->rate . ' ' . __('days'); ?>
+    </td>
+    <?php if(isset($sf_user) && $sf_user->hasCredential('recruit')): ?>
+    <td>
+      <?php echo link_to('Edit', 'absence/edit?id='. $absence->id); ?>
+    </td>
+    <?php endif;?>
+  </tr>
+<?php endforeach; ?>
+</table>
+

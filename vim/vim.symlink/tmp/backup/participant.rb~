@@ -1,0 +1,50 @@
+class Participant < ActiveRecord::Base
+    belongs_to :user
+    belongs_to :order
+    has_many :participant_items
+    has_many :items, :through => :participant_items
+    accepts_nested_attributes_for :items
+    accepts_nested_attributes_for :participant_items
+
+    #validations
+    validates :user_id, :order_id, :presence => true
+    validates_associated :participant_items
+    # validates associated items
+    validates :participant_items, :presence => true
+
+    has_paper_trail
+
+    # object states
+    state_machine :initial => :signed do
+
+        event :pay do
+            transition :signed => :payed
+        end
+
+        event :ship do
+            transition :payed => :shipped
+        end
+
+        event :recive do
+            transition :shipped => :recived
+        end
+
+        state :signed do
+        end
+
+        state :payed do
+        end
+
+        state :shipped do
+        end
+
+        state :recived do
+        end
+    end
+    def default_role
+        "user"
+    end
+    def to_s
+        self.user
+    end
+end

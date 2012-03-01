@@ -1,0 +1,275 @@
+<?php
+
+/* SVN FILE: $Id: infopages_controller.php 337 2008-08-29 13:09:07Z k.rakowski $ */
+
+/**
+ * Kontroler stron informacyjnych (infopages).
+ *
+ */
+class InfopagesController extends AppController {
+
+    var $name = 'Infopages';
+
+    /* tymczasowo */
+    // var $scaffold = array('index', 'edit', 'delete', 'add');
+    var $components = array('Email');
+
+    var $paginate = array(
+        'limit' => 10,
+        'order' => array(
+            'Infopage.id' => 'asc'
+        ),
+        'fields' => 'Infopage.id, Infopage.title, Infopage.slug, Infopage.created, Infopage.modified, User.username, User.id'
+    );
+
+
+
+
+
+
+    /**
+     * Wyswietlenie strony informacyjnej.
+     *
+     * @param int $id id strony do wyswietlenia
+     */
+    function view($id = null)
+    {
+        if ($id == null)
+        {
+            $this->redirect('/infopages/');
+            return;
+        }
+
+        if (!is_numeric($id)) /* wyszukiwanie po slugu */
+        {
+            $data = $this->Infopage->find('first',
+                array(
+                    'conditions' => array(
+                        'slug' => $id
+                    ),
+                    'recursive' => -1
+                )
+            );
+        } else {
+            $this->Infopage->id = $id;
+            $data = $this->Infopage->read('Infopage.*, User.username');
+        }
+
+		if(!empty($data['Infopage']['page_title'])){
+			$this->pageTitle = $data['Infopage']['page_title'];
+		} else {
+			$this->pageTitle = $data['Infopage']['title'];
+		}
+
+        if($data['Infopage']['layout']!='defult') {
+            $this->view = $data['Infopage']['layout'];
+        }        
+        $this->set('Infopage', $data);
+    }
+
+    /*
+     *  Formularz kontaktowy do komunikacji z CR CRM
+     */
+    function send()
+    {
+        $this->pageTitle = 'RODZIYNKA – rodzinka klientów Carrefour Formularz kontaktowy - sugestie, uwagi';
+
+        App::import('Model', 'Message');
+        $message = new Message();
+
+       App::import('Model', 'Category');
+        $category = new Category();
+
+        if (!empty($this->data)) {
+            $message->create();
+            $this->data['Message']['messageSubmitDate'] = date("Y-m-d", time());
+            if ($message->save($this->data)) {
+                $this->Email->smtpOptions = Configure::read('smtpOptions');
+                $this->Email->delivery = 'smtp';
+                $this->Email->to = $this->data['Message']['messageFrom']; /* adres uzytkownika */
+                $this->Email->from = Configure::read('fromEmail'); /* zaladowanie adresu z pliku konfig. */
+                $this->Email->subject = 'Potwierdzenie wysłania sugestii.';
+                $this->Email->sendAs = 'both';
+                $this->Email->template = 'send_message_confirm';
+                /* zmienne */
+                $this->set('address', Configure::read('location').'/'.$this->params['controller'].'/confirm/'.md5('rodziynka'.$message->id));
+
+                App::import('Model', 'Crcurl');
+                $crcurl = new Crcurl();
+                $data['Crcurl']['urlMsgId'] = $message->id;
+                $data['Crcurl']['urlData'] = md5('rodziynka'.$message->id);
+                $crcurl->save($data);
+
+                $this->Email->send();
+
+                $this->Session->setFlash('Wniosek został złożony. Szczegółowe informacje zostały wysłane na podany adres e-mail.');
+                $this->redirect(array('action'=>'index'));
+            } else {
+                $this->Session->setFlash(__('Wiadomość nie została wysłana. Spróbuj ponownie.', true));
+            }
+        }
+       $categories = $category->find('list', array(
+            'fields'=>array('Category.categoryID', 'Category.categoryName'),
+            'conditions' => array('Category.categorySection' => 'rodziynka'))
+       );
+        $this->set(compact('categories'));
+    }
+
+    /**
+     * Funkcja potwierdzajaca wysłanie wiadomości.
+     *
+     * @param string $confirm_code ciag potwierdzajacy
+     */
+    function confirm($confirm_code = null)
+    {
+        App::import('Model', 'Crcurl');
+        $crcurl = new Crcurl();
+
+        App::import('Model', 'Message');
+        $message = new Message();
+
+        if ($confirm_code == null)
+        {
+            $this->Session->setFlash('Podano niepoprawny ciąg aktywacyjny.');
+            $this->redirect('/');
+            return;
+        }
+
+        $conditions = array('Crcurl.urlData' => $confirm_code);
+        $fields = array('urlId', 'urlMsgId', 'urlData');
+        $recursive = -1;
+        $url = $crcurl->find('first', compact('conditions', 'fields', 'recursive'));
+        if ($url) {
+            $mData['Message']['messageID'] = $url['Crcurl']['urlMsgId'];
+            $mData['Message']['messageState'] = '1';
+         
+            if ($message->updateAll(array('Message.messageState' => '1'), array('Message.messageID' => $url['Crcurl']['urlMsgId'], 'Message.messageState' => '0')))
+            {
+                $this->Session->setFlash('Potwierdzono wiadomość. Dziękujemy.');
+            }
+            else
+            {
+                $this->Session->setFlash('Nie udałos się potwierdzić wiadomości. Spróbuj ponownie później.');
+            }
+        }
+        else
+        {
+            $this->Session->setFlash('Podano niepoprawny ciąg aktywacyjny.');
+            $this->redirect('/');
+            return;
+        }
+
+        $this->redirect(array('action'=>'index'));
+        
+    }
+
+    /**
+     * Strona glowna z lista stron. Moze (tylko) zwracac liste newsow dla wymagajacego jej elementu.
+     *
+     * @return mixed
+     */
+    function index()
+    {
+        $this->pageTitle = 'RODZIYNKA – rodzinka klientów Carrefour Pomoc, pytania i odpowiedzi';
+        if(isset($this->params['requested'])) /* czy akcja byla zazadana z innej akcji/elementu? */
+        {
+            $items = $this->paginate();
+            return $items;
+        } else {
+            $in = $this->Infopage->find('first',
+                array(
+                    'fields' =>	'Infopage.slug',
+                    'order' => 'Infopage.id ASC'
+                )
+            );
+            $this->redirect('/infopages/view/'.$in['Infopage']['slug']);
+        }
+    }
+
+    /* FUNKCJE ADMINISTRACYJNE */
+
+
+    /**
+     * Lista stron informacyjnych (admin).
+     *
+     */
+    function admin_index()
+    {
+        $items = $this->paginate('Infopage');
+        $this->set(compact('items'));
+
+    }
+
+
+    /**
+     * Dodanie nowej strony informacyjnej (formularz + przetworzenie).
+     *
+     */
+    function admin_add()
+    {
+        if (!empty($this->data))
+        {
+            $this->data['Infopage']['user_id'] = $this->Auth->user('id');
+
+            if ($this->Infopage->save($this->data))
+            {
+                $this->flash('Nowa strona zapisana.','/'.$this->params['prefix'].'/'.$this->params['controller']);
+            }
+        }
+    }
+
+    /**
+     * Edycja strony informacyjnej
+     *
+     * @param int $id identyfikator strony do edycji.
+     */
+    function admin_edit($id = null)
+    {
+        if ($id == null)
+        {
+            $this->flash('Nieprawidłowy id', '/'.$this->params['prefix'].'/'.$this->params['controller']);
+            return;
+        }
+        $this->Infopage->id = $id;
+        if (empty($this->data))
+        {
+            if (!$this->data = $this->Infopage->read())
+            {
+                $this->flash('Nieprawidłowy id', '/'.$this->params['prefix'].'/'.$this->params['controller']);
+            }
+        } else {
+            /* zapamietanie id pomiedzy formularzami */
+            if (empty($this->data['Infopage']['id']))
+            {
+                $this->data['Infopage']['id'] = $id;
+            }
+            if ($this->Infopage->save($this->data))
+            {
+                $this->flash('Strona zapisana','/'.$this->params['prefix'].'/'.$this->params['controller']);
+            }
+        }
+    }
+
+    /**
+     * Skasowanie strony informacyjnej.
+     *
+     * @param int $id identyfikator strony do skasowania.
+     */
+    function admin_delete($id = null)
+    {
+        if ($id == null)
+        {
+            $this->flash('Nieprawidłowy id', '/'.$this->params['prefix'].'/'.$this->params['controller']);
+            return;
+        }
+
+        if ($this->Infopage->del($id))
+        {
+            $this->flash('Strona skasowana', '/'.$this->params['prefix'].'/'.$this->params['controller']);
+        } else {
+            $this->flash('Nieprawidłowy id', '/'.$this->params['prefix'].'/'.$this->params['controller']);
+        }
+    }
+
+}
+?>

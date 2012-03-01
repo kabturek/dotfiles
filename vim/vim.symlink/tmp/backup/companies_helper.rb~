@@ -1,0 +1,11 @@
+module CompaniesHelper
+
+  def company_valid_date(time)
+    if time.respond_to?(:strftime)
+      time.strftime("%d-%m-%Y")
+    else
+      "brak"
+    end
+  end
+
+end

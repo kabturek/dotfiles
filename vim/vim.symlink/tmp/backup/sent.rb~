@@ -1,0 +1,21 @@
+class Document::Sent < Document
+  # todo
+  def date
+    @created_at
+  end
+
+  def company
+    @recipient
+  end
+
+  def archive 
+    API_PROXY.archive(@uuid)
+  end
+  
+  def self.archive_selected(documents)
+    documents.each do |document_uuid|
+      API_PROXY.archive document_uuid
+    end
+  end
+
+end

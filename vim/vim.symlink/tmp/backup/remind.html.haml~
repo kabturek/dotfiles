@@ -1,0 +1,20 @@
+%h3#pageTitle
+  %span
+    =image_tag '/assets/headers/remind_nowe_haslo.png', :alt => 'Ustalenie nowego hasła'
+.data
+  = form_tag send_reminder_password_path, :id => :remindPassword, :class => :thin do
+    - if flash[:alert]
+      %p.info.error= flash[:alert]
+    %fieldset
+      %legend#adresEmail
+        %span
+          =image_tag '/assets/headers/remind_adres_email.png', :alt => 'Wpisz adres email'
+      %dl
+        %dt
+          %label{:for => "email"}
+            Email
+            %em.asterisk *
+        %dd
+          %input#email.text{:maxlength => "255", :name => "email", :size => "30", :type => "text"}/
+    %input#wyslij.button{:type => "submit", :value => "Wyślij"}/
+  

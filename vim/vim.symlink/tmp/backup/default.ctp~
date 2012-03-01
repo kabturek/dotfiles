@@ -1,0 +1,146 @@
+<?php
+/* SVN FILE: $Id: default.ctp 392 2008-10-03 12:33:53Z k.rakowski $ */
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<?php echo $html->charset(); ?>
+<title><?php echo $title_for_layout; ?></title>
+<?php
+		/* favicon */
+		echo $html->meta('icon');
+		
+		/* elementy meta */
+		echo $html->meta('keywords', Configure::read('Page.keywords'));
+		echo $html->meta('description', Configure::read('Page.description'));
+
+		/* cssy (site - glowne, thickbox - okienko, ie - poprawka dla IE) */
+		echo $html->css('site');
+		echo $html->css('thickbox');		
+		echo '<!--[if lte IE 6]>'.$html->css('ie6').'<![endif]-->';
+		
+		/* javascripty */
+		echo $javascript->link(array('prototype'));
+		echo $javascript->link(array('jquery-1.2.6.pack'));
+		echo $javascript->link(array('thickbox'));
+		echo $javascript->link(array('show-error'));
+		echo $javascript->link(array('flash-ac'));
+		echo $javascript->link(array('swfobject'));
+		
+		echo $scripts_for_layout;
+	?>
+
+
+    <script type="text/javascript">
+                        window.onload = function(){
+  /* swfobject.embedSWF("/swf/banner_winiary.swf", "flash-content", "568", "180", "9.0.0",null,{ptop:1,xmlpath:0,title_x:18,title_y:27,body_x:18,body_y:55},{wmode:"transparent",scale:"noscale",salign:"t"});
+
+*/
+
+ swfobject.embedSWF("/flash/20110818/carousel.swf", "flash-content", "568", "180", "9.0.0",null,{ptop:1,xmlpath:"/flash/20110818/data.xml",title_x:18,title_y:27,body_x:18,body_y:55},{wmode:"transparent",scale:"noscale",salign:"t"});
+
+};
+                    </script>
+</head>
+
+<body>
+     
+	<div id="wrapper">
+        <ul class="tt-menu">
+            <li><strong><a href="http://carrefour.pl">Carrefour.pl</a></strong></li>
+            <li><a href="http://www.galeria-carrefour.pl/">Galerie handlowe</a></li>
+            <li><a href="http://www.rodziynka.pl/">Rodzinka</a></li>
+            <li><a href="http://www.carrefour.pl/page/pl/tanie-promocje/kuchnia/">Kulinaria</a></li>
+
+            <li style="margin-left:280px;"><a href="http://www.carrefour.pl/page/pl/korporacyjny/o-carrefour/">O Carrefour</a></li>
+            <li><a href="http://www.carrefour.pl/page/pl/korporacyjny/praca/">Praca</a></li>
+            <li><a href="http://www.carrefour.pl/page/pl/korporacyjny/dla-mediow/">Dla mediów</a></li>
+            <li><a href="http://www.carrefour.pl/page/pl/korporacyjny/wspolpraca/">Współpraca</a></li>
+            <li><a href="http://www.carrefour.pl/page/pl/tanie-promocje/kontakt/">Kontakt</a></li>
+        </ul>
+         <ul class="tt-logo" >
+             <li><strong><a href="http://carrefour.pl"><img src="/css/img/logo-carrefour.gif" alt="carrefour" /></a></strong></li>
+        </ul>
+        <ul id="top-menu" style="margin-top:-30px;">
+        <?php echo $this->element('loginpanel'); ?>
+        </ul>
+
+        <div id="content" class="contentIE">
+        	<div id="header">
+            	<div id="flash">
+
+                <!-- jesli jest karuzela flash to id="flash-content" w divie poniżej -->
+                <div id="flash-content">
+  
+                </div>
+                    
+                </div> <!-- flash -->
+            </div>
+            <div id="main-menu">
+            	<ul>
+                	<li><a href="<?php echo $this->base; ?>/" id="main-menu-home-page"<? if ($this->here == '/'){?> class="active"<?}?>>Strona główna</a></li>
+                    <li><a href="<?php echo $this->base; ?>/infopages/" id="main-menu-about-rodziynka"<? if ($this->name == 'Infopages' AND $this->here != '/infopages/view/Kontakt'){?> class="active"<?}?>>O Rodzince</a></li>
+                    <li><a href="<?php echo $this->base; ?>/catalogues/" id="main-menu-promotions"<? if ($this->name == 'Catalogues' OR $this->name == 'Products'){?> class="active"<?}?>>Promocje</a></li>
+                    <li><a href="<?php echo $this->base; ?>/gift_catalogues/" id="main-menu-gifts"<? if ($this->name == 'GiftCatalogues' OR $this->name == 'GiftProducts'){?> class="active"<?}?>>Prezenty</a></li>
+                    <li><a href="<?if (isset($this->viewVars['userId']) AND !empty($this->viewVars['userId'])){?>/accounts/<?}else{?>/customers/ajax_login/<?=base64_encode('/accounts/')?>?height=242&amp;width=561&amp;modal=true" class="thickbox<?}?>" id="main-menu-my-account"<? if ($this->name == 'Customers' OR $this->name == 'Accounts'){?> class="active"<?}?>>Moje konto</a></li>
+                    <li><a href="<?php echo $this->base; ?>/infopages/view/Kontakt" id="main-menu-contact"<? if ($this->here == '/infopages/view/Kontakt'){?> class="active"<?}?>>Kontakt</a></li>
+                </ul>
+                <form id="search-form" action="/pages/search">
+                	<fieldset>
+                    	<legend>Wyszukaj</legend>
+                        	<ol>
+                            	<li class="search-button">
+                                	<input type="image" src="<?php echo $this->base; ?>/css/img/search_button_bg1.gif" onMouseOver="src='/img/search_button_hover1.gif'" onmouseout="src='/img/search_button_bg1.gif'" />
+                                </li>
+                                <li class="search-window">
+                                	<label for="search-window">Szukaj</label>
+                                    <input type="text" name="search" id="search-window"<?php if(isset($word) AND !empty($word)){?> value="<?=$word?>"<?php } ?> />
+                                </li>
+                            </ol>
+                    </fieldset>
+                </form>
+            </div>
+		  
+		
+
+			<?php echo $content_for_layout; ?>
+
+			<a href="<?php echo $this->base; ?>/" title="program lojalnościowy Carrefour">
+                            <img alt="Rodzinka - Rodzynka" id="rodziynka" width="376" height="230" src="<?php echo $this->base; ?>/css/img/header_rodziynka_bg.gif"</a>
+		</div>
+	</div>
+	
+	<?
+		if ($session->check('Message.flash')): /* ewentualne wyswietlenie wiadomosci 'flash' - popup */
+		 ?>
+	
+		<div id="TB_overlay" class="TB_overlayBG"></div>
+		<div id="TB_window" style="margin-left: -311px; width: 622px; margin-top: -141px; display: block;"><div style="width: 622px; height: 237px;" class="TB_modal" id="TB_ajaxContent">
+		        <div id="dialog-window">
+		            <h2>Informacja</h2>
+		            <p><?$session->flash()?></p>
+		            <a href="#" class="ok-button"><img alt="OK" src="<?php echo $this->base; ?>/css/img/dialog_window_button.gif" onclick="tb_remove()" /></a>
+		        </div>				
+		        
+		</div>
+		<? endif; ?>
+		
+		<?php echo $this->element('registerdiv');?>
+<?php if($show_select){
+    echo $this->element('choose_shop', array('shops' => $shops, 'form' => $form));
+} ?>
+	<?php //echo $javascript->link(array('flash-content'));
+	?>
+	<?php echo $cakeDebug; ?>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+	var pageTracker = _gat._getTracker("UA-7677291-1");
+	pageTracker._trackPageview();
+} catch(err) {}</script>
+</body>
+</html>

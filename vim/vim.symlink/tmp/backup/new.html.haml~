@@ -1,0 +1,40 @@
+%h3#pageTitle
+  %span
+    Logowanie
+.data
+  .border-box.info-box.info-box-right
+    %div
+      %h3 
+        Nie masz jeszcze konta w serwisie 
+        %strong "między fimami"
+        ?
+        %br
+        Korzyści, które zapewniamy:
+      %ul
+        %li oszczędność kosztów i prac
+        %li wygodny dostęp do informacji o fakturach
+        %li gwarancję prawną serwisu
+        %li bezpieczeństwo i poufność przesyłanych informacji
+      %p.center
+        =link_to "Dołącz do nas", new_crm_application_registration_path, :class => "green-button"
+  - if flash[:alert]
+    %p.info.error= flash[:alert]
+  = form_tag session_path, :id => :login, :class => :thin do
+    = hidden_field_tag :redirect_to, params[:redirect_to].to_query if !params[:redirect_to].nil? and !params[:redirect_to].empty?
+    %fieldset.noLegend
+      %dl
+        %dt
+          %label{:for => "email"}
+            Email
+            %em.asterisk *
+        %dd
+          %input#email.text{:maxlength => "255", :name => "email", :size => "30", :type => "text"}/
+        %dt
+          %label{:for => "password"}
+            Hasło
+            %em.asterisk *
+        %dd
+          %input#password.text{:name => "password", :type => "password"}/
+    %p.info
+      = link_to "nie pamiętam hasła", remind_password_path
+    %input#zalogujSieButton2.button{:type => "submit", :value => "Zaloguj się"}/

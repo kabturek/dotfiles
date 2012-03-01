@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+mike:
+  user: mike 
+  order: johns_order
+  role: user
+  state: signed
+  comment: test comment
+
+two:
+  user: 
+  order: 
+  role: MyString
+  state: MyString
+  comment: MyText

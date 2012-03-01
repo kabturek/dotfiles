@@ -1,0 +1,11 @@
+class UserStatistic
+  def generate(user, period = nil)
+    total_time = 0
+    total_length = 0
+    avg_speed = 0
+    workouts_num = 0
+
+    user.workouts.each do |workout|
+    end
+  end
+end

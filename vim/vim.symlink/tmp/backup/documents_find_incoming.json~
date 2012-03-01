@@ -1,0 +1,53 @@
+{
+  "Page": 1,
+  "TotalPages": 1,
+  "Total": 2,
+  "Data": [
+    {
+      "UUID": "38373938-3439-3131-3535-00000023213",
+      "Name": "jakis dokument",
+      "Size": "123323",
+      "SenderUUID": "38373938-3439-3131-3535-000000000000",
+      "SenderNIP": "123-32-32323-3",
+      "RecipientUUID": "38373938-3439-3131-3535-000000000000",
+      "RecipientNIP": "3232-323-3323",
+      "DownloadedByForte": true,
+      "Archived": false,
+      "Status": "Uploaded",
+      "History": [
+        {
+          "CreatedOn": "2011-11-02T01:00:00+01:00",
+          "CreatedBy": "<login>",
+          "CreatorType": "Sender | Recipient | System",
+          "Type": "DocumentDownloaded" 
+        },
+        {
+          "CreatedOn": "2011-11-01T00:12:00+01:00",
+          "CreatedBy": "<login>",
+          "CreatorType": "Sender | Recipient | System",
+          "Type": "DocumentUploaded" 
+        }
+      ]
+    },
+    {
+      "UUID": "<string>",
+      "Name": "<string>",
+      "Size": "<int>",
+      "SenderUUID": "38373938-3439-3131-3535-000000000000",
+      "SenderNIP": "<string>",
+      "RecipientUUID": "38373938-3439-3131-3535-000000000000",
+      "RecipientNIP": "<string>",
+      "DownloadedByForte": "<bool>",
+      "Archived": "<bool>",
+      "Status": "Downloaded",
+      "History": [
+        {
+          "CreatedOn": "<date>",
+          "CreatedBy": "<login>",
+          "CreatorType": "Sender",
+          "Type": "DocumentUploaded" 
+        }
+      ]
+    }
+  ]
+}

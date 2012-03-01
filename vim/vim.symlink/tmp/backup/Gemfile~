@@ -1,0 +1,64 @@
+source 'http://rubygems.org'
+
+gem 'rails', '3.1.1'
+gem 'mysql2'
+
+gem 'json'
+gem 'haml'
+
+gem 'execjs'
+gem 'therubyracer'
+gem 'state_machine'
+gem 'whenever', :require => false
+
+gem 'exception_notification'
+group :assets do
+  gem 'coffee-rails', '~> 3.1.1'
+  gem 'uglifier', '>= 1.0.3'
+end
+
+gem 'capistrano-ext'
+
+group :production do
+end
+
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'shoulda-matchers'
+  gem 'capybara'
+end
+
+group :development do
+  gem 'ruby-debug', :platforms => :mri_18
+  gem 'ruby-debug19', :platforms => :mri_19
+  gem 'capistrano_colors'
+  gem 'jslint_on_rails'
+end 
+
+group :test do
+  gem 'webmock'
+  gem 'rb-readline'
+  if RUBY_PLATFORM =~ /-*linux.*/
+    gem 'rb-inotify'
+    gem 'libnotify'
+  end
+
+  if RUBY_PLATFORM =~ /-*darwin.*/
+    gem 'growl'
+    gem 'rb-fsevent'
+  end
+  gem 'guard'
+  gem 'spork', '> 0.9.0.rc'
+  gem 'guard-rspec'
+  gem 'guard-spork'
+end
+
+gem "recaptcha", :require => "recaptcha/rails"
+gem 'jquery-rails'
+gem 'rest-client', :git => 'git://github.com/archiloque/rest-client.git'
+gem 'capistrano'
+gem 'kaminari'
+
+#gem 'paperclip'
+gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
+

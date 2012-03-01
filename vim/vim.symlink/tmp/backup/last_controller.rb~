@@ -1,0 +1,50 @@
+class LastController < ApplicationController
+  before_filter :lastfm
+  def lastfm
+    @lastfm = Lastfm.new(Lastkoncert::API_KEY, Lastkoncert::API_SECRET)
+    @user = User.first
+    if @user.session
+      @lastfm.session = @user.session 
+    else 
+      redirect_to :authenticate
+    end
+  end
+
+  def authenticate
+    token = @lastfm.auth.get_token
+    redirect_to 'http://www.last.fm/api/auth/?api_key=' + Lastkoncert::API_KEY + '&token=' + token
+  end
+  def session
+    redirect_to 'index' if @user.session 
+    last_session = @lastfm.auth.get_session(params[:token])
+    @user.session = last_session
+    @user.save
+    @lastfm.session = last_session
+  end
+  def index
+
+  end
+  def collect_top_artists
+    artists  = @lastfm.user.get_top_artists( :user => @user.username, :limit => 20)
+    artists.each do |artist|
+      @user.add_artist artist
+    end
+    artists  = @lastfm.user.get_top_artists( :user => @user.username, :limit => 20, :period => '3month')
+    artists.each do |artist|
+      @user.add_artist artist
+    end
+  end
+  def refresh_artist_concerts
+    if @user.last_sync & @user.last_sync.advance(:days => 0) < Time.now 
+      @user.subscriptions.each do |subscription|
+        events = @lastfm.artist.get_events :artist => subscription.artist.name, :mbid => subscription.artist.mbid
+        events.each do |event|
+          user.add_event
+        end
+      end
+      @user.last_sync = Time.now
+      @user.save
+    end
+  end
+
+end

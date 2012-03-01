@@ -1,0 +1,37 @@
+# encoding: utf-8
+class Document::Incoming < Document
+  API_DOC_TYPE = "DocumentUploaded"
+    
+  def date
+    @created_at
+  end
+
+  def company
+    @sender
+  end
+
+  def accept
+    API_PROXY.change_status(@uuid, :accepted)
+  end
+
+  def history_available?
+    false
+  end
+
+  def accept_reject_allowed?
+    true
+  end
+
+  def reject(reason)
+    API_PROXY.change_status(@uuid, :rejected, reason)
+  end
+
+  def send_via_email
+    API_PROXY.send_via_email(@uuid)
+  end
+
+  def self.send_via_email_selected(documents)
+    API_PROXY.send_via_email documents
+  end
+
+end

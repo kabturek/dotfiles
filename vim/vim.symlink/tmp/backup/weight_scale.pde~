@@ -1,0 +1,53 @@
+
+// vim:ft=arduino
+//The selector main file
+//#define CPU_FREQ 8000000L
+
+//  #define TWI_FREQ 10000L
+// #define CPU_FREQ 8000000UL
+#include <stdint.h>
+#include "WProgram.h"
+
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include <avr/pgmspace.h>
+#include <inttypes.h>
+
+
+// PIN DEFINITIONS:
+// PC0 -- analog in
+//
+// PD4 - bridge excite
+// PD3 - bridge excite
+
+
+
+int16_t reading;
+int16_t test;
+int8_t counter = 0;
+int sum = 0;
+
+void setup() {
+
+  // init serial port
+  Serial.begin(9600);
+
+reading = 0;
+test = 123;
+
+}
+
+
+
+
+void loop() {
+    sum+=analogRead(0);
+    delay(50);
+    counter++;
+    if(counter == 9){
+      Serial.println(sum/10);
+      counter = 0;
+    }
+
+}
+

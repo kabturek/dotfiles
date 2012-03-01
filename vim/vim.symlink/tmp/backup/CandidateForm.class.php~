@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * Candidate form.
+ *
+ * @package    ptclean
+ * @subpackage form
+ * @author     Y
+ * @version    SVN: $Id: sfDoctrineFormTemplate.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
+ */
+class CandidateForm extends EmployeeForm {
+  public function configure(){
+    parent::configure();
+    
+    $this->widgetSchema['language'] = new sfWidgetFormInputHidden();
+    $this->setDefault('language', 'en');
+    $this->setWidget('current_stage', new sfWidgetFormInputHidden());
+    $this->setDefault('current_stage', 1);
+    $this->setWidget('user_type', new sfWidgetFormInputHidden());
+    $this->setDefault('user_type', 0); #recruit
+    $this->setDefault('entry_date', date("Y-m-d H:i")); #default the entry date to now()
+    $this->setWidget('status_id', new sfWidgetFormInputHidden());
+    $this->setDefault('status_id', Doctrine::getTable('EmployeeStatus')->getStatusId('hiring'));
+
+    unset($this['user_id'],
+      $this['status_notes'],
+      $this['address_street'],
+      $this['address_city'],
+      $this['address_state'],
+      $this['address_zip'],
+      $this['birthday'],
+      $this['emergency_contact'],
+      $this['first_impression'],
+      $this['first_impression_notes'],
+      $this['enthusiasm'],
+      $this['enthusiasm_notes'],
+      $this['trainable'],
+      $this['trainable_notes'],
+      $this['interview_score'],
+      $this['interview_approved'],
+      $this['interview_approved_notes'],
+      $this['position'],
+      $this['inquiries_list']
+    );
+  }
+}

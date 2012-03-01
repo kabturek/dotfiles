@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * EmployeeDamage form.
+ *
+ * @package    ptclean
+ * @subpackage form
+ * @author     Marcin Domański <marcin+ptclean@kabturek.info>
+ * @version    SVN: $Id: sfDoctrineFormTemplate.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
+ */
+class EmployeeDamageForm extends BaseEmployeeDamageForm
+{
+  public function configure()
+  {
+    unset($this['created_at'], $this['updated_at']);
+    $this->widgetSchema['employee_id'] = new sfWidgetFormDoctrineChoice(array(
+      'model' => 'Employee',
+      'query' => Doctrine::getTable('Employee')->getCurentEmployeesQuery(),
+      'order_by' => array('last_name', 'ASC'),
+      'add_empty' => true
+    ));
+    $this->widgetSchema['employees_id']->setOption('order_by', 'last_name ASC, first_name ASC');
+
+    $this->widgetSchema['date'] = new sfWidgetFormDatePicker();
+    $this->widgetSchema['details'] = new sfWidgetFormTextarea();
+    $this->widgetSchema['address'] = new sfWidgetFormTextarea();
+  }
+  public function hideEmployee(){
+    $this->widgetSchema['employee_id'] = new sfWidgetFormInputHidden();
+  }
+  public function setDefault($field, $value){
+    if($field == 'employee_id'){
+      $this->hideEmployee();
+    }
+    return parent::setDefault($field, $value);
+  }
+}

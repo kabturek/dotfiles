@@ -1,0 +1,5 @@
+module WorkoutsHelper
+  def time(seconds)
+  "%.d:%.d" % @workout.track.time.divmod(60)
+  end
+end

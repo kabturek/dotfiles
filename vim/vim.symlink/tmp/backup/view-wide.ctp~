@@ -1,0 +1,93 @@
+<?php
+/* SVN FILE: $Id: view.ctp 346 2008-09-01 16:47:34Z k.rakowski $ */
+
+/**
+ * Wyswietlenie wybranego katalogu.
+ * 
+ * @todo poprawic wyswietlanie atrybutow produktu
+ * 
+ */
+?>
+
+<style type="text/css" media="screen">
+    #TB_ajaxContent #next-button-right { 
+        left: 398px;
+    }
+    #TB_ajaxContent #close-wrapper {
+        left: 414px;
+    }
+    
+    #catalog-layer #catalog-content-page {
+        width:394px;
+    }
+	#catalog-layer img{margin-left:15px}
+	
+	/*div#TB_window{height:10px;width:10px;} TU ZMIENIAC ROZMIARY KATALOGOW*/
+	div#TB_window{position:absolute;top:50px)
+</style>
+
+<div id="sidebar-menu">
+		   		<?php /* echo $this->element('infopageslist', array('limit' => 100)); */ ?>
+		   		<?php echo $this->element('linkslist', array('link_group_id' => 1)); ?>
+		   </div>
+		   <div id="main-content-blue">
+		       
+		    <?php
+		    /**
+		     * automatyczne pobieranie okładki dla folderu jeśli istnieje
+		     * wystarczy wrzucić do katalogu z plikiem .xml plik okladka.gif
+		     */
+		    $path_pieces = explode("/", $data['Catalogue']['xml_file']);
+		    foreach($path_pieces as $key => $piece) {
+		        // kasowanie członu urla z nazwa pliku xml
+		        if(strstr($piece, '.xml')) {
+		            unset($path_pieces[$key]);
+		        }
+		    }
+		    $path = implode("/", $path_pieces).'/okladka.gif';
+		    
+		    // jeśli isnieje ustawiamy okladke z katalogu z xmlem
+            if(file_exists(ROOT.$path)) $cover_src = str_replace('/app/webroot', '', $path);
+            // nie ma - ustawiamy okładkę domyślną
+            else $cover_src = '/css/img/gif/main_content_catalog_img-trans.gif';
+		    ?>   
+		       <a class="thickbox" href="/catalogues/view_pages/Folder_hitow?width=450&amp;height=575&amp;modal=true"><img style="margin: 0pt 10px 0pt 5px;" src="/files/File/20110818_fh/okladka.gif" alt="Folder hitów"></a>
+		   	<? /*<a href="<?php echo $this->base; ?>/catalogues/view_pages/<?=$catalogue_id?>?width=450&amp;height=575&amp;modal=true" class="thickbox"><img alt="Folder hitów" src="<?php echo $this->base; ?><?php echo $cover_src ?>" style="margin: 0 10px 0 5px;" /></a> */?>
+		   	<h1>SZKOLNE ZAKUPY<br />Z RODZINKĄ!</h1>
+
+				<p>Oferta ważna od 17.08.2011 do 27.09.2011 <br /><br />Zapraszamy do obejrzenia folderu hitów, w którym znajdziesz produkty premiowane dodatkowymi punktami.</p>
+
+			<a href="<?php echo $this->base; ?>/catalogues/view_pages/<?=$catalogue_id?>?width=450&amp;height=575&amp;modal=true" class="red-button thickbox" onclick="pageTracker._trackPageview('/crf-rdz-fh');">Zobacz</a>
+			<div style="clear: both;"><br /></div>
+
+			<!-- kolumna A -->
+			<div id="gifts-column-one">
+				<ul>
+				<? foreach ($data['Product'] as $id => $p): ?>
+				<? if ($id%2 == 0): ?>
+					<li>
+						<?=$this->element('product_list_item', array('product' => $p, 'ga' => 'crf-rdz-fh-prod'))?>
+					</li>
+				<?endif;?>
+				<?endforeach?>
+				</ul>
+			</div>
+			
+			<!-- kolumna B -->
+			<div id="gifts-column-two">
+				<ul>
+				<? foreach ($data['Product'] as $id => $p): ?>
+				<? if ($id%2 == 1): ?>
+					<li>
+						<?=$this->element('product_list_item', array('product' => $p, 'ga' => 'crf-rdz-fh-prod'))?>
+					</li>
+				<?endif;?>
+				<?endforeach?>
+				</ul>
+			</div> 	
+				
+
+</div>  
+        </div>
+        
+        <?php echo $this->element('default_layout_footer', array('dots' => true)); ?>

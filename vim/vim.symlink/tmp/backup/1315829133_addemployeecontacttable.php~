@@ -1,0 +1,55 @@
+<?php
+
+class Addemployeecontacttable extends Doctrine_Migration_Base
+{
+  public function up()
+  {
+        $this->createTable('contact', array(
+             'id' => 
+             array(
+              'type' => 'integer',
+              'length' => '8',
+              'autoincrement' => '1',
+              'primary' => '1',
+             ),
+             'employee_id' => 
+             array(
+              'type' => 'integer',
+              'notnull' => '',
+              'length' => '8',
+             ),
+             'date' => 
+             array(
+              'type' => 'datetime',
+              'notnull' => 'true',
+             ),
+             'notes' => 
+             array(
+              'type' => 'string',
+              'notnull' => false
+             ),
+             'created_at' => 
+             array(
+              'type' => 'timestamp',
+              'length' => '25',
+             ),
+             'updated_at' => 
+             array(
+              'type' => 'timestamp',
+              'length' => '25',
+             ),
+             ), array(
+             'primary' => 
+             array(
+              0 => 'id',
+             ),
+             'collate' => 'utf8_unicode_ci',
+             'charset' => 'utf8',
+             ));
+  }
+
+  public function down()
+  {
+        $this->dropTable('contact');
+  }
+}

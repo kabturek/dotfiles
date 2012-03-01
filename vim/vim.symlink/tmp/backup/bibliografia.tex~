@@ -1,0 +1,46 @@
+\begin{comment}
+Bibliografia (bez numeracji rozdziału).
+Bibliografia, czyli wykaz literatury związanej z tematem pracy i wykorzystywanej przez
+autora, powinna zawierać cytowane w pracy pozycje. Każda publikacja lub dokument zawarte
+w spisie literatury są identyfikowane przez podanie nazwiska i imienia autora, tytułu pracy,
+miejsca wydania i wydawnictwa, roku opublikowania. Spis powinien być ponumerowany i
+wykonany w porządku alfabetycznym.
+Poniżej są zamieszczone wzory opisów różnych pozycji bibliograficznych:
+książka
+autor, tytuł książki, miejsce wydania, wydawnictwo, rok wydania;
+artykuł
+autor, tytuł artykułu, nazwa czasopisma, rok, numer woluminu, numery stron;
+akt normatywny
+tytuł (rozporządzenie, uchwała, ustawa, zarządzenie), nazwa organu promulgacyjnego, rok,
+numer, pozycja.
+praca niepublikowana
+autor, tytuł pracy, nazwa instytucji i jej siedziby, rok opracowania, informacja o technice
+wykonania (np. maszynopis).
+strona internetowa
+adresy stron internetowych muszą być opatrzone odpowiednim komentarzem podającym
+informacje o źródle: do jakiej firmy należy strona internetowa, czego dotyczą informacje tam
+prezentowane, itp.
+
+%\bibitem{alsomali} Al-Somali, S., Gholami, R. and Clegg, B.: An investigation into the acceptance of online banking in Saudi Arabia, Technovation, wydanie 29, nr 2, 2009
+
+
+1.
+
+2.Bazy danych i PostgreSQL. Od podstaw
+
+Autorzy: Richard Stones, Neil Matthew
+Data wydania: 2002/04
+
+https://info.wit.edu.pl/~bibl-strona/makwww/makwww.cgi?BM=01&IM=05&WI=POSTGRESQLbPODReCZNIK&NU=01&DD=1
+http://helion.pl/ksiazki/bazy-danych-i-postgresql-od-podstaw-richard-stones-neil-matthew,bdpspo.htm
+
+=======================================
+\end{comment}
+      \bibitem{geoinformacja} Dariusz Felcenloben, "Geoinformacja", Katowice, Wydawnictwo Gall, 2011
+      \bibitem{wprowadzeniedogis} Piotr Werner, "Wprowadzenie do Geograficznych Systemów Informacyjnych", Warszawa, Uniwersytet Warszawski, 1992
+      \bibitem{rozwazaniaogis} Roger Tomlinson, "Rozważania o GIS", Warszawa, ESRI Polska, 2008
+      \bibitem{leksykon} Jerzy Gaździcki, "Leksykon Geomatyczny", Warszawa, Wydawnictwo "Wieś Jutra" Sp. z o. o., 2001
+      \bibitem{gettingstartedgis} Keith C. Clarke, "Getting Started with Geographic Information Systems", Upper Saddle River USA, Prentice Hall, 2001
+      \bibitem{informationfusion} V. Popovich, C. Claramunt, T. Devogele, M. Schrenk, K. Korolenko, "Information Fusion and Geographic Information Systems: Towards the digital Ocean", Springer-Verlag, Berlin, 2011 
+        G70.212.C55
+        G70.2.f45

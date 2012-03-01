@@ -1,0 +1,31 @@
+# encoding: UTF-8
+module BusinessPartnersHelper
+
+  def render_letters_filters
+    filters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "Ł", "M", "N", "Ń", "O", "Ó", "P", "R", "S", "Ś", "T", "U", "V", "W", "X", "Y", "Z", "Ź", "Ż"]
+    content = ""
+    filters.each do |filter|
+      content += "<li>#{link_to(filter, business_partners_path(:filter_type => :letters, :letter => filter.downcase, :blocked => params[:blocked]))}</li>"
+    end
+    raw content
+  end
+
+  # def link_to_block_partner(partner)
+  #   if partner[:blocked]
+  #     content_tag(:div, :class => "blocked") do
+  #       "&nbsp".html_safe
+  #     end
+  #   else
+  #     link_to 'zablokuj', blacklist_partner_path(partner[:id]), :method => :post, :confirm => "Czy na pewno zablokować kontrahenta?"
+  #   end
+  # end
+
+  def contractor_name(number, company)
+    if company.is_in_cooperation
+      "<h3>#{company.name}</h3> ".html_safe
+    else
+      "<h3>Firma #{number}</h3>".html_safe
+    end
+  end
+  
+end

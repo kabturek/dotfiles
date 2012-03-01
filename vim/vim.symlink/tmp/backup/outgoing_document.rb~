@@ -1,0 +1,10 @@
+# encoding: utf-8
+class Documents::OutgoingDocument < Documents::Document
+  def sent_date
+    status = get_status_change("DocumentUploaded")
+    Time.parse(status[:created_on])
+  end
+  def self.all(*options)
+    super(:outgoing, *options)
+  end
+end

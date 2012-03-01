@@ -1,0 +1,105 @@
+# encoding: UTF-8
+# Klasa reprezentująca pojedynczego użytkownika. Zawiera jego hasło i email, a także konto. Pozwala na autentykację
+# użytkownika (tj. pobranie jego uuid) a także zawiera metody odpowiedzialne za walidację i zmianę hasła.
+class User
+  include ActiveModel::Validations
+
+  attr_accessor :email, :password, :account
+
+  delegate :uuid, :"active?", :to => "account", :prefix => "account"
+  delegate :"can?", :to => "account"
+
+  API_PROXY = PuchatekApi::User.new
+
+  def initialize(user = {})
+    @account  = Account.new
+    @email    = user[:email] || API_PROXY.class.credentials.email
+    @password = API_PROXY.class.credentials.password
+    @permissions = user[:permissions] if user[:permissions]
+  end
+
+  def permissions
+    @permissions ||= @account.permissions
+  end
+
+  def change_password(current_password, new_password, new_password_confirmation)
+    API_PROXY.change_password(new_password) if new_password_valid(current_password, new_password, new_password_confirmation)
+  end
+  
+  def update
+    perms = permissions.map do |key, value|
+      key if Account::PERMISSIONS.include? key 
+    end
+    API_PROXY.update(email, perms)
+  end
+
+  def delete
+    API_PROXY.delete(email)
+  end
+
+
+  private
+  def new_password_valid(current_password, new_password, new_password_confirmation)
+    validate_password(current_password) &&
+        validate_password_existence(new_password) &&
+        validate_password_confirmation(new_password, new_password_confirmation)
+  end
+
+  def validate_password(password)
+    errors.add(:password, "Nieprawidłowe dotychczasowe hasło") unless (result = (password == @password))
+    result
+  end
+
+  def validate_password_confirmation(password, password_confirmation)
+    errors.add(:password, "Podane hasła nie zgadzają się") unless (result = (password == password_confirmation))
+    result
+  end
+
+  def validate_password_existence(password)
+    errors.add(:password, "Podane hasło nie może być puste") unless (result = password.present?)
+    result
+  end
+  
+  def self.check_email(email)
+    return false unless email.present?
+    path = "/login/unique?email=#{email}"
+    PuchatekApi::rest_request(:get, path)
+  rescue RestClient::Conflict, RestClient::ResourceNotFound
+    false
+  end
+  
+  class << self
+
+    def authenticate(login, password)
+      API_PROXY.authenticate(login, password)
+    end
+
+    def request_password_reset(email)
+      API_PROXY.request_password_reset(email) rescue nil
+    end
+
+    def change_password_with_token(token, new_password)
+      API_PROXY.change_password_with_token(token, new_password)
+    end
+    
+    def new_password_valid?(new_password,new_password_confirmation)
+      !new_password.empty? && !new_password_confirmation.empty? && new_password == new_password_confirmation
+    end
+
+    def create(user)
+      if user[:permissions].kind_of? Hash
+        user[:permissions] = user[:permissions].map do |key, value|
+          # musimy zmienic pierwszy znak na dużą litere ponieważ api zwraca
+          # uprawnienia w postaci ForteDownloadDocument a oczekuje forteDownloadDocument
+          key[0,1].downcase + key[1..-1] if Account::PERMISSIONS.include? key 
+        end
+      end
+      API_PROXY.create(user)
+    end
+    
+    def all
+      API_PROXY.list
+    end
+  end
+
+end

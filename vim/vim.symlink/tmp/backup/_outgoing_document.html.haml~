@@ -1,0 +1,12 @@
+%tr
+  %td
+    = outgoing_document.sent_date
+  %td
+    = outgoing_document.sender
+  %td
+    = outgoing_document.name
+  %td
+    = outgoing_document.size
+  %td
+    = t(outgoing_document.status)
+

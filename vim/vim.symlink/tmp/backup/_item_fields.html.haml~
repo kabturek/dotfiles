@@ -1,0 +1,11 @@
+%tr
+  %td= f.object.item.title
+  %td= f.object.item.description
+  %td.price
+    %span= f.object.item.price
+  %td= f.select :quantity, 0..100, {}, { :class => "quantity_select"}
+  %td.row_sum
+    %span
+    PLN
+    
+  =f.hidden_field :item_id

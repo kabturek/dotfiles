@@ -1,0 +1,75 @@
+\section{Projekt Systemu}
+\subsection{Opis systemu}
+Główną częścią systemu jest aplikacja internetowa napisana w języku Ruby korzystająca z frameworka Ruby on Rails. Aplikacja umożliwia zarządzanie danymi o treningach, które wykonuje użytkownik. Umożliwia ona dodanie do treningu ścieżki z urządzenia GPS. Dzięki analizie tej ścieżki możliwe jest wyliczenie statystyk dotyczących treningu. Są to takie informacje jak: prędkość chwilowa, prędkość średnia, czas treningu, wysokość, przebyta odległość oraz trasa.
+\subsection{O języku Ruby}
+Ruby jest jezykiem obiektowym stworzonym przez Yukihiro Matsumoto w 1995 roku. Został stworzony jako język skryptowy, który zastąpi język Perl, ale będzie w pełni obiektowy.  Yukihiro Matsumoto inspirował się takimi językami jak Smalltalk, Eiffel i Lisp. Rozwijany jest on jako otwarte oprogramowanie(licencja GNU GPL\footnote{GNU General Public License - najpopularniejsza licencja wolnego i otwartego oprogramowania}).
+  
+Jednym z głównym założeń języka było stworzenie jeżyka przyjaznego użytkownikowi (programiście), a nie maszynie. Matsumoto pisał: ``Często ludzie, szczególnie inżynierzy oprogramowania, skupiają się na maszynach. Myślą ''Robiąc to, maszyna będzie działać szybciej. Robiąc to, maszyna będzie bardziej wydajna.``. Skupiają się na maszynach, a powinni skupić sie na człowieku, na tym jak człowiek programuje, lub operuje aplikacją. My jesteśmy Panami. Maszyny sa niewolnikami.''. Ruby został stworzony, aby jak najbardziej przypominał naturalny język.
+Ruby jest językiem dynamicznym - wykonuje wiele operacji podczas działania programu, podczas gdy inne języki (statyczne, kompilowalne) wykonują je podczas etapu kompilacji. Dzięki temu możliwe jest dodawanie nowego kodu - rozszerzanie programu podczas działania. W Ruby wszystko jest obiektem - każdy obiekt wbudowany lub utworzony przez użytkownika. Dlatego, w Ruby można zobaczyć takie wyrażenia jak:
+ \begin{verbatim}
+  3.times { print 'Ruby!' }
+ \end{verbatim}
+ Wynikiem tego kodu będzie \verb%Ruby!Ruby!Ruby!%. \ \verb%times% jest metodą klasy Integer, która jako argument przyjmuje Blok. Bloki (Closures) są inspirowane jezykami funkcyjnymi - pozwalają przekazać do dowolnej metody kawałek kodu który będzie wykonywany w danej metodzie. Dzieki temu możliwe jest modyfikowanie metod wykraczające poza podstawowe modyfikowanie działania metod przez podawanie parametrów. Metody mogą wywoływać przekazany blok jeden lubi więcej razy, mogą także przekazywać parametry do bloków. Dzieki temu można tworzyć Iteratory - metody zwracające kolejne elementy jakiejś kolekcji i wywołujące przekazany blok na każdym elemencie. 
+ 
+ Kolejną funkcją są otwarte klasy - każdą klase/obiekt można go zmienić podczas działania programu, także obiekty/klasy wbudowane - takie jak Array (tablica), czy String (łańcuch znaków). Dzięki temu można dodać metody do klas wbudowanych podczas działania programu. Operatory typu +, -, * sa także metodamy na obiektach i można je definiować/nadpisywać.
+ 
+ Ruby wspiera tylko jednokrotne dziedziczenie\footnote{Każda klasa ma tylko jedną klasę po której dziedziczy(rodzica).}, ale pozwala on tworzyć Moduły, zbiory metod, które można dołączać do każdej klasy i w ten sposób rozszerzać ich funkcjonalność.
+
+ Ruby zyskał popularność, między innymi, dzięki frameworkowi do aplikacji internetowych Ruby on Rails.
+
+  \subsection{O frameworku Ruby on Rails}
+  Framework Ruby on Rails został opublikowany w 2004 roku przez Davida Heinemeiera Hanssona. Został on wyodrębniony z aplikacji Basecamp, nad którą pracował David. Jest to kompletny framework - zawiera wszystkie elementy potrzebne do stworzenia aplikacji internetowej. Framework główne założenia ma zgodne z jeżykiem Ruby - skupia się na ułatwieniu pracy programiście.
+  
+  Framework oparty jest na architekturze MVC\footnote{Model-View-Controller}. MVC jest architektonicznym wzorcem projektowym, według którego aplikacja składa się z 3 głównych warstw:
+  \begin{itemize}
+    \item{Model - zawiera logikę biznesową aplikacji}
+    \item{Widok - jest to jedna z form prezentacji modelu, może składać się z podwidoków}
+    \item{Kontroler - jest to warstwa scalająca Model i Widok - reaguje na działania użytkownika, wysyła żądania do modelu oraz przedstawia odpowiedni widok modelu}
+  \end{itemize}
+  Architektura ta wywodzi się od aplikacji GUI\footnote{Graphical User Interface - Graficzny Interfejs Użytkownika}, ale jest szeoko stosowana a aplikacjach internetowych.
+
+  Jedną z głównych zasad Rails jest ``Convention Over Confiuration``\footnote{Konwencja ponad konfiguracje}. Dzięki zastosowaniu wartości domyślnych początkowa konfiguracja jest ograniczona do minimum. Zasada ta upraszcza tworzenie skomplikowanych procesów dzięki ustaleniu konkretnych zasad i zmniejsza ilość kodu oraz konfiguracji potrzebnej do osiągnięcia danego celu. Poprzez zmniejszenie ilości decyzji jakie programista musi podjąć w początkowej fazie projektowania zwiększa się szybkość tworzenia aplikacji, nie zmniejszając ilości możliwości. 
+
+  Reguła DRY\footnote{Don't Repeat Yourself - Nie Powtarzaj Się} jest kolejną zasadą, którą kierują się twórcy frameworka. Mówi ona, iż każdy informacja lub element w kodzie powinien być tylko w jednym zdefiniowanym miejscu. Dzieki temu zawsze wiadomo, gdzie szukać danej informacji. Unika się także błędów wynikajacych z powtarzania kodu. Zgodnie z tą zasadą zmiana konkretnego elementu nie powinna wpływać na żadne niezwiązane elementy, a związane elementy powinny zmieniać się przewidywalnie. 
+
+  Aktualna trzecia wersja środowiska przeszła duże zmiany architektury dzięki połączeniu się z drugim frameworkiem napisanym w Ruby - Merb. Architektura stała się bardziej modularna - dzięki temu możliwe jest użycie tylko niektórych komponentów, lub zastąpienie innymi komponentami realizujacymi dane zadanie. 
+  Główne elementy frameworku Ruby on Rails:
+  %TODO: opisac kolejne
+  \begin{itemize}
+    \item{Action Pack - pakiet składający się z Action Controller - komponent zarządzający warstwą kontrolera, Action View - warstwy odpowiadającej za funckje widoku oraz Action Dispatch, który odpowiada za tłumaczenie adresów na odpowiednie akcje kontrolera}
+    \item{Action Mailer - rusztowanie odpowiadjące za odbieranie, przetwarzanie i wysyłanie wiadomości e-mail}
+    \item{Active Model - jest to warstwa pośrednicząca między warstwą abstrakcji a komponentem ActionPack umożliwijąca podmianę warstwy abstrakcji używanej przez Rails}
+    \item{Active Record - warstwa abstrakcji łącząca obiekty biznesowe z relacyjną bazą danych}
+    \item{Active Resource - umożliwa mapowanie zdalnych zasobów na lokalne obiekty} 
+    \item{Active Support - zbiór modułów rozszerzających wbudowane typy języka Ruby o przydatne metody uzywane w samym frameworku jak i w aplikacjach}
+  \end{itemize}
+
+  \subsection{Architektura}
+  Główną częścią aplikacji jest \verb%WorkoutsController%. Zawiera on podstawowe funkcje związane z treningami: wyświetlanie listy treningów, wyświetlanie konkretnego treningu, dodawanie, edycja oraz usuwanie treningu. Każdej z tych funkcji odpowiadają osobne akcje.
+
+  \subsubsection{Treningi}
+  %IMG: workouts/index
+  Adres \verb%/workouts% jest domyślną stroną jaką użytkownik widzi po zalogowaniu się - przedstawia on liste treningów razem ze skrócona informacja na temat każdego treningu. W prawej części ekranu widoczny jest profil użytkownika razem z ostatnimi osiągnieciami oraz wyznaczonymi celami. W środku ekranu przedstawiona jest podzielona na strony lista treningów domyślnie posortowana od najnowszego do najstarszego. Nad lista znajdują się filtry umożliwijące zawężenie treningów do danego okresu lub wyszukanie konkretnego treningu po nazwie lub opisie. 
+  %TODO: czy napewno?
+  Pod listą znajduje się mapa przedstawiające trasy aktualnie wyświetlanych treningów. 
+
+  %IMG: strona treningu
+  Po kliknięciu na tytuł wybranego treningu przechodzimy na stronę z jego szczegółami. Adres strony przykładowego treningu ma postać \verb%/workouts/1% i wywołuje akcję \verb%show% kontrolera \verb%WorkoutsController% jako parametr przyjmując identyfikator treningu. 
+  Na stronie znajdują się podstawowe dane danego trenignu służące ocenie jego skuteczności: 
+  \begin{itemize}
+    \item{Czas treningu}
+    \item{Długość trasy treningu}
+    \item{Średnia oraz maksymalna prędkość poruszania się}
+  \end{itemize}
+  Dodatkowo wyświetlany jest interaktywny wykres umożliwiający sprawdzenie jaką użytkownik miał w danym momencie treningu prędkość oraz jaka była wysokość nad poziomem morza. Poniżej wykresu można wybrać które wartości można wyświetlać na wykresie. Obok wykresu wyświetlana jest mapa z przebiegiem trasy. Używany jest serwis Google Maps\footnote{http://maps.google.com}a, który umożliwia wczytanie zbioru wspołrzędnych i wyświetlanie ich na mapie korzystająć z API. Mapa jest interaktywna - możliwe jest przybliżanie i oddalania oraz zmiana widoczcnego obszaru. Dostępne są dwa widoki - domyślnie wyświetlana mapa terenu oraz tryb zdjęć satelitarnych.  
+
+  %IMG porownianie dwoch trybow google maps
+  Używany jest jeden formularz obsługujący tworzenie oraz edycje treningów. Umożliwia on wprowadzenie informacji o treningu (tytuł oraz opis), wprowadzenie daty treningu oraz załączenie pliku GPX ze śladem z urządzenia GPS zapisującego trase treningu. Po wprowadzeniu tych danych są one wysyłane do serwera który zapisuje je do bazy danych oraz oblicza dane treningu z pliku GPX. Po tej operacji użytkownik przekierowywany jest na strone z przedstawionym nowo dodanym lub edytowanym treningiem.
+
+
+  \subsubsection{Cele}
+  Cele są to wartości jakie uzytkownik chce osiągnąć w danym okresie czasu. Mogą one dotyczyć takich rzeczy jak przebyty dystans czy średnia prędkość. Dzięki celom występuje czynnik motywujący użytkownika do osiągania lepszych wyników. 
+
+
+\newpage
+  

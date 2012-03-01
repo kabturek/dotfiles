@@ -1,0 +1,58 @@
+.customer.clearfix.editable_section
+  .name
+    %h3.editable_value= business_partner.name
+    .editable_default_hidden.edit-form.data
+      = form_tag change_name_business_partner_path(business_partner.uuid), :method => :put do
+        %fieldset.noLegend
+          %dl
+            %dt
+              %label{:for => "friendly_name"} Zmień nazwę kontrahenta
+            %dd
+              = text_field_tag :friendly_name, business_partner.name, :class => 'text'
+              %button.orange-button{:type => "submit"}
+                %span Zapisz
+              %button.reset{:type => "reset", :class => :editable_edit, :id => 'customer-edit-edit'}
+                %span Anuluj
+    .editable_default_hidden.agreement-form.data
+      = form_tag request_contract_documents_business_partner_path(business_partner.uuid), :method => :post do
+        %fieldset.noLegend
+          %dl
+            %dt
+              %p
+                Proszę o wysłanie
+                = succeed "," do
+                  %strong dokumentu poświadczającego
+                %br
+                  że ten kontrahent wyraził
+                  %strong zgodę na wymianę e-dokumentów
+            %dd
+              %button.orange-button{:type => "submit"}
+                %span Wyślij zgłoszenie
+              %button.reset{:type => "reset", :id => 'customer-doc-edit', :class => :editable_edit}
+                %span Anuluj
+    - if business_partner.waiting_for_removal
+      .data
+        %p
+          %span{:class => :block}= "czeka na usunięcie z czarnej listy"
+    - elsif business_partner.waiting_for_addition
+      .data
+        %p
+          %span{:class => :block}= "czeka na dodanie do czarnej listy"
+          = link_to 'odblokuj', unblock_business_partner_path(business_partner.uuid), :method => :delete, :confirm => "Czy na pewno odblokować kontrahenta?"
+    - elsif business_partner.on_blacklist
+      .data
+        %p
+          %span{:class => :block}= "zablokowany"
+          = link_to 'odblokuj', unblock_business_partner_path(business_partner.uuid), :method => :delete, :confirm => "Czy na pewno odblokować kontrahenta?"
+
+    %span.info-ico Pełne informacje o kontrahencie znajdziesz w programie księgowym
+  .nip
+    %p= number_to_nip(business_partner.nip)
+  .options
+    %ul
+      %li.customer-edit
+        %a{:href => "#", :class => :editable_edit, :id => 'customer-edit-edit', :title => "Edytuj nazwę kontrahenta"} edytuj
+      %li.customer-block
+        = link_to nil, block_business_partner_path(business_partner.uuid),:title => 'Zablokuj kontrahenta', :confirm => "Czy na pewno zablokować kontrahenta?" if !business_partner.on_blacklist
+      %li.customer-doc
+        %a{:href => "#", :class => :editable_edit, :id => 'customer-doc-edit', :title => "Wyślij żądanie wysłania umowy"} poswiadczenie

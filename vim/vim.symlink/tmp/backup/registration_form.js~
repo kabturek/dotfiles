@@ -1,0 +1,388 @@
+$(function () {
+    jQuery.validator.addMethod('masked_rangelength', function(value, element, param){
+      var length = this.getLength($.trim(value).replace(/_/g,''), element);
+			return this.optional(element) || ( length >= param[0] && length <= param[1] );
+    }, "Numer nie jest prawidłowy.");
+
+    if ($('#new_crm_registration_form, form.edit_crm_application_registration, #edit-company, #renew_registration').length > 0) {
+        $("#new_crm_registration_form, form.edit_crm_application_registration, #edit-company, #renew_registration").validate({
+            rules: {
+               "crm_application_registration[nip]": {
+                  rangelength: [10,10]
+                },
+                "crm_application_renew_registration[nip]":{
+                  rangelength: [10,10]
+                },
+               "crm_application_registration[regon]": {
+                  rangelength: [9,9]
+                },
+                "crm_application_renew_registration[regon]":{
+                  rangelength: [9,9]
+                },
+               "crm_application_registration[krs]": {
+                  required: true,
+                  masked_rangelength: [2,10]
+                },
+                "crm_application_renew_registration[krs]":{
+                  required: true,
+                  masked_rangelength: [2,10]
+                },
+               "crm_application_registration[post_code]": {
+                  masked_rangelength: [6,6]
+                },
+                "crm_application_renew_registration[post_code]":{
+                  masked_rangelength: [6,6]
+                }
+            },
+            messages:{
+                "crm_application_registration[company_name]":"Nazwa nie może być pusta.",
+                "crm_application_registration[user_email]": {
+                  required: "Adres email nie może być pusty",
+                  email: "Podany adres email jest nieprawidłowy"
+                },
+                "crm_application_registration[password]":"Hasło nie może być puste.",
+                "crm_application_registration[password_confirmation]":"Musisz potwierdzić hasło.",
+                "crm_application_registration[city]":"Miasto nie może być puste.",
+                "crm_application_registration[phone]":"Numer telefonu nie może być pusty.",
+                "crm_application_registration[post_code]":{
+                  required: "Kod pocztowy nie może być pusty.",
+                  rangelength: "Podaj prawidłowy kod pocztowy.",
+                  masked_rangelength: "Podaj prawidłowy kod pocztowy."
+                },
+                "crm_application_registration[street_name]":"Ulica nie może być pusta.",
+                "crm_application_registration[street_number]":"Numer domu nie może być pusty.",
+                "crm_application_registration[nip]": {
+                  required: "Numer NIP nie może być pusty.",
+                  rangelength: "Podaj prawidłowy numer NIP.",
+                  number: "Podaj prawidłowy numer NIP."
+                },
+                "crm_application_registration[regon]": {
+                  required: "Numer REGON nie może być pusty.",
+                  rangelength: "Podaj prawidłowy numer REGON.",
+                  number: "Podaj prawidłowy numer REGON."
+                },
+                "crm_application_registration[krs]":{
+                  required: "Numer KRS nie może być pusty.",
+                  rangelength: "Podaj prawidłowy numer KRS"
+                },
+                "crm_application_registration[representatives_attributes][0][firstname]":"Imię nie może być puste",
+                "crm_application_registration[representatives_attributes][0][lastname]":"Nazwisko nie może być puste",
+                "crm_application_registration[representatives_attributes][0][position]":"Stanowisko nie może być puste",
+                "crm_application_registration[representatives_attributes][1][firstname]":"Imię nie może być puste",
+                "crm_application_registration[representatives_attributes][1][lastname]":"Nazwisko nie może być puste",
+                "crm_application_registration[representatives_attributes][1][position]":"Stanowisko nie może być puste",
+                "crm_application_registration[representatives_attributes][2][firstname]":"Imię nie może być puste",
+                "crm_application_registration[representatives_attributes][2][lastname]":"Nazwisko nie może być puste",
+                "crm_application_registration[representatives_attributes][2][position]":"Stanowisko nie może być puste",
+                "crm_application_registration[representatives_attributes][3][firstname]":"Imię nie może być puste",
+                "crm_application_registration[representatives_attributes][3][lastname]":"Nazwisko nie może być puste",
+                "crm_application_registration[representatives_attributes][3][position]":"Stanowisko nie może być puste",
+                "crm_application_update_data[representatives_attributes[0][firstname]]":"Imię nie może być puste",
+                "crm_application_update_data[representatives_attributes[0][lastname]]":"Nazwisko nie może być puste",
+                "crm_application_update_data[representatives_attributes[0][position]]":"Stanowisko nie może być puste",
+                "crm_application_update_data[representatives_attributes[1][firstname]]":"Imię nie może być puste",
+                "crm_application_update_data[representatives_attributes[1][lastname]]":"Nazwisko nie może być puste",
+                "crm_application_update_data[representatives_attributes[1][position]]":"Stanowisko nie może być puste",
+                "crm_application_update_data[representatives_attributes[2][firstname]]":"Imię nie może być puste",
+                "crm_application_update_data[representatives_attributes[2][lastname]]":"Nazwisko nie może być puste",
+                "crm_application_update_data[representatives_attributes[2][position]]":"Stanowisko nie może być puste",
+                "crm_application_update_data[representatives_attributes][1][firstname]":"Imię nie może być puste",
+                "crm_application_update_data[representatives_attributes][1][lastname]":"Nazwisko nie może być puste",
+                "crm_application_update_data[representatives_attributes][1][position]":"Stanowisko nie może być puste",
+                "crm_application_update_data[representatives_attributes][2][firstname]":"Imię nie może być puste",
+                "crm_application_update_data[representatives_attributes][2][lastname]":"Nazwisko nie może być puste",
+                "crm_application_update_data[representatives_attributes][2][position]":"Stanowisko nie może być puste",
+                "crm_application_renew_registration[company_name]":"Nazwa nie może być pusta.",
+                "crm_application_renew_registration[user_email]": {
+                  required: "Adres email nie może być pusty",
+                  email: "Podany adres email jest nieprawidłowy"
+                },
+                "crm_application_renew_registration[password]":"Hasło nie może być puste.",
+                "crm_application_renew_registration[password_confirmation]":"Musisz potwierdzić hasło.",
+                "crm_application_renew_registration[city]":"Miasto nie może być puste.",
+                "crm_application_renew_registration[phone]":"Numer telefonu nie może być pusty.",
+                "crm_application_renew_registration[post_code]":{
+                  required: "Kod pocztowy nie może być pusty.",
+                  rangelength: "Podaj prawidłowy kod pocztowy.",
+                  masked_rangelength: "Podaj prawidłowy kod pocztowy."
+                },
+                "crm_application_renew_registration[street_name]":"Ulica nie może być pusta.",
+                "crm_application_renew_registration[street_number]":"Numer domu nie może być pusty.",
+                "crm_application_renew_registration[nip]": {
+                  required: "Numer NIP nie może być pusty.",
+                  rangelength: "Podaj prawidłowy numer NIP."
+                },
+                "crm_application_renew_registration[regon]":{
+                  required: "Numer REGON nie może być pusty.",
+                  rangelength: "Podaj prawidłowy numer REGON."
+                },
+                "crm_application_renew_registration[krs]": {
+                  required: "Numer KRS nie może być pusty.",
+                  rangelength: "Podaj prawidłowy numer REGON."
+                },
+                "crm_application_renew_registration[representatives_attributes[0][firstname]]":"Imię nie może być puste",
+                "crm_application_renew_registration[representatives_attributes[0][lastname]]":"Nazwisko nie może być puste",
+                "crm_application_renew_registration[representatives_attributes[0][position]]":"Stanowisko nie może być puste",
+                "crm_application_renew_registration[representatives_attributes[1][firstname]]":"Imię nie może być puste",
+                "crm_application_renew_registration[representatives_attributes[1][lastname]]":"Nazwisko nie może być puste",
+                "crm_application_renew_registration[representatives_attributes[1][position]]":"Stanowisko nie może być puste",
+                "crm_application_renew_registration[representatives_attributes[2][firstname]]":"Imię nie może być puste",
+                "crm_application_renew_registration[representatives_attributes[2][lastname]]":"Nazwisko nie może być puste",
+                "crm_application_renew_registration[representatives_attributes[2][position]]":"Stanowisko nie może być puste",
+                "crm_application_renew_registration[representatives_attributes][1][firstname]":"Imię nie może być puste",
+                "crm_application_renew_registration[representatives_attributes][1][lastname]":"Nazwisko nie może być puste",
+                "crm_application_renew_registration[representatives_attributes][1][position]":"Stanowisko nie może być puste",
+                "crm_application_renew_registration[representatives_attributes][2][firstname]":"Imię nie może być puste",
+                "crm_application_renew_registration[representatives_attributes][2][lastname]":"Nazwisko nie może być puste",
+                "crm_application_renew_registration[representatives_attributes][2][position]":"Stanowisko nie może być puste"
+			}
+		});
+		
+		// Check representants
+		$('#new_crm_registration_form, form.edit_crm_application_registration, form.new_crm_registration_renew_registation').submit(function(){
+			if ($(this).find('#osobaReprezentujacaFirme').parents('fieldset').find('dl').length < 1) {
+				return false;
+			}
+		});
+		
+    }
+    // if confirm_data
+    $('.edit').click(function (e) {
+        e.preventDefault();
+
+        if ($(this).parents('fieldset').find('input').length > 0) {
+            // if inputs
+            var editable = $(this).parents('fieldset'),
+                readable = $(this).parents('fieldset').prev('fieldset');
+
+            if ($("form.edit_crm_application_registration").valid()) {
+				
+                editable.hide();
+
+                // Changed Content Code                
+                var newContent = editable.clone();
+                $.each(newContent.find('input'), function () {
+	                    if ($(this).attr('type') != 'hidden') $(this).after('<div class="text">' + $(this).val() + '</div>');
+	                    $(this).remove();
+                });
+                newContent.find('em, .removePerson, legend, .addEmployee').remove();
+                readable.find('dl').remove();
+                readable.find('legend').after(newContent.html());
+                // \Changed Content Code
+
+                readable.show();
+            }
+        }
+        else {
+            $(this).parents('fieldset').hide();
+            $(this).parents('fieldset').next('fieldset').show();
+        }
+
+    });
+
+
+    var newUser = new UserClon();
+    newUser.initialize($('.addEmployee'));
+
+    $('input#crm_application_registration_post_code, #crm_application_update_data_post_code, #crm_application_renew_registration_post_code').mask('99-999');
+    $('input#crm_application_registration_nip, #crm_application_update_data_nip, #crm_application_renew_registration_nip').mask('9999999999');
+    $('input#crm_application_registration_regon, #crm_application_update_data_regon, #crm_application_renew_registration_regon').mask('999999999');
+    $('input#crm_application_registration_krs, #crm_application_update_data_krs, #crm_application_renew_registration_krs').mask('9?999999999');
+
+
+    if ($('form#login').length == 0 && $('#password').length > 0) {
+        $('#password').password_strength();
+    }
+
+    $('.removePerson').click(function (event) {
+        event.preventDefault();
+        if ($(this).parents('fieldset').find('dl').length > 1) {
+			
+			var contrainer = $(this).parents('dl');
+			var repId = contrainer.next('input').val();
+			
+			$.ajax({
+				url: '/crm_application/registration/remove_representative',
+				type: 'POST',
+				data: 'id=' + repId,
+				success: function(){
+					contrainer.next('input').remove();
+					contrainer.remove();
+				}
+			});
+        }
+        else {
+            $.achtung({ message:'Musi pozostać co najmniej jedna osoba!', timeout:3 });
+        }
+    });
+});
+
+var UserClon = function () {
+    return {
+        initialize:function (selector) {
+            var self = this;
+            selector.click(function (e) {
+                e.preventDefault();
+                selector.before(self.renderTemplate(selector, self.form_type(selector)));
+                $('.removePerson').click(function (event) {
+                    event.preventDefault();
+			        if ($(this).parents('fieldset').find('dl').length > 1) {
+
+						var contrainer = $(this).parents('dl');
+						var repId = contrainer.next('input').val();
+
+						$.ajax({
+							url: '/crm_application/registration/remove_representative',
+							type: 'POST',
+							data: 'id=' + repId,
+							success: function(){
+								contrainer.next('input').remove();
+								contrainer.remove();
+							}
+						});
+			        }
+			        else {
+			            $.achtung({ message:'Musi pozostać co najmniej jedna osoba!', timeout:3 });
+			        }
+                });
+            });
+        },
+        counter:function (selector) {
+            return selector.parents('fieldset').find('dl').length;
+        },
+        form_type: function(selector) {
+          var form_id = selector.parents('form').attr('id');
+          if(form_id == 'edit-company'){
+            return 'update_data';
+          } else if(form_id  == 'new_crm_registration_form'){
+            return 'registration';
+          } else if(form_id  == 'edit_crm_application_registration'){
+            return 'registration';
+          } else {
+            return form_id;
+          }
+        },
+        renderTemplate:function (selector, type) {
+            return '<dl>' +
+                '<dt>' +
+                '<label for="company_firstname">Imię</label> <em class="asterisk">*</em>' +
+                '</dt>' +
+                '<dd>' +
+                '<input class="text required" id="crm_application_' + type + '_representatives_attributes_' + this.counter(selector) + '_firstname" maxlength="30" name="crm_application_' + type + '[representatives_attributes][' + this.counter(selector) + '][firstname]" size="60" type="text" value="">' +
+                '</dd>' +
+                '<dt>' +
+                '<label for="company_lastname">Nazwisko</label> <em class="asterisk">*</em>' +
+                '</dt>' +
+                '<dd>' +
+                '<input class="text required" id="crm_application_' + type + '_representatives_attributes_' + this.counter(selector) + '_lastname" maxlength="255" name="crm_application_' + type + '[representatives_attributes][' + this.counter(selector) + '][lastname]" size="60" type="text" value="">' +
+                '</dd>' +
+                '<dt>' +
+                '<label for="company_position">Stanowisko</label> <em class="asterisk">*</em>' +
+                '</dt>' +
+                '<dd>' +
+                '<input class="text required" id="crm_application_' + type + '_representatives_attributes_' + this.counter(selector) + '_position" maxlength="50" name="crm_application_' + type + '[representatives_attributes][' + this.counter(selector) + '][position]" size="60" type="text" value="">' +
+                '</dd>' +
+                '<dt><a href="#" class="removePerson">Usuń osobę</a></dt><dd></dd>' +
+                '</dl>'
+        }
+    }
+}
+
+
+var UpdateValidation = function (form_id) {
+
+  return {
+    initialize:function () {
+      var self = this;
+      this.form = $('#' + form_id);
+      this.form.find('input').removeClass('required');
+      this.form.bind('submit', function(event, answer) {
+        return self.checkFields();
+      });
+    },
+
+    checkFields:function () {
+                  var status = false;
+                  var importantData = false;
+
+                  $.each(this.form.find('input:text'), function (field) {
+                    if ($.trim($(this).val()) !== '') {
+                      status = true;
+                    }
+                  });
+
+                  if (!status) {
+                    $.achtung({ message: 'Uzupełnij przynajmniej jedno pole!', timeout: 3 });
+                  }
+
+                  var representantsGroups = $('#osobaReprezentujacaFirme').parents('fieldset').find('dl');
+
+                  $.each(representantsGroups, function(index,rep){
+                    var rep = $(this);
+                    var repStatus = false;
+                    $.each(rep.find('input'), function() {
+                      $(this).removeClass('required');
+                      if ($(this).val() != '' && rep.find('input[value=]').length > 0){
+                        repStatus = true;
+                      }
+
+                    });
+                    if (repStatus) {
+                      status = false;
+                      $.achtung({ message: 'Uzupełnij pole reprezentanta!', timeout: 3 });
+                      representantsGroups.find('input').attr('class', 'text required');
+                    }
+                  });
+
+                  //Walidacja gdy którekolwiek z pól reprezentanta jest puste
+                  if($('#osobaReprezentujacaFirme').parents('fieldset').find('dl').find('input[value=]').length >0 
+                      && $('#osobaReprezentujacaFirme').parents('fieldset').find('dl').find('input[value!=]').length >0 ){
+                      if(status){
+                        $.achtung({ message: 'Uzupełnij pole reprezentanta!', timeout: 3 });
+                      }
+                      status = false;
+                      representantsGroups.find('input').attr('class', 'text required');
+                  }
+
+                  if (!this.form.valid()) {
+                    return false;
+                  }
+
+                  importantConfirmText = "UWAGA! Zmiana tych danych skutkuje koniecznością podpisania nowego oświadczenia.\nObecna umowa będzie aktywna tylko przez 30 kolejnych dni.\n\nCzy na pewno chcesz zmienić dane wrażliwe?";
+                  confirmText = "Czy na pewno chcesz zmienić zaznaczone dane?";
+
+
+
+                  $.each($('#crm_application_update_data_nip, #crm_application_update_data_regon, #crm_application_update_data_krs'), function(){
+                    if ($(this).val() != "") {
+                      importantData = true;
+                    }
+                  });
+
+                  $.each($('#osobaReprezentujacaFirme').parents('fieldset').find('input'), function(){
+                    if ($(this).val() != "") {
+                      importantData = true;
+                    }
+                  });
+
+                  if (importantData){
+
+                    if (!confirm(importantConfirmText)) {
+                      status = false;
+                    } 
+
+                  } else {
+                    if (!confirm(confirmText)) {
+                      status = false;
+                    } 
+                  }
+                  return status;
+                },
+
+
+    preventSend:function () {
+                  // notification
+                }
+  }
+
+}

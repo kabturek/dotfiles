@@ -1,0 +1,43 @@
+<div id="employee_info">
+  <h3><?php echo $employee->first_name . ' ' . $employee->last_name; ?></h3>
+  <p>
+  Stage: <?php echo $employee->current_stage; ?>
+  </p>
+  <ul>
+    <li>
+      <?php echo link_to('View', 'employee/show?id='. $employee->id); ?>
+    </li>
+    <li>
+      <?php echo link_to('Edit', 'employee/edit?id='. $employee->id); ?>
+    </li>
+<?php if($employee->user_id): ?>
+    <li>
+      <?php echo link_to('Edit User Account', 'sfGuardUser/edit?id='. $employee->user_id); ?>
+    </li>
+<?php endif; ?>
+    <li>
+      <?php echo link_to('Employee Tests', 'employee/tests?id='. $employee->id); ?>
+    </li>
+    <li>
+      <?php echo link_to('Employee Materials', 'employee/materials?id='. $employee->id); ?>
+    </li>
+    <li>
+      <?php echo link_to('Employee Messages', 'employee/messages?id='. $employee->id); ?>
+    </li>
+<?php if($employee->current_stage >= 5): ?>
+    <li>
+      <?php echo link_to('Field Training Report', 'employee/training?id='. $employee->id); ?>
+    </li>
+    <li>
+      <?php echo link_to('Absenteeism', 'employee/absence?id='. $employee->id); ?>
+    </li>
+    <li>
+      <?php echo link_to('Damages', 'employee/damages?id='. $employee->id); ?>
+    </li>
+<?php endif; ?>
+    <li>
+      <?php echo link_to('Contacts', 'employee/contacts?id='. $employee->id); ?>
+    </li>
+  </ul>
+</div>
+

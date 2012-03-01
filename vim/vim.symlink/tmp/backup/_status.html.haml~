@@ -1,0 +1,1 @@
+%td= t "documents.status." + document.status

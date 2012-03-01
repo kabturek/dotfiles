@@ -1,0 +1,9 @@
+jQuery(document).ready(function($){
+  $('#client_comment_type').change(function(){
+    if($(this).val() == 'complaint' || $(this).val() == 'complaint and praise'){
+      $('#client_comment_is_valid').parents('.sf_admin_form_row').hide();
+    } else {
+      $('#client_comment_is_valid').parents('.sf_admin_form_row').show();
+    }
+  }).change();
+});

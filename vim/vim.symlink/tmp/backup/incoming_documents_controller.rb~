@@ -1,0 +1,59 @@
+# encoding: utf-8
+class Documents::IncomingDocumentsController < DocumentsController
+
+  before_filter :set_document, :except => [:batch]
+
+  def download
+    authorize! :download_document
+    send_data @document.download , :filename => params[:filename]
+  end
+
+  def accept
+    authorize! :accept_reject_document
+    if @document.accept
+      notice = t("flashes.notice.document_accepted")
+    else
+      notice = t("flashes.notice.document_accepted_failed")
+    end
+    redirect_to :back, :notice => notice    
+  end
+  
+  def reject
+    authorize! :accept_reject_document
+    redirect_to :back, :notice => t("flashes.notice.document_reject_length") if params[:reason] and params[:reason].length > 255
+    if @document.reject params[:reason]
+      notice = t("flashes.notice.document_rejected")
+    else
+      notice = t("flashes.notice.document_rejected_failed")
+    end
+    redirect_to :back, :notice => notice    
+  end
+
+  def send_via_email
+    if @document.send_via_email
+      notice = t("flashes.notice.document_sent_email")
+    else
+      notice = t("flashes.notice.document_sent_email_failed")
+    end
+    redirect_to :back, :notice => notice    
+  end
+
+  def batch
+    if Document::Incoming.send_via_email_selected params[:documents]
+      notice = t("flashes.notice.document_sent_emails")
+    else
+      notice = t("flashes.notice.document_sent_emails_failed")
+    end
+    redirect_to :back, :notice => notice    
+  end
+
+  private  
+  def find_options
+    options = {}
+    options[:sort_by] = "SenderUUID" if options[:sort_by] == 'Company'
+    options[:recipientUuid] = current_user.account.uuid
+    options[:status] = "Uploaded"
+    super.merge(options)
+  end  
+
+end

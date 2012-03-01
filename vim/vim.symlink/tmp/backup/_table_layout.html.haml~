@@ -1,0 +1,15 @@
+%h2 Moje Dokumenty - Wysłane
+.customer-header.clearfix
+  %table.documents
+    %tr
+      %th.date
+        %span Data wysłania
+      %th.kontrahent 
+        %span Kontrahent 
+      %th.dokument 
+        %span Dokument 
+      %th.rozmiar
+        %span Rozmiar
+      %th.options 
+        %span Opcje
+    = yield  

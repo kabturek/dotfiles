@@ -1,0 +1,6 @@
+<h1><?php echo $document->title; ?></h1>
+<?php if($document->filename) {
+  echo show_pdf($document->filename);
+} else {
+  echo '<p>'. __('No file attached').'</p>';
+}?>

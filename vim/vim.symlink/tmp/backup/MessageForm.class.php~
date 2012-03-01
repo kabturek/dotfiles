@@ -1,0 +1,94 @@
+<?php
+
+/**
+ * Message form.
+ *
+ * @package    ptclean
+ * @subpackage form
+ * @author     Marcin Domański <marcin+ptclean@kabturek.info>
+ * @version    SVN: $Id: sfDoctrineFormTemplate.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
+ */
+class MessageForm extends BaseMessageForm
+{
+  public function configure()
+  {
+    unset($this['created_at'], $this['updated_at']);
+    $this->widgetSchema['from_id'] = new sfWidgetFormInputHidden();
+    $this->disableLocalCSRFProtection();
+    $this->widgetSchema['title']->setAttribute('size', 70);
+    $this->validatorSchema['title']->setOption('min_length', 5);
+    $this->validatorSchema['title']->setOption('required', true);
+    $this->widgetSchema['text']->setAttribute('rows', 15);
+    $this->widgetSchema['text']->setAttribute('cols', 75);
+    $this->validatorSchema['text']->setOption('required', true);
+    $this->validatorSchema['text']->setOption('min_length', 5);
+    $this->widgetSchema['recipients_list']->setOption('renderer_class', 'sfWidgetFormSelectDoubleList');
+    $this->widgetSchema['stage'] = new sfWidgetFormChoice(array(
+      'choices' => Employee::getStages(' '),
+    ));
+    $this->validatorSchema['stage'] = new sfValidatorChoice(array(
+      'choices' => array_keys(Employee::getStages(' ')),
+      'required' => false,
+    ));
+
+    $this->widgetSchema['position'] = new sfWidgetFormDoctrineChoice(array(
+      'model' => 'Category', 
+      'add_empty' => true
+    ));
+    $this->validatorSchema['position'] = new sfValidatorDoctrineChoice(array(
+      'model' => 'Category', 
+      'required' => false
+    ));
+  }
+  public function saveRecipientsList($con = null)
+  {
+    if (!$this->isValid())
+    {
+      throw $this->getErrorSchema();
+    }
+
+    if (!isset($this->widgetSchema['recipients_list']))
+    {
+      // somebody has unset this widget
+      return;
+    }
+
+    if (null === $con)
+    {
+      $con = $this->getConnection();
+    }
+
+    $existing = $this->object->Recipients->getPrimaryKeys();
+    $values = $this->getValue('recipients_list');
+    if (!is_array($values))
+    {
+      $values = array();
+    }
+    //lets combine all recipients
+    $stage = $this->getValue('stage');
+    $position = $this->getValue('position');
+    //get all employees/users on that stage with that position
+    $users = Doctrine::getTable('MessageRecipient')->findUsers($stage, $position);
+    $values = array_unique(array_merge($values, $users));
+
+
+    $unlink = array_diff($existing, $values);
+    if (count($unlink))
+    {
+      $this->object->unlink('Recipients', array_values($unlink));
+    }
+
+    $link = array_diff($values, $existing);
+    if (count($link))
+    {
+      $this->object->link('Recipients', array_values($link));
+    }
+  }
+
+  public function getJavascripts(){
+    return array_merge(parent::getJavascripts(), array('/js/message_form.js'));
+  }
+  public function getStylesheets(){
+    return array_merge(parent::getStylesheets(), array('/css/message_form.css'));
+  }
+}

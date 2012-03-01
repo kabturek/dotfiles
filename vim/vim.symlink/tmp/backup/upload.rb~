@@ -1,0 +1,26 @@
+class Upload < ActiveRecord::Base
+
+  has_attached_file :document, :path => ":rails_root/tmp/attachments/:attachment/:id/:style/:filename"
+
+  before_save :send_info, :if => :recipient_present?
+  after_save :post_file_and_delete, :if => :upload_url_present?
+
+  API_PROXY = PuchatekApi::Document.new
+
+  protected
+  def recipient_present?
+    !recipient_uuid.nil?
+  end
+  def send_info
+    self.upload_url = API_PROXY.send_info(recipient_uuid, document_file_name, document_file_size)
+    true
+  end
+
+  def upload_url_present?
+    !upload_url.nil?
+  end
+
+  def post_file_and_delete
+    delete if API_PROXY.post_file(URI(upload_url), document_content_type, document.to_file)
+  end
+end

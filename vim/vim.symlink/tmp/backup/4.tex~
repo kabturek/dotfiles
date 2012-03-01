@@ -1,0 +1,46 @@
+\section{Realizacja}
+\subsection{Serwer}
+    Środowisko Ruby on Rails posiada wbudowany serwer internetowy, który umożliwia testowania oraz pracowanie z aplikacjami bez konieczności przygotowywania środowiska produkcyjnego. Bedąc w aplikacji wydanie polecenia 
+    ``rails server''
+    uruchomi wbudowany serwer (domyślnie jest to serwer Webrick, ale można uzywać także innych serwerów takich jak Mongrel lub Thin).
+    \begin{verbatim}
+$ rails s -u
+=> Booting WEBrick
+=> Rails 3.1.1 application starting in development \
+  on http://0.0.0.0:3000
+=> Call with -d to detach
+=> Ctrl-C to shutdown server
+=> Debugger enabled
+[2012-02-04 20:21:58] INFO  WEBrick 1.3.1
+[2012-02-04 20:21:58] INFO  ruby 1.9.2 (2011-07-09)
+[2012-02-04 20:21:58] INFO  WEBrick::HTTPServer#start: \
+  pid=24295 port=3000
+    \end{verbatim}
+    Od tej pory aplikacja będzie dostępna pod adresem \verb%http://localhost:3000/%. Domyślnie aplikacja uruchamia się w trybie deweloperskim, więc w terminalu w którym zostanie uruchomiona beda wyświetlać się informacje o aktualnych zdarzeniach (żadaniach HTTP, zapytaniach wykonywanych do bazy danych). 
+    \subsubsection{Serwer produkcyjny}
+    Jako serwer produkcyjny został użyty serwer Apache. Jest to obecnie najpopularniejszy serwer internetowy obsługujący 58\% witryn internetowych na świecie. \footnote{"January 2012 Web Server Survey". Netcraft. 2012-02-01 http://news.netcraft.com/archives/2012/01/03/january-2012-web-server-survey.html} Jest dostępny we wszystkich popularnych dystrybucjach linuksa. Serwer Apache posiada wiele rozszerzeń umożliwiających mu obsługe aplikacji internetowych napisanych w wielu językach Perl, Python, PHP, Ruby. Modułem, którego użyłem jest Phusion Passenger. Umożliwia on uruchamianie aplikacji internetowych napisanych w języku Ruby, które są zgodne ze specyfikacją Rack. Rack jest specyfikacją określającą minimalny, modularny oraz rozszerzalny interfejs do tworzenia aplikacji internetowych w języku Ruby. Upraszcza on odebieranie oraz wykonywanie żądań HTTP poprzez stworzenie wspólnego interfejsu dla serwerów oraz szkieletów aplikacji. Ruby on Rails od wersji 3 wspiera specyfikacje Rack.
+    Aby zainstalować Phusion Passanger, mając zainstalowane środowisko Ruby należy wpisać komende
+    \begin{verbatim}
+    $ gem install passenger
+    \end{verbatim}
+    Komenda \verb%gem% jest interfejsem do repozytorium pakietów RubyGems \footnote{http://rubygems.org}, który jest częścią języka Ruby od wersji 1.9.Po instalacji pakietu należy zainstalować moduł do serwera HTTP - dla Apache jest to komenda: 
+    \begin{verbatim}
+    passenger-install-apache2-module
+    \end{verbatim}
+    Uruchomi to kreator, który poprowadzi przez instalacje modułu podpowiadając jakie pakiety są niezbędne do instalacji. Po kompilacji należy dodać do konfiguracji Apache konfiguracje modułu, która zostanie wyświetlona oraz uruchomić ponownie serwer. Kreator poda także, przykładową konfiguracje witryny dla aplikacji Ruby on Rails. Poniżej znajduje się konfiguracja produkcyjna aplikacji.
+    \begin{verbatim}
+ <VirtualHost *:80>
+    ServerName ash.filmprodukcja.com/trainer
+    DocumentRoot /var/www/trainer/public    
+    <Directory /var/wwwtrainer/public>
+       AllowOverride all            
+       Options -MultiViews            
+    </Directory>
+ </VirtualHost>
+   \end{verbatim}
+   Jest to standardowa konfiguracja wirtualnego hosta. \verb%ServerName% określa adres na pod którym będzie dostępna aplikacja. \verb%DocumentRoot% wskazuje gdzie w systemie plików znajduje się aplikacji. W dyrektywie \verb%Directory% znajduje się niezbędna konfiguracja serwera, dzięki której niektóre z zachowań serwera Apache można konfigurować w aplikacji. 
+
+   \subsection{Warstwa Modelu (ORM)}
+    \subsubsection{ opisy typow danych, tabel}
+    \subsubsection{wizualizacja tabel}
+\newpage

@@ -1,0 +1,14 @@
+%dt Możesz usunąć swoje dane:
+%dd
+  = link_to 'usuń konto', crm_application_remove_data_path, :method => :post, :confirm => "UWAGA! Usunięcie danych z portalu skutkuje dezaktywacją konta.Zalogowanie do portalu nie będzie już możliwe.\nCzy na pewno chcesz usunąć dane z portalu?"
+%a.question{:href => "#MozeszUsunacInfo"} ?
+%span#MozeszUsunacInfo.tooltip
+  %span.innerTooltip
+    %strong W jakim celu zbieramy te informacje?
+    Lorem ipsum dolor sit amet, consectetur adipiscing
+    elit. Fusce facilisis nibh sit amet mi iaculis
+    fringilla. Morbi accumsan turpis ac justo tempor
+    malesuada ut sed augue.
+  %span.tooltipPointer  
+  %a.tooltipClose{:href => "#", :rel => "close"} Zamknij
+  .border-box.info-box.separated

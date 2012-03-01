@@ -1,0 +1,35 @@
+<?php
+/**
+ * ClientCommentsFilter
+ **/
+class ClientCommentsFilter extends sfForm
+{
+  public function configure(){
+    $this->setWidgets(array(
+      'date_start'          => new sfWidgetFormDatePicker(),
+      'date_end'            => new sfWidgetFormDatePicker(),
+      'type'           => new sfWidgetFormChoice(array(
+        'choices' => array(
+         'complaint' => 'complaint', 'praise' => 'praise', 'complaint and praise' => 'complaint and praise', 'N/A' => 'N/A'
+        ),
+        'expanded' => true,
+        'multiple' => true
+      )),
+      'is_valid'       => new sfWidgetFormChoice(array('choices' => array('' => 'yes or no', 1 => 'yes', 0 => 'no'))),
+      'subject' => new sfWidgetFormDoctrineChoice(array(
+        'model' => 'CommentArea',
+        'multiple' => true,
+        'expanded' => true
+      )),
+    ));
+    $this->setValidators(array(
+      'date_start'          => new sfValidatorDate(array('required' => false)),
+      'date_end'            => new sfValidatorDate(array('required' => false)),
+      'type'           => new sfValidatorChoice(array('choices' => array(0 => 'complaint', 1 => 'praise', 2 => 'complaint and praise', 3 => 'N/A'), 'required' => false, 'multiple' => true)),
+      'is_valid'       => new sfValidatorBoolean(array('required' => false)),
+      'subject'     => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'CommentArea', 'required' => false)),
+    ));
+    $this->widgetSchema->setNameFormat('comment_filter[%s]');
+  }
+  
+}

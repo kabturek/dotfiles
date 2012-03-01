@@ -1,0 +1,32 @@
+{include file=$tpl_dir./breadcrumb.tpl}
+<h2>{l s='Order summary' mod='przelewy24'}</h2>
+
+{assign var='current_step' value='payment'}
+{include file=$tpl_dir./order-steps.tpl}
+<h3>{l s='Przelewy24.pl payment serwice' mod='przelewy24'}</h3>
+<p>
+{l s='You will be redirected to the przelewy24.pl, where you can finish your transaction.' mod='przelewy24'}
+
+{l s='After booking, your order is going to be realized.' mod='przelewy24'}
+</p>
+<h3>{l s='Do wpłaty zostanie doliczona prowizja w wysokości 2% od kwoty zamówienia.' mod='przelewy24'}</h2>
+
+<form action="https://secure.przelewy24.pl" method="post" id="przelewy24Form" name="przelewy24Form" accept-charset="iso-8859-2">
+<input type="hidden" name="p24_session_id" value="{$p24_session_id}" />
+<input type="hidden" name="p24_id_sprzedawcy" value="{$p24_id_sprzedawcy}" />
+<input type="hidden" name="p24_kwota" value="{$p24_kwota}" />
+<input type="hidden" name="p24_opis" value="{$p24_opis}" />
+<input type="hidden" name="p24_klient" value="{$p24_klient}" />
+<input type="hidden" name="p24_adres" value="{$p24_adres}" />
+<input type="hidden" name="p24_kod" value="{$p24_kod}" />
+<input type="hidden" name="p24_miasto" value="{$p24_miasto}" />
+<input type="hidden" name="p24_kraj" value="{$p24_kraj}" />
+<input type="hidden" name="p24_email" value="{$p24_email}" />
+<input type="hidden" name="p24_language" value="{$p24_language}" />
+<input type="hidden" name="p24_return_url_ok" value="{$p24_return_url_ok}" />
+<input type="hidden" name="p24_return_url_error" value="{$p24_return_url_error}" />
+<p class="cart_navigation">
+	<a href="{$base_dir_ssl}order.php?step=3" class="button_large">{l s='Other payment methods' mod='przelewy24'}</a>
+	<input type="submit" name="submit" value="{l s='I confirm my order' mod='przelewy24'}" class="exclusive_large" />
+</p>
+</form>

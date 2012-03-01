@@ -1,0 +1,115 @@
+# == Schema Information
+#
+# Table name: tracks
+#
+#  id                 :integer         not null, primary key
+#  date               :datetime
+#  workout_id         :integer
+#  length             :decimal(, )
+#  trace_file_name    :string(255)
+#  trace_content_file :string(255)
+#  trace_file_size    :string(255)
+#  trace_updated_at   :string(255)
+#  created_at         :datetime
+#  updated_at         :datetime
+#  time               :integer
+#
+
+require 'polyline_encoder/polyline_encoder'
+
+class Track < ActiveRecord::Base
+  belongs_to :workout
+  has_attached_file :trace
+  has_many :track_points, :dependent => :delete_all, :order => 'time ASC'
+
+  before_save :process_trace?
+
+  def process_trace?
+    process_trace if changed.include? "trace_updated_at"
+    true
+  end
+
+  def process_trace
+    #remove all files from database
+    xml = Nokogiri::XML(File.open(trace.to_file(:original)))
+    name = xml.at_css('trk name').children.first.content
+    #description = xml.at_css('trk desc').children.first.content
+    #color  = xml.at_css('gpx trk extensions topografix|color').content
+    clear_trackpoints
+    last_point = nil
+    total_distance = 0
+    total_time = 0
+    first_point = nil
+    point = nil
+    xml.css('gpx trk trkseg trkpt').each do |xml_point|
+      point = TrackPoint.create_from_xml(xml_point)
+      first_point = point if last_point.nil?
+      #skip if the points have the same time
+      next if last_point and last_point.time == point.time
+      point.track = self
+      point.distance = last_point.nil? ? 0 : last_point.latlon.distance(point.latlon)
+      point.elapsed_time = last_point.nil? ? 0 : point.time.to_i - last_point.time.to_i
+      point.speed = last_point.nil? ? 0 : (point.distance / point.elapsed_time) * 3.6
+      #skip if the speed is > 100km/h
+      next if point.speed > 100
+      point.save
+      total_time += point.elapsed_time
+      total_distance += point.distance
+      last_point = point
+    end
+    self.length = total_distance
+    self.time = total_time
+
+    self.encoded_polyline = encode_polyline
+  rescue Errno::ENOENT
+    false
+  end
+
+  def clear_trackpoints
+    track_points.clear
+  end
+
+  def as_json(options={})
+    super({:include => {:track_points => {:only => [:time, :speed, :elevation, :distance], :methods => [:lat, :lon]}}})
+  end
+
+  def encoded_polyline
+    poly = super()
+    if poly.nil?
+      cache_encoded_polyline 
+    else 
+      poly
+    end
+  end
+
+  def encode_polyline
+    points = track_points.map do |point|
+      [point.lat, point.lon]
+    end
+    PolylineEncoder.encode(points)
+  end
+
+  def elevation_json
+    track_points.map do |point|
+      [point.time.to_i * 1000, point.elevation]
+    end.to_json
+  end
+
+  def speed_json
+    track_points.map do |point|
+      [point.time.to_i * 1000, point.speed]
+    end.to_json
+  end
+
+  def cache_encoded_polyline
+    encoded = encode_polyline
+    update_attribute(:encoded_polyline, encoded)
+    encoded
+  end
+
+  def elapsed
+    "%.d:%.d" % time.divmod(60)
+  end
+
+
+end

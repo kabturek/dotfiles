@@ -1,0 +1,70 @@
+- @layout_has_tabs = true
+%ul#tabs
+  %li{:class => ('act' if (my_pooh_controllers.include? params[:controller]))}
+    = link_to 'Moje konto', account_path
+  - if current_user and current_user.account_active?
+    %li{:class => ('act' if params[:controller] == 'companies')}
+      = link_to 'Kontrahenci', companies_path
+- if params[:controller] != 'companies'
+  #aside
+    %ul.insite-nav
+      - if current_user.account_active?
+        %li.moje-dokumenty{:class => ('act' if params[:controller] =~ /.*document.*/)}
+          %a{:href => documents_incoming_documents_path}
+            %span
+              Moje dokumenty
+              %strong= "(#{current_user.account.documents_count})"
+          - if params[:controller] =~ /documents/
+            %ul.submenu
+              %li{:class => ('act' if params[:controller] == 'documents/incoming_documents')}
+                %a{:href => documents_incoming_documents_path}
+                  %span Przychodzące
+              %li{:class => ('act' if params[:controller] == 'documents/received_documents')}
+                %a{:href => documents_received_documents_path}
+                  %span Odebrane
+              %li{:class => ('act' if params[:controller] == 'documents/outgoing_documents')} 
+                %a{:href => documents_outgoing_documents_path}
+                  %span Wychodzące
+              %li{:class => ('act' if params[:controller] == 'documents/sent_documents')} 
+                %a{:href => documents_sent_documents_path }
+                  %span Wysłane
+              %li{:class => ('act' if params[:controller] == 'documents/archive/received_documents')}
+                %a{:href => documents_archive_received_documents_path }
+                  %span Archiwum
+                %ul.submenu
+                  %li{:class => ('act' if params[:controller] == 'documents/archive/received_documents')}
+                    %a{:href => documents_archive_received_documents_path }
+                      %span odebrane
+                  %li{:class => ('act' if params[:controller] == 'documents/archive/rejected_documents')}
+                    %a{:href => documents_archive_rejected_documents_path }
+                      %span odrzucone
+                  %li{:class => ('act' if params[:controller] == 'documents/archive/sent_documents')}
+                    %a{:href => documents_archive_sent_documents_path }
+                      %span wysłane
+        %li.moi-kontrahenci{:class => ('act' if params[:controller] == 'business_partners')}
+          %a{:href => business_partners_path}
+            %span
+              Moi kontrahenci
+              %strong= "(#{current_user.account.partners_count})"
+      %li.moje-konto{:class => ('act' if my_account_controllers.include? params[:controller])}
+        %a{:href => account_path}
+          %span Moje ustawienia
+        - if my_account_controllers.include? params[:controller]
+          %ul.submenu
+            %li{:class => ('act' if params[:controller] == 'account' and params[:action] == 'show')}
+              %a{:href => account_path}
+                %span Moje dane
+            - if current_user.can? :user_management  and current_user.account_active?
+              %li{:class => ('act' if params[:controller] == 'crm_application/users')}
+                %a{:href => crm_application_users_path}
+                  %span Zarządzanie użytkownikami
+            %li{:class => ('act' if params[:controller] == 'passwords')}
+              %a{:href => password_path}
+                %span Zmiana hasła do serwisu
+            %li{:class => ('act' if params[:controller] == 'crm_application/notification')} 
+              %a{:href => edit_crm_application_notification_path}
+                %span Powiadomienia o statusie dokumentów
+            - if current_user.can? :user_management
+              %li{:class => ('act' if params[:controller] == 'account' and params[:action] == 'contract')} 
+                %a{:href => contract_account_path }
+                  %span Status umowy z Sage

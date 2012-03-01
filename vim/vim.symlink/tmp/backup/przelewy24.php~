@@ -1,0 +1,226 @@
+<?php
+class Przelewy24 extends PaymentModule {
+	
+	private $_html = '';
+	private $_postErrors = array();
+	
+	public function __construct()
+	{
+		$this->name = 'przelewy24';
+		$this->tab = 'Payment';
+		$this->version = '0.8';
+		$this->currencies = true;
+		parent::__construct();
+		$this->page = basename(__FILE__, '.php');
+		$this->displayName = $this->l('Przelewy24.pl');
+		$this->description = $this->l('Przelewy24.pl payment service');
+		$this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
+	}
+	
+	public function getContent()
+	{
+		if (Tools::isSubmit('submit'))
+		{
+			Configuration::updateValue('P24_ID_SPRZEDAWCY', Tools::getValue('sprzedawcaID'));
+			Configuration::updateValue('P24_TEST_MODE', Tools::getValue('test_mode'));
+			Configuration::updateValue('P24_TEST_MODE_TRANSACTION', Tools::getValue('test_transaction_select'));
+                        $this->_displayForm(true);
+                }
+		
+		//$this->_displayForm();
+            if(!$this->_html)
+            {
+                $this->_displayForm();
+            }
+
+        return $this->_html;
+	}
+	
+	private function _displayForm($b_updated=false)
+	{
+            $this->_html.='<h2>Przelewy24.pl</h2>'.$this->l('Below you will find integration parameters with Przelewy24.pl');
+            $this->_html.='<script type="text/javascript">
+                                    $(function(){
+                                            $("#test_mode").change(
+                                                    function()
+                                                    {
+                                                            var o_Test_Transaction=$("#test-transaction");
+
+                                                            if($(this).val()==1)
+                                                            {
+                                                                    o_Test_Transaction.css("visibility","visible");
+                                                            }
+                                                            else
+                                                            {
+                                                                    o_Test_Transaction.css("visibility","hidden");
+                                                            }
+                                                    }
+                                            );
+                                    });
+                           </script>';
+            if($b_updated) $this->_html.='<div class="conf confirm"><img alt="Potwierdź" src="../img/admin/ok.gif"/> Zaktualizowano</div>';
+            $this->_html.='<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
+                            <fieldset>
+                                    <legend><img src="../img/admin/contact.gif" />'.$this->l('Settings').'</legend>
+                                    <label>'.$this->l('seller ID').'<br /><small style="color:red">'.$this->l('Required').'</small></label>
+                                    <div class="margin-form">
+                                            <input type="text" name="sprzedawcaID" value="'.Configuration::get('P24_ID_SPRZEDAWCY').'" />
+                                    </div>
+                                    <label>'.$this->l('Module mode').'</label>
+                                    <div class="margin-form">
+                                            <div>
+                                                    <h5 style="display:none">'.$this->l('Test mode').'</h5>
+                                                    <select name="test_mode" id="test_mode" style="margin-left:16px">
+                                                            <option value="1"'.
+                                                                    ((Configuration::get('P24_TEST_MODE')==1) ?
+                                                                            'selected':'').'>'.$this->l('test').'</option>
+                                                            <option value="0"'.
+                                                                    ((Configuration::get('P24_TEST_MODE')==0) ?
+                                                                            'selected':'').'>'.$this->l('production').'</option>
+                                                    </select>
+                                            </div>
+                                            <div id="test-transaction" style="visibility:'.
+                                                                            ((Configuration::get('P24_TEST_MODE')==1) ? 'visible'
+                                                                                    : 'hidden')
+                                                                    .'">
+                                                    <h5 style="display:inline">'.$this->l('Transaction type:').'</h5>
+                                                    <select name="test_transaction_select" id="test_transaction_select" style="margin-left:9px">
+                                                            <option value="1"'.
+                                                                    ((Configuration::get('P24_TEST_MODE_TRANSACTION')==1) ?
+                                                                            'selected':'').'>'.$this->l('test ok').'</option>
+                                                            <option value="0"'.
+                                                                    ((Configuration::get('P24_TEST_MODE_TRANSACTION')==0) ?
+                                                                            'selected':'').'>'.$this->l('test error').'</option>
+                                                    </select>
+                                            </div>
+                                    </div>
+                                    <br /><br />
+                                    <input type="submit" name="submit" value="'.$this->l('Save').'" class="button" />
+                            </fieldset>
+                        </form>';
+	}
+	
+	public function install()
+	{
+		parent::install();
+		if(
+			!$this->registerHook('payment') OR 
+				!$this->registerHook('paymentReturn') OR
+					!$this->_createAmountTable()
+		)
+		return false;
+	}
+	
+	
+	private function _createAmountTable()
+	{
+		Db::getInstance()->Execute
+		(
+			'CREATE TABLE `przelewy24_amount` (
+			`i_id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+			`s_sid`	char(32) NOT NULL,
+			`i_id_order` INT UNSIGNED NOT NULL ,
+			`i_amount` INT UNSIGNED NOT NULL
+			) ENGINE=MYISAM;'
+		);
+		
+	return true;
+	}
+	
+	
+	public function hookPayment($params)
+	{
+		global $smarty, $cookie;
+		$currency = $this->getCurrency();
+		$cart=$params['cart'];
+		$opistr="Zamówienie nr: ".$cart->id;
+		$address = new Address(intval($params['cart']->id_address_invoice));
+		$s_lang=new Country(intval($address->id_country));
+		
+		$customer = new Customer(intval($params['cart']->id_customer));
+		$kwota=number_format($cart->getOrderTotal(true, 3), 2, '.', ''); // floatval nie jest potrzebne
+		$smarty->assign
+		(
+			array
+			(
+				'p24_session_id'=> $cart->id.'|'.time(),//$opistr,//$sid,
+				'p24_id_sprzedawcy'=>Configuration::get('P24_ID_SPRZEDAWCY'),
+				'p24_kwota'=>$kwota*100,
+				'p24_opis'=> $opistr,
+				'p24_klient'=>$customer->firstname.' '.$customer->lastname,
+				'p24_adres'=>$address->address1." ".$address->address2,
+				'p24_kod'=>$address->postcode,
+				'p24_miasto'=>$address->city,
+				'p24_language'=>strtolower($s_lang->iso_code),
+				'p24_kraj'=>$s_lang->iso_code,
+				'p24_email'=>$customer->email,
+				'p24_return_url_ok' => 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'modules/przelewy24/validation_prestashop_ok.php',
+				'p24_return_url_error' => 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'modules/przelewy24/validation_prestashop_error.php'
+			)
+		);
+		return $this->display(__FILE__, 'przelewy24.tpl');
+	}
+	
+	
+	public function hookPaymentReturn($params)
+	{
+		if (!$this->active)
+			return ;
+		
+		return $this->display(__FILE__, 'confirmation.tpl');
+	}
+	
+	public function execPayment($cart)
+	{
+		global $smarty, $cookie;
+		$currency = $this->getCurrency();
+		$address = new Address(intval($cart->id_address_invoice));
+		$customer = new Customer(intval($cart->id_customer));
+		$kwota=number_format($cart->getOrderTotal(true, 3), 2, '.', '')*100; // floatval nie jest potrzebne
+
+		$s_sid=md5(time());
+		Db::getInstance()->
+				Execute('INSERT INTO `przelewy24_amount` '.
+									'(`s_sid`,`i_id_order`,`i_amount`) '.
+										'VALUES("'.$s_sid.'",'.$cart->id.','.$kwota.')');
+
+		
+		$s_lang=new Country(intval($address->id_country));
+		
+		$s_descr="Zamówienie nr: ".$cart->id;
+		if(Configuration::get('P24_TEST_MODE')==1)
+		{
+			if(Configuration::get('P24_TEST_MODE_TRANSACTION')==1)
+			{
+				$s_descr='TEST_OK';
+			}
+			else
+			{
+				$s_descr='TEST_ERR';
+			}
+		}
+		
+		$smarty->assign
+		(
+			array
+			(
+				'p24_session_id'=> $cart->id.'|'.$s_sid,//$sid,
+				'p24_id_sprzedawcy'=>Configuration::get('P24_ID_SPRZEDAWCY'),
+				'p24_kwota'=>$kwota,
+				'p24_opis'=> $s_descr,
+				'p24_klient'=>$customer->firstname.' '.$customer->lastname,
+				'p24_adres'=>$address->address1." ".$address->address2,
+				'p24_kod'=>$address->postcode,
+				'p24_miasto'=>$address->city,
+				'p24_language'=>strtolower($s_lang->iso_code),
+				'p24_kraj'=>$s_lang->iso_code,
+				'p24_email'=>$customer->email,
+				'p24_return_url_ok' => 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'modules/przelewy24/validation_prestashop_ok.php',
+				'p24_return_url_error' => 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'modules/przelewy24/validation_prestashop_error.php'
+			)
+		);
+		
+  return $this->display(__FILE__, 'pay.tpl');
+  }
+}
+?>

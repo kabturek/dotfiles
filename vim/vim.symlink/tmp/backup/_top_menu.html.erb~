@@ -1,0 +1,12 @@
+<nav id="topMenu">
+  <ul>
+    <li><%= link_to 'Strona główna', root_path, :id => "home" %></li>
+    <% if logged? %>
+        <li><a href="/puchatek">Puchatek</a></li>
+    <% end %>
+    <li class="<%='act' if current_page? '/jak-to-dziala' %>"><a href="/jak-to-dziala">Jak to działa?</a></li>
+    <li class="<%='act' if current_page? '/jak-to-dziala' %>"><a href="/o-nas">O nas</a></li>
+    <li class="<%='act' if current_page? '/jak-to-dziala' %>"><a href="/cennik">Cennik</a></li>
+    <li class="<%='act' if current_page? '/jak-to-dziala' %>"><a href="/kontakt">Kontakt</a></li>
+  </ul>
+</nav>

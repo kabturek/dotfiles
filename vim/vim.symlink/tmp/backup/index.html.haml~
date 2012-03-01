@@ -1,0 +1,206 @@
+= render 'shared/company_tabs'
+
+= render :partial => 'business_partners/business_partners_json'
+
+#content-col.clearfix
+  %h2= t("." + params[:controller]) 
+
+  - if current_user.can? :upload_document
+    .new-document 
+      = link_to 'Wyślij dokumenty', '#', :id => 'new-document'
+  .customer-header.clearfix
+    - unless @documents.empty?
+      = render "table_documents", :documents => @documents
+    - else
+      %div{:style => "font-weight: bold; padding: 10px; text-align: center;"} 
+        Brak dokumentów
+  .new-document-modal{:title => 'Wyślij dokumenty'}
+    %h2 Wyślij dokumenty
+    = form_tag '/upload/send_documents', :id => 'upload-documents' do
+      = label_tag :recpient, "Wybierz kontrahenta"
+      = text_field_tag :recipient, nil, :id => 'bp-search', :size => 40, :class => 'required'
+      = hidden_field_tag :recipient_uuid, nil, :id => 'bp-search-uuid', :class => 'required'
+      #documents-upload
+        #custom-queue
+        #status-message
+      = file_field_tag :document, :id => 'document_file_upload', :class => 'required'
+      = submit_tag "Wyślij"
+  .reject-document-modal.modal{:title => 'Odrzuć dokument'}
+    %h2 
+      Odrzuć dokument 
+    = form_tag '#', :method => :put, :id => :reject_document_form do
+      .wrapper
+        = label_tag :reason, "Podaj powód odrzucenia"
+        = text_field_tag :reason, nil, :size => 40, :id => nil, :maxlength => 255
+        = submit_tag "Odrzuć"
+
+:javascript
+  function reset_errors() {
+    $(".error").remove();
+  }
+  function add_error(input_id, message){
+    $("#" + input_id).after("<label for=\"" + input_id + "\" generated=\"true\" class=\"error\" style=\"display: block;\">" + message + "</label>");
+  }
+  function valid_bp_uuid(bp){
+    jQuery.each(business_partners, function(index, value){
+      if(value.value == bp){
+        return true;
+      }
+    });
+    return false;
+  }
+  function valid_bp(){
+    var bp = $("#bp-search").val() 
+    var valid = false;
+    jQuery.each(business_partners, function(index, value){
+      if(value.label === bp){
+        valid = true;
+      }
+    });
+    return valid;
+  }
+  $(function() {
+    $("#new-document").click(function(){
+      $(".new-document-modal").dialog({
+        draggable: false,
+        resizable: false,
+        modal: true,
+        width: 500,
+        height: 400,
+        beforeClose: function() {
+          $(".new-document-modal form").each(function(){ 
+            this.reset();
+          });
+          if( $("#document_file_uploadUploader").length > 0) {
+            $("#document_file_upload").uploadifyClearQueue();
+          }
+          $("#status-message").html('');
+        }
+      });
+      return false;
+    });
+
+    $( "#bp-search" ).autocomplete({
+      source: business_partners,
+      focus: function(event, ui) { 
+        return false;
+      },
+      change: function(event, ui) { 
+        if(ui.item === null ){
+          $("bp-search-uuid").val("");
+          jQuery.each(business_partners, function(index, value){
+            var re = new RegExp( '^.*\(NIP: ' + parseInt($("#bp-search").val().replace('-', '')) + ')', 'g');
+            if(value.label.match(re)){
+              $("#bp-search").val(value.label);
+              $( "#bp-search-uuid" ).val( value.value);
+            }
+          });
+        }
+      },
+      select: function (event, ui) {
+        $( "#bp-search" ).val( ui.item.label );
+        $( "#bp-search-uuid" ).val( ui.item.value );
+        return false;
+      }
+    }); 
+
+    $("#upload-documents").submit(function(){
+      reset_errors();
+      if($("input.uploaded-document").size() == 0){
+        add_error("document_file_upload", "Dodaj przynajmniej jeden dokument");
+      }
+      if($("input#bp-search").val() == ''){
+        add_error("bp-search", "Wybierz kontrahenta");
+      }
+      if($("input#bp-search-uuid").val() == '' && valid_bp_uuid($("input#bp-search-uuid").val())){
+        add_error("bp-search", "Wybierz kontrahenta");
+      }
+      if(!valid_bp()){
+        add_error("bp-search", "Wybierz prawidłowego kontrahenta");
+      }
+      if($("#upload-documents label.error").length == 0){
+        return true;
+      } else {
+        return false;
+      }
+    });
+
+    $('#document_file_upload').uploadify({
+      'fileDataName'   : 'document',
+      'uploader'       : '/uploadify.swf',
+      'script'         : '/upload/create',
+      'cancelImg'      : '/assets/cancel.png',
+      'folder'         : '/uploads',
+      'buttonText'     : 'Dodaj pliki',
+      'multi'          : true,
+      'auto'           : true,
+      'fileExt'        : '*.doc;*.pdf',
+      'fileDesc'       : 'Dokumenty',
+      'queueID'        : 'custom-queue',
+      'height'         : 30,
+      'queueSizeLimit' : 100,
+      'simUploadLimit' : 3,
+      'sizeLimit'   : 30240000,
+      'removeCompleted': false,
+      'scriptData'     : {
+        "#{Rails.application.config.session_options[:key]}" : "#{cookies[Rails.application.config.session_options[:key]]}",
+        "#{request_forgery_protection_token}"    : "#{u u form_authenticity_token}"
+      },
+      'onSelectOnce'   : function(event,data) {
+        $('#status-message').text('Plik został dodany');
+      },
+      'onAllComplete'  : function(event,data) {
+        $('#status-message').text(data.filesUploaded + ' plik(ów) dodanych do wysłania');
+      },
+      'onComplete'      : function(event, id, fileObj, response, data) {
+        json = JSON.parse(response);
+        $("#document_file_upload" + id).append('<input type="hidden" class="uploaded-document" name="documents[]" value="' + json.id + '" />');
+        $("label[for=\"document_file_upload\"]").remove();
+      },
+      'onCancel'        : function(event, dom_id, fileObj, data) {
+        id = $("#document_file_upload" + dom_id + " input.uploaded-document").val();
+        
+        if(id){
+          $.ajax({
+            type: 'DELETE',
+            url: "#{url_for('/upload/delete')}",
+            data: { "id": id}
+          });
+        }
+      }
+    });				
+    $("a.reject-document").click(function(){
+      $("div.reject-document-modal form").attr('action', $(this).attr('href'));
+      $("div.reject-document-modal form#reject_document_form").validate({
+        rules: {
+          reason: {
+            //required: true,
+            maxlength: 255
+          }
+        },
+      messages:{
+        "reason": {
+          //required: "Podaj powód odrzucenia",
+          maxlength: "Maksymalna długość powodu odrzucenia wynosi 255 znaków."
+        }
+      },
+      errorPlacement: function (error, element) {
+        element.parents("div.wrapper").append(error);
+      }
+      });
+      $("div.reject-document-modal").dialog({
+        draggable: false,
+        resizable: false,
+        modal: true,
+        width: 400,
+        height: 240,
+        beforeClose: function() {
+          $(".reject-document-modal form").each(function(){ 
+            this.reset();
+          });
+        }
+      });
+      return false;
+    });
+  });
+

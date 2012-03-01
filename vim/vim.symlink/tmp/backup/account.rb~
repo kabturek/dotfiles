@@ -1,0 +1,149 @@
+# encoding: utf-8
+# Klasa reprezentująca konto. Zawiera metody zwracające dane o koncie m.in. czas trwania umowy, status aktualnej umowy
+# historię wysłanych wniosków do danej umowy.
+class Account
+
+  API_PROXY = PuchatekApi::Account.new
+
+  PERMISSIONS = [
+    "ForteDownloadDocument",
+    "ForteUploadDocument",
+    "ForteAcceptRejectDocument",
+    "ForteArchiveDocument",
+    "ForteUserManagement",
+    "WwwDownloadDocument",
+    "WwwUploadDocument",
+    "WwwAcceptRejectDocument",
+    "WwwArchiveDocument",
+    "WwwUserManagement"
+  ]
+
+  def uuid
+    API_PROXY.class.credentials.uuid
+  end
+
+  def active?
+    uuid.present?
+  end
+  
+  def registration_application_allowed?
+    profile[:can_register_again]
+  end
+  
+  def decline_contract_application_allowed?
+    profile[:can_decline_contract]
+  end
+  
+  def remove_data_application_allowed?
+    profile[:can_delete_account]
+  end
+  
+  def update_data_application_allowed?
+    profile[:can_modify_data]
+  end
+
+  def valid_from
+    profile[:valid_from]
+  end
+
+  def valid_to
+    profile[:valid_to]
+  end
+
+  def documents_count
+    profile[:documents]
+  end
+
+  def partners_count
+    profile[:contractors]
+  end
+
+  def notifications
+    profile[:notification_frequency]
+  end
+
+  def set_notifications(type)
+    API_PROXY.set_notifications(type)
+  end
+
+  def requests_history
+    @requests_log ||= API_PROXY.requests_history
+  end
+
+  def business_partners
+    @partners ||= BusinessPartner.all
+  end
+
+  def last_update_date
+    Time.parse(requests_history.first[:created_on]) if requests_history.first
+  end
+
+  def contract_validity_type
+    today = Date.today
+
+    if valid_from && (valid_from.day == (today + 1.day).day)
+      return :valid_from_tomorrow
+    elsif valid_from && (valid_from > (today + 1.day))
+      return :valid_from_date
+    end
+
+    if  valid_to && valid_from && ((valid_to >= today) || (valid_to.day >= today.day))
+      :valid_to_date
+    elsif !valid_to && valid_from && valid_from <= today
+      :valid
+    else
+      :not_valid
+    end
+  end
+
+  def can?(permission)
+    raise PuchatekApi::InvalidPermission if !PERMISSIONS.include? web_permission(permission)
+    permissions.include? web_permission(permission)
+  end
+
+  def permissions(type = nil)
+    if type 
+      Account.filter_permissions profile[:permissions], type
+    else
+      profile[:permissions]
+    end
+  end
+
+  def denied_permissions(type = nil)
+   denied_perm = PERMISSIONS - permissions() 
+    if type 
+      Account.filter_permissions denied_perm, type
+    else
+      denied_perm
+    end
+  end
+
+  def self.permissions(type = nil)
+    filter_permissions(PERMISSIONS, type)
+  end
+
+  private  
+  def self.filter_permissions(permissions, type)
+    type = type.to_s.capitalize
+    permissions.map do |item|
+      item if item =~ /#{type}/
+    end.compact
+  end
+
+  def profile
+    @profile_hash ||= API_PROXY.profile    
+    # {
+    #   "ValidFrom":"2011-12-08T12:12:12",
+    #   "ValidTo":null,
+    #   "CanRegisterAgain":true,
+    #   "CanDeclineContract":false,
+    #   "CanDeleteAccount":false,
+    #   "CanModifyData":false
+    # }
+  end
+
+  def web_permission(permission)
+    "Www" + permission.to_s.camelize
+  end
+
+end

@@ -1,0 +1,5 @@
+module CrmApplication
+  def self.table_name_prefix
+    'crm_application_'
+  end
+end

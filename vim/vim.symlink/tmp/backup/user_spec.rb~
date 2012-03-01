@@ -1,0 +1,32 @@
+require 'spec_helper'
+
+describe User do
+
+  before do
+    PuchatekApi::Base.credentials = {
+        :uuid => "uuid",
+        :email => "email",
+        :password => "password"
+    }
+  end
+
+  it "returns list of avaiable users for this account" do
+    stub_request(:get, "http://email:password@sg1.smtsoftware.com/puchatek_development/www/contractor/uuid/login").
+      with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate'}).
+      to_return(:status => 200, :body => "", :headers => {})
+
+    User.all.count == 3
+  end
+
+  it "adds a user to the account" do
+    stub_request(:post, "http://email:password@sg1.smtsoftware.com/puchatek_development/www/contractor/uuid/login").
+      with(:body => "{\"Permissions\":[\"WwwDownloadDocument\",\"WwwUploadDocument\"],\"Email\":\"user@example.com\"}", 
+           :headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Content-Length'=>'86', 'Content-Type'=>'application/json'}).
+    to_return(:status => 200, :body => get_response('user/find_all'), :headers => {})
+
+    User.create({ 
+      :email => "user@example.com",
+      :permissions => ["WwwDownloadDocument", "WwwUploadDocument"]
+    }).should == true
+  end
+end

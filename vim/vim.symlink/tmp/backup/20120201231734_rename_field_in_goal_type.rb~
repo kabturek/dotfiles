@@ -1,0 +1,6 @@
+class RenameFieldInGoalType < ActiveRecord::Migration
+  def change
+    
+  end
+
+end

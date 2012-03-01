@@ -1,0 +1,8 @@
+
+--This line, and those below, will be ignored--
+
+A    config/sql/update-27.09.2011.sql
+M    controllers/catalogues_controller.php
+A    views/catalogues/view-wide.ctp
+M    views/catalogues/admin_edit.ctp
+M    views/catalogues/admin_add.ctp

@@ -1,0 +1,12 @@
+%td.options
+  - if current_user.can? :download_document and document.download_available
+    = link_to "Pobierz", url_for(:id => document.uuid, :action => :download, :filename => document.name), {:class => "download-document", :id => document.uuid}
+    = link_to image_tag('envelope.gif', :width => 20), url_for(:id => document.uuid, :action => :send_via_email, :filename => document.name), {:class => "send-via-email", :title => 'Wyslij na skrzynkę mailową'} if document.respond_to?('send_via_email')
+
+  - if current_user.can? :accept_reject_document and document.accept_reject_allowed?
+    %br
+    = link_to "Akceptuj", url_for(:id => document.uuid, :action => :accept, :filename => document.name),  :method => :put
+    = link_to "Odrzuć", url_for(:id => document.uuid, :action => :reject, :filename => document.name), :class => 'reject-document'
+  
+  - if document.history_available?
+    %a.show_history{:id => document.uuid} Historia 

@@ -1,0 +1,6 @@
+.hidden{:id => "document_history_" + document.uuid}
+  %ul
+    - document.history.each do |history| 
+      - if history[:created_by].empty? and history[:type] == 
+
+      %li= history[:created_on] + ' ' + history[:type] + ' przez ' + history[:created_by] 

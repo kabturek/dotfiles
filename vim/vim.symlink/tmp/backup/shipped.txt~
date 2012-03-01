@@ -1,0 +1,15 @@
+﻿Witaj {firstname} {lastname},
+
+Twoje zamowienie zostalo wyslane.
+
+Wkrotce otrzymasz adres URL ktory umozliwi Ci sledzenie przesylki.
+
+Mozesz sprawdzic zamowienie w sekcji "Historia zamowien" na twoim koncie klikajac "Moje konto" na naszej witrynie. 
+
+Dziekujemy za zakupy w naszym sklepie internetowym {shop_name}!
+
+{shop_name} - {shop_url}
+
+
+
+{shop_url}

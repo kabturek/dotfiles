@@ -1,0 +1,14 @@
+.border-box.info-box
+  %div
+    %h3 Ze względu na Bezpieczeństwo Twoich danych nie przechowujemy ich na portalu.
+    %dl.arrow
+      %dt
+        Zmiana takich danych jak:
+        %ul
+          %li KRS
+          %li NIP
+          %li REGON
+          %li Wszystkie dane reprezentanta
+      %dd
+        %strong Skutkuje koniecznością unieważnienia umowy i podpisania nowej.
+    %h4 Zanim zmienisz dane sprawdź na umowie, czy jest taka konieczność.

@@ -1,0 +1,67 @@
+= render :partial => 'join_us', :locals => {:step => :second}
+
+.data
+  #dolaczDoNas
+    = form_for(@registration_form, :url => crm_application_registration_path, :method => :post) do |f|
+      = f.hidden_field :sage_serial_number, :value => @registration_form.sage_serial_number
+      = f.hidden_field :sage_serial_number_hash, :value => @registration_form.sage_serial_number_hash
+      = f.hidden_field :password, :value => @registration_form.password
+      = f.hidden_field :password_confirmation, :value => @registration_form.password
+      = f.hidden_field :user_email, :value => @registration_form.user_email
+      = f.hidden_field :company_name, :value => @registration_form.company_name
+      - if @registration_form.errors.present?
+        %p.info.error
+          - @registration_form.errors.each do |field, error|
+            = error
+            %br
+      %p.info.full
+        Sprawdź, czy podane dane się zgadzają.
+      #company_name_section.editable_section
+        %fieldset.noLegend
+          %dl
+            %dt
+              %label{:for => "name"} Nazwa firmy
+            %dd
+              .text#company_name= @registration_form.company_name
+            %dt
+              %label{:for => "email"} Email
+            %dd
+              .text#company_email
+                = mail_to @registration_form.user_email
+                %span.important.msg Twój login
+      .clearfix
+
+      = render :partial => 'shared/fieldsets/address_info', :locals => {:f => f, :with_values => true}
+      = render :partial => 'shared/fieldsets/company_info', :locals => {:f => f, :with_values => true}
+      = render :partial => 'shared/fieldsets/representatives', :locals => {:f => f, :with_values => true}
+
+      %fieldset.noLegend
+        #captcha
+          :javascript
+            var RecaptchaOptions = {       
+               custom_translations : {
+                instructions_visual : "Przepisz tekst z obrazka:",
+                instructions_audio : "Napisz to co słyszysz:",
+                play_again : "Odtwórz ponownie",
+                cant_hear_this : "Pobierz w formacie MP3",
+                visual_challenge : "Wersja tekstowa",
+                audio_challenge : "Wersja głosowa",
+                refresh_btn : "Inny obrazek",
+                help_btn : "Pomoc",
+                incorrect_try_again : "Niepoprawnie. Spróbuj ponownie."
+              }
+            };
+          = recaptcha_tags :ajax => true
+      %fieldset.noLegend.leftfield.chck
+        .row
+          = f.check_box :regulations
+          %label{:for => "regulations"}
+            Zapoznałem/łam się z
+            =link_to 'regulaminem.', regulamin_path, :target => "_blank"
+        .row
+          = f.check_box :agreement
+          %label{:for => "agreement"}
+            Wyrażam zgodę lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec neque quam, mattis ac cursus vel, eleifend eu enim. Mauris elementum interdum ipsum, ornare tempus nibh pretium dapibus.
+      .clearfix
+        = link_to "Popraw dane", edit_crm_application_registration_path, :id => "poprawDane"
+        = f.submit "Dalej - potwierdź dane", :class => 'button', :id => 'wyslijDane'

@@ -1,0 +1,4 @@
+- if item[:history].empty?
+  = render :partial => 'requests_history_details', :locals => { :kind => humanize_event_type(item[:kind]), :detail => {:operation_date => item[:created_on]}}
+- else
+  = render :partial => 'requests_history_details', :collection => item[:history], :as => :detail, :locals => {:kind => humanize_event_type(item[:kind])}

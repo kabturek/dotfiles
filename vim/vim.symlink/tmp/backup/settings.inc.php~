@@ -1,0 +1,15 @@
+<?php
+
+define('__PS_BASE_URI__', '/');
+define('_THEME_NAME_', 'PRE007');
+define('_DB_NAME_', 'prestashop');
+define('_DB_SERVER_', 'localhost');
+define('_DB_USER_', 'root');
+define('_DB_PREFIX_', 'ps_');
+define('_DB_PASSWD_', '');
+define('_DB_TYPE_', 'MySQL');
+define('_COOKIE_KEY_', 'nJOt6h639qMkuiRkthaqqKSmc36RLw597LI5wT0UPEzcdzIwWmqa0TM8');
+define('_COOKIE_IV_', 'zy0UTP0C');
+define('_PS_VERSION_', '1.3.7');
+
+?>

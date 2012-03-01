@@ -1,0 +1,14 @@
+class CreateWorkouts < ActiveRecord::Migration
+  def change
+    create_table :workouts do |t|
+      t.string    :title
+      t.text      :description
+      t.datetime  :date
+      t.string    :log_file_name
+      t.string    :log_content_file
+      t.string    :log_file_size
+      t.string    :log_updated_at
+      t.timestamps
+    end
+  end
+end

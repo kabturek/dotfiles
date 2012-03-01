@@ -1,0 +1,23 @@
+%html
+  %head
+    %title Trainer
+    = stylesheet_link_tag    "application" 
+    = javascript_include_tag "application" 
+    = csrf_meta_tags
+  %body
+    .topbar
+      .topbar-inner
+        .container-fluid
+          %a.brand Trainer
+          =tabs
+    = render 'shared/flashes'
+  .container-fluid
+    .sidebar
+      - if user_signed_in?
+        = render :partial => 'users/profile_info' 
+      - else
+        = render :partial => 'shared/join'
+    .content
+      .row
+        .span16
+          = yield

@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+mike_johns_order_item:
+  quantity: 1
+  item: johns_order_item
+  participant: mike_johns_rder
+
+two:
+  quantity: 1
+  item: 
+  participant: 

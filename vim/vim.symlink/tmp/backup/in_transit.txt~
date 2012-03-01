@@ -1,0 +1,15 @@
+Witaj {firstname} {lastname},
+
+Twoje zamowienie jest obecnie w transporcie.
+
+Mozesz sledzic przesylkę klikając na poniższy link: {followup}
+
+Mozesz rowniez dokonać przegladu niniejszego zamowienia i pobrac faktury klikając "Historia zamowien" w zakladce "Moje konto" na naszej stronie.
+
+Dziekujemy za zakupy w naszym sklepie internetowym {shop_name}!
+
+{shop_name} - {shop_url}
+
+
+
+{shop_url}

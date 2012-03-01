@@ -1,0 +1,36 @@
+<?php use_helper('Text'); ?>
+<div id="sf_admin_container">
+<?php include_partial('employee', array('employee' => $employee)); ?>
+<h1>Communication history</h1>
+<table>
+  <tr>
+    <th>
+      <?php echo __('Date'); ?>
+    </th>
+    <th>
+      <?php echo __('Notes'); ?>
+    </th>
+      <th>
+        Actions
+      </th>
+  </tr>
+<?php foreach($contacts as $contact): ?>
+  <tr>
+    <td>
+      <?php echo $contact->date; ?>
+    </td>
+    <td>
+      <?php echo truncate_text($contact->notes); ?>
+    </td>
+    <td>
+    <?php if(isset($sf_user) && $sf_user->hasCredential('recruit')): ?>
+      <?php echo link_to('Edit', 'client_comment/edit?id='. $contact->id); ?>
+    <?php endif;?>
+      <?php echo link_to('Show', 'client_comment/show?id='. $contact->id); ?>
+    </td>
+  </tr>
+<?php endforeach; ?>
+</table>
+<?php echo link_to('Add new communication', 'employee_contact/new?employee_id='. $employee->id); ?>
+
+</div>

@@ -1,0 +1,12 @@
+class CreateTrackPoints < ActiveRecord::Migration
+  def change
+    create_table :track_points do |t|
+      t.timestamp :time
+      t.decimal :elevation
+      t.decimal :speed
+      t.point :latlon, :geographic => true
+
+      t.timestamps
+    end
+  end
+end

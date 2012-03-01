@@ -1,0 +1,6 @@
+dwa modele z state machine
+PrzychodzacyDokument Uploaded, Downloaded, Accepted, Archived
+WychodzacyDokument Uploaded, Downloaded, Accepted, Rejected, Canceled, Archived
+
+6 kontrolerow RESTowych
+

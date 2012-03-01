@@ -1,0 +1,169 @@
+#content.jakToDziala
+  %h3#pageTitle
+    %span
+      %img{:alt => "Dlaczego warto korzystać?", :height => "24", :src => "/assets/headers/jak_to_dziala_dlaczego_warto.png", :width => "380"}/
+  .textRight
+    .imgWithCaption
+      %img{:src => "/assets/o_nas_2.jpg"}
+        %span Sage jest jednym z największych dostawców rozwiązań ERP na świecie
+    %h2 Korzyść 1
+    %ul
+      %li kolosalne oszczędności w porównaniu do tradycyjnej dystrybucji dokumentów, w tym faktur elektronicznych (środki finansowe, praca,  czas), a przede wszystkim:
+      %li obniżenie kosztów wysyłki faktur (Komisja sejmowa szacuje koszt wysłania jednej faktury papierowej na 1,5 do 5 PLN)
+      %li zmniejszenie nakładu pracy przy przyjmowaniu i wystawianiu faktur – dzięki aplikacji „e-faktura” dokumenty te są automatycznie wczytywane i generowane z systemu
+      %li wydatne skrócenie czasu przekazywania i otrzymywania faktur
+  .textLeft
+    .imgWithCaption
+      %img{:src => "/assets/o_nas_1.jpg"}
+        %span Jesteśmy wiodącym w naszym kraju producentem oprogramowania do zarządzania firmami.
+    %h2 Korzyść 2
+    %ul
+      %li Ograniczenie ilości błędów generowanych przez użytkowników  przy ręcznym przepisywaniu danych z faktur papierowych do systemów finansowo-księgowych
+      %li wygodne zarządzanie e-fakturami (publikacja, odbiór, podgląd itp.)
+      %li bieżący dostęp do informacji o fakturach pobranych lub niepobranych, zaakceptowanych lub nie
+      %li gwarancja spełniania wymogów prawnych, dotyczących wymiany faktur elektronicznych, m.in. autentyczności pochodzenia i integralności danych 
+      %li zapewnienie bezpieczeństwa i poufności danych m.in. poprzez użycie bezpiecznych protokołów komunikacji (np. SSL), autentykację i autoryzację użytkowników 
+  .textRight
+    .imgWithCaption
+      %img{:src => "/assets/o_nas_2.jpg"}
+        %span Sage jest jednym z największych dostawców rozwiązań ERP na świecie
+    %h2 Korzyść 3
+    %ul
+      %li stworzenie swoistego „buforu” wymiany danych, pozbawionego wad poczty elektronicznej (m.in. niezaprzeczalność operacji) 
+      %li Uzyskanie możliwości każdorazowego potwierdzenia dostarczenia dokumentów finansowych do kontrahenta, co eliminuje liczne problemy z uzgadnianiem stanu wzajemnych rozliczeń
+      %li Uzyskanie możliwości elektronicznego potwierdzania sald na dany moment
+      %li Nulla pellentesque porta erat ac ullamcorper.
+      %li Uczestnictwo w Portalu daje gwarancję bezpieczeństwa przesyłu e-faktur. Wybrane zagadnienia prawne  Portalu zostały opracowane przez   PWC - jedną z najbardziej znanych i cenionych firm konsultingowych. 
+  :plain
+    <div class="bg clearfix">
+    <div>
+      <h2 id="najczesciejZadawane"><span><img src="/assets/headers/jak_to_dziala_najczesciej.png" width="298" height="24" alt="Najczęściej zadawane pytania"></span></h2>
+        <div class="faqColumn">  
+          <div class="article">
+            <h3>1.	Dlaczego rejestracja wymaga podania tak wielu danych?</h3>
+              <div class="indent">
+                <p>Wszystkie dane, podane przez Ciebie w trakcie procesu rejestracji, są niezbędne do zawarcia umowy z naszym Serwisem. Tak sformułowana umowa umożliwi Ci wymianę<br> 
+                e-dokumentów z wszystkimi użytkownikami Serwisu bez dalszych dodatkowych formalności.</p>
+          </div>
+        </div>
+
+        <div class="article">
+          <h3>2.	Kiedy moje konto jest w pełni aktywne?</h3>
+            <div class="indent">
+              <p>Aby zakończyć rejestrację wyślemy do Ciebie potwierdzenie na konto e-mail, które podałeś podczas wprowadzania danych do umowy. . Potwierdź je, klikając na przesłany link. Od tego momentu możesz  logować się na swoje konto, jednak jeszcze bez opcji wysyłania e-dokumentów.</p>
+                <p>Przygotowaną umowę wyślemy do Ciebie e-mailem. Podpisz ją i&nbsp;odeślij szybko do nas. </p>
+                  <p><strong>Ważne:</strong> masz na to 30 dni. Gdy otrzymamy podpisaną umowę, aktywujemy Twój pełny dostęp do konta. <br>
+                    </p>
+                      </div>
+                        </div>
+                      <div class="article">
+                        <h3>3.	Czy umowę z Serwisem muszę podpisać bezterminowo?</h3>
+                          <div class="indent">
+                            <p>Nie. To Ty decydujesz na jaki okres podpisujesz umowę z&nbsp;Serwisem</p>
+                          </div>
+                          </div>
+
+                          <div class="article">
+                            <h3>4.	Które z moich danych będą widoczne dla innych kontrahentów?</h3>
+                            <div class="indent">
+                              <p>Ze wszystkich danych, które podajesz podczas rejestracji, widoczne będą wyłącznie <strong>NIP</strong> oraz <strong>"przyjazna nazwa"</strong> Twojej firmy. </p>
+                            </div>
+                          </div>
+                          <div class="article">
+                            <h3>5.	Czy mogę zmieniać swoje dane?</h3>
+                            <div class="indent">
+                              <p>Tak. Jednak zmiana niektórych danych np. parametrów umowy - w szczególności numeru NIP, KRS, cz danych reprezentanta firmy, wymaga ponownego podpisania oświadczenia, </p>
+                            </div>
+                          </div>
+
+                          <div class="article">
+                            <h3>6.	Co zrobić, gdy zapomnę hasła do logowania?</h3>
+                            <div class="indent">
+                              <p>W takim przypadku możesz zresetować swoje stare hasło. Wyślemy do Ciebie  link, który po kliknięciu przeniesie Cię do formularza ustanawiania nowego hasła.</p>
+                            </div>
+                          </div>
+                          <div class="article">
+                            <h3>7.	Co w przypadku kontroli w firmie – czy mogę mieć pewność, że inny użytkownik Serwisu wyraził zgodę na wymianę e-dokumentów?</h3>
+                            <div class="indent">
+                              <p>Tak. Możemy dostarczyć podpisany egzemplarz dokumentu (lub  jego notarialnie potwierdzonej kopii) zaświadczający o tym, że inny klient Serwisu wyraził taką zgodę. Wystarczy, że złożysz wniosek o wysłanie potwierdzającego dokumentu, a my wyślemy odpowiedni dokument na podany adres e-mail.</p>
+                            </div>
+                          </div>
+
+                          <div class="article">
+                            <h3>8.	W jaki sposób dowiem się czy mój kontrahent otrzymał wysłaną e-Fakturę?</h3>
+                            <div class="indent">
+                              <p>Na każdym etapie procesu  otrzymasz  następujące powiadomienia:</p>
+                                <ul>
+                                  <li>o dokumencie oczekującym do odbioru</li>
+                                  <li>o dokumencie odebranym przed odbiorcę</li>
+                                  <li>potwierdzenie odebrania dokumentu</li>
+                                  <li>przypomnienie dla odbiorcy o nieodebranym dokumencie</li>
+                                  <li>powiadomienie dla nadawcy o nieodebranym dokumencie</li>
+                                  <li>ostrzeżenie dla odbiorcy o konieczności odebrania i usunięcia dokumentu</li>
+                                  <li>informację o nadal nieodebranym dokumencie</li>
+                                  <li>lub o usunięciu dokumentu </li>
+                                </ul>
+                              </div>
+                          </div>
+                          </div>
+                          <div class="faqColumn">
+                          <div class="article">
+                            <h3>9.	Jak szybko e-Faktura dotrze do mojego kontrahenta?</h3>
+                            <div class="indent">
+                              <p>W ciągu 30 sekund od nadania e-dokumentu w systemie pojawi się informacja u odbiorcy, że oczekuje na niego faktura.</p>
+                            </div>
+                          </div>
+
+                          <div class="article">
+                            <h3>10.	Czy tylko jedna osoba musi obsługiwać konto?</h3>
+                            <div class="indent">
+                              <p>Nie. Masz możliwość definiowania wielu użytkowników (loginów) w ramach jednego konta klienckiego. Tym użytkownikom możesz nadać uprawnienia do:</p>
+                                <ul>
+                                  <li>zarządzania uprawnieniami,</li>
+                                  <li>zarządzania użytkownikami,</li>
+                                  <li>odczytu/zapisu dokumentów </li>
+                                </ul>
+                            </div>
+                          </div>
+
+                          <div class="article">
+                            <h3>11.	 Czy mogę stworzyć listę firm, z którymi nie chcę wymieniać się e-dokumentami?</h3>
+                            <div class="indent">
+                              <p>Tak. Możesz wycofać zgodę na wymianę dokumentów elektronicznych z konkretnym kontrahentem. Możesz dodać kontrahenta do swojej „czarnej listy”. Możesz też określić datę, od której wymiana dokumentów z danym kontrahentem przestaje obowiązywać. Masz dostęp do wpisów swojej „czarnej listy” – możesz je przeglądać i usuwać. Usunięcie kontrahenta z „czarnej listy” skutkuje wznowieniem możliwości wymiany dokumentów. </p>
+                            </div>
+                          </div>
+
+                          <div class="article">
+                            <h3>12.	W jaki sposób mogę odnaleźć firmę, z którą chcę wymieniać e-dokumenty?</h3>
+                            <div class="indent">
+                              <p>Jedynym kryterium wyszukiwania jest numer NIP. Dodatkowo podczas wyszukiwania zobaczysz „przyjazną nazwę”, pod którą znaleziony kontrahent będzie wyświetlany na liście. Po znalezieniu kontrahenta jest on automatycznie dodawany do listy Twoich kontrahentów. </p>
+                            </div>
+                          </div>
+                          <div class="article">
+                            <h3>13.	Co zrobić, jeśli nie znajdę kontrahenta w waszym Serwisie?</h3>
+                            <div class="indent">
+                              <p>W takim przypadku możesz podać adres e-mail kontrahenta i za pomocą Serwisu zaprosić do współpracy elektronicznej wymiany dokumentów.  </p>
+                            </div>
+                          </div>
+
+                          <div class="article">
+                            <h3>14.	Czy mogę usunąć swoje dane z  Serwisu?</h3>
+                            <div class="indent">
+                              <p>Tak. Masz możliwość całkowitego usunięcia swoich danych. Wystarczy, że wyślesz do nas wniosek o usunięcie danych z&nbsp;Serwisu. Po przetworzeniu wniosku, Twoje dane zostanę usunięte.</p>
+                            </div>
+                          </div>
+                          <div class="article">
+                            <h3>15. Czy obowiązuje jakiś termin wypowiedzenia umowy z Serwisem? </h3>
+                            <div class="indent">
+                              <p>Nie. W każdej chwili możesz zrezygnować z usług  Serwisu.</p>
+                                <p><strong>Ważne:</strong>  Całkowite wycofanie zgody na udział w Serwisie nastąpi po wysłaniu przez Ciebie elektronicznego wniosku o&nbsp;unieważnienie umowy. Dopiero po przyjęciu wniosku przez Serwis, umowa zostanie unieważniona. </p>
+                            </div>
+                          </div>
+                          </div>
+
+                    <div class="need-info"><div>
+                      <h2>Potrzebujesz więcej informacji?</h2>
+                        <p>Skontaktuj się z nami <strong>22 678 234 567</strong></p>
+                      </div></div>
+                    </div>
+                    </div>

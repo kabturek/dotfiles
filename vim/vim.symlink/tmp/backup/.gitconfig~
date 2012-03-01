@@ -1,0 +1,13 @@
+[user]
+name=Marcin Domański
+email=me@kabturek.info
+[giggle]
+	compact-mode = false
+	main-window-geometry = 879x674+173+124
+[color]
+	ui = true
+[core]
+	autocrlf = false
+	excludesfile = /home/kabturek/.gitignore_global
+[alias]
+	s = status --short --branch

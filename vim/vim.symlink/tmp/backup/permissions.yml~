@@ -1,0 +1,12 @@
+pl:
+  permissions:
+    WwwAcceptRejectDocument: Akceptować i odrzucać pliki
+    WwwArchiveDocument: Archwizować pliki
+    WwwDownloadDocument: Odbierać pliki
+    WwwUploadDocument: Wysyłać pliki
+    WwwUserManagement: Zarządzać kontem
+    ForteAcceptRejectDocument: Akceptować i odrzucać pliki
+    ForteArchiveDocument: Archwizować pliki
+    ForteDownloadDocument: Odbierać pliki
+    ForteUploadDocument: Wysyłać pliki
+    ForteUserManagement: Zarządzać kontem

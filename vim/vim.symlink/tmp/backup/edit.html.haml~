@@ -1,0 +1,25 @@
+= render :partial => 'shared/company_tabs'
+#content-col
+  %h2 Powiadomienia o statusie dokumentów
+
+  = form_tag '/crm_application/notification', :id => 'notification-form' do 
+    = radio_button_tag 'type', 'All', @notification == 'All' ? true : false, :class => 'required'
+    = label_tag 'type_All', 'wysyłane po każdym zdarzeniu'
+    %br
+    = radio_button_tag 'type', 'OnePerDay', @notification == 'OnePerDay' ? true : false
+    = label_tag 'type_OnePerDay', 'podsumowanie powiadomień wysyłane codziennie'
+    %br
+    = radio_button_tag 'type', 'OnePerWeek', @notification == 'OnePerWeek' ? true : false
+    = label_tag 'type_OnePerWeek', 'podsumowanie powiadomień wysyłane raz na tydzień'
+    %br
+    = button_tag 'Zmień ustawienia'
+
+:javascript
+  $("#notification-form").validate({
+    messages:{
+      type: "Zaznacz typ powiadomienia"
+    },
+    errorPlacement: function (error, element) {
+      element.parents("form").append(error);
+      }
+  });

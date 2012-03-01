@@ -1,0 +1,5 @@
+#content
+  %p= t('.status.changed_to_' + @new_status)
+  %p= t('.change_status_message')
+
+  = render 'notification/form'

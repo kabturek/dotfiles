@@ -1,0 +1,22 @@
+# encoding: utf-8
+# Kontroler odpowiada za obsługę powiadomien
+class CrmApplication::NotificationController < ApplicationController
+  before_filter :login_required!
+
+  # /GET
+  # Wyswietla formularz powiadomień
+  def edit
+    @notification = current_user.account.notifications
+  end
+  # /POST
+  # Wysyła wniosek o zmiane typu powiadomienia
+  def create
+    if current_user.account.set_notifications params[:type]
+      notice = t("flashes.notice.notification_request")
+    else
+      notice = t("flashes.notice.notification_request_failed")
+    end
+    redirect_to edit_crm_application_notification_path, :notice => notice
+  end
+
+end

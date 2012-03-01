@@ -1,0 +1,8 @@
+class DeviseAddUser < ActiveRecord::Migration
+  def self.up
+    User.create!(:email => 'trampek@gmail.com', :password => 'devel', :password_confirmation => 'devel')
+  end
+
+  def self.down
+  end
+end

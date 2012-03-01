@@ -1,0 +1,9 @@
+class ParticipantItem < ActiveRecord::Base
+  belongs_to :item
+  belongs_to :participant
+
+  validates_numericality_of :quantity, :only_integer => true
+  validates_associated :item
+
+  has_paper_trail
+end

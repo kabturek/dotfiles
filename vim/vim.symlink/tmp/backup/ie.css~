@@ -1,0 +1,20 @@
+#send-csv-form {
+  display: none;
+  height:auto;
+}
+#send-csv {
+  margin: 0;
+  padding: 0;
+  height: auto;
+  cursor: pointer;
+}
+
+@media all and (-webkit-min-device-pixel-ratio:10000), not all and (-webkit-min-device-pixel-ratio:0) {
+  #send-csv #file{
+    position: static;
+    display: block; 
+  }   
+
+.ie7 #content{
+  margin-bottom: 50px;
+}

@@ -1,0 +1,2 @@
+%td.date
+  != document.date.strftime("%d-%m-%Y") + "<br/>" + document.date.strftime("%H:%M")

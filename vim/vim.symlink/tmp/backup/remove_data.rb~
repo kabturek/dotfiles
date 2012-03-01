@@ -1,0 +1,7 @@
+module CrmApplication
+  class RemoveData
+    def submit
+      PuchatekApi::CrmForms.new.submit_remove_data_form
+    end
+  end
+end

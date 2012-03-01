@@ -1,0 +1,288 @@
+<?php use_stylesheets_for_form($form) ?>
+<?php use_javascripts_for_form($form) ?>
+<h2><?php echo __('New Candidate'); ?></h2>
+<div class="block">                                        
+    <div id="ankieta">
+        <?php echo $form->renderFormTag('create') ?>
+        <fieldset>
+            <legend>
+                <?php echo __('Basic information'); ?>
+            </legend>
+            <table class="tabel">
+                <tbody>
+                    <tr>
+                        <td class="lewatab"><?php echo $form['first_name']->renderLabel() ?></td>
+                        <td class="centtab"><?php echo $form['first_name']->renderError() ?><?php echo $form['first_name']->render(array('class'=>'textfield')) ?></td>
+                    </tr>
+                    <tr>
+                        <td class="lewatab"><?php echo $form['last_name']->renderLabel() ?></td>
+                        <td class="centtab"><?php echo $form['last_name']->renderError() ?>
+                                <?php echo $form['last_name']->render(array('class'=>'textfield')) ?></td>
+                    </tr>
+                    <tr>
+                        <td class="lewatab"><?php echo $form['cellphone']->renderLabel(); ?>
+                          <span class="help"><?php echo $form->getWidgetSchema()->getHelp('cellphone')?></span>
+                        </td>
+                        <td class="centtab"><?php echo $form['cellphone']->renderError() ?>
+                                <?php echo $form['cellphone']->render(array('class'=>'textfield')) ?></td>
+                    </tr>
+                    <tr>
+                        <td class="lewatab"><?php echo $form['email_address']->renderLabel() ?></td>
+                        <td class="centtab"><?php echo $form['email_address']->renderError() ?>
+                                <?php echo $form['email_address']->render(array('class'=>'textfield')) ?></td>
+                    </tr>
+                    <tr>
+                        <td class="lewatab"><?php echo $form['entry_date']->renderLabel() ?></td>
+                        <td class="lewatab"><?php echo $form['entry_date']->renderError() ?>
+                                <?php echo $form['entry_date']->render() ?></td>
+                    </tr>
+                    <tr>
+                        <td class="lewatab"><?php echo $form['source']->renderLabel() ?></td>
+                        <td class="centtab"><?php echo $form['source']->renderError() ?>
+                                <?php echo $form['source']->render() ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="lewatab"><?php echo $form['source_details']->renderLabel() ?></td>
+                        <td class="centtab"><?php echo $form['source_details']->renderError() ?>
+                                <?php echo $form['source_details']->render(array('class'=>'textfield')) ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="lewatab"><?php echo $form['category_id']->renderLabel() ?></td>
+                        <td class="centtab"><?php echo $form['category_id']->renderError() ?>
+                                <?php echo $form['category_id']->render() ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="lewatab"><?php echo $form['language']->renderLabel() ?></td>
+                        <td class="centtab"><?php echo $form['language']->renderError() ?>
+                                <?php echo $form['language']->render() ?>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <?php echo $form['valid_permit']->renderError() ?>
+                <?php echo $form['valid_permit']->render() ?>
+                <?php echo $form['valid_permit']->renderLabel() ?>
+            </p>
+            <p>
+                <?php echo $form['valid_driving_license']->renderError() ?>
+                <?php echo $form['valid_driving_license']->render() ?>
+                <?php echo $form['valid_driving_license']->renderLabel() ?>
+            </p>
+            <p>
+                <?php echo $form['insured_vehicle']->renderError() ?>
+                <?php echo $form['insured_vehicle']->render() ?>
+                <?php echo $form['insured_vehicle']->renderLabel() ?>
+            </p>
+            <p>
+                <?php echo $form['acceptable_distance']->renderError() ?>
+                <?php echo $form['acceptable_distance']->render() ?>
+                <?php echo $form['acceptable_distance']->renderLabel() ?>
+            </p>
+            <p>
+                <?php echo $form['full_time']->renderError() ?>
+                <?php echo $form['full_time']->render() ?>
+                <?php echo $form['full_time']->renderLabel() ?>
+            </p>
+            <p>
+                <?php echo $form['max_absent']->renderError() ?>
+                <?php echo $form['max_absent']->render() ?>
+                <?php echo $form['max_absent']->renderLabel() ?>
+            </p>
+            <p>
+                <?php echo $form['intermediate_english']->renderError() ?>
+                <?php echo $form['intermediate_english']->render() ?>
+                <?php echo $form['intermediate_english']->renderLabel() ?>
+            </p>
+            <p>
+                <?php echo $form['internet_access']->renderError() ?>
+                <?php echo $form['internet_access']->render() ?>
+                <?php echo $form['internet_access']->renderLabel() ?>
+            </p>
+            <p>
+                <?php echo $form['cell_phone']->renderError() ?>
+                <?php echo $form['cell_phone']->render() ?>
+                <?php echo $form['cell_phone']->renderLabel() ?>
+            </p>
+        </fieldset>
+        <fieldset>
+            <legend><?php echo __('Open questions'); ?></legend>
+            <table class="tabel">
+                <tbody>
+                    <tr>
+                        <th><?php echo $form['reference']->renderLabel() ?></th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?php echo $form['reference']->renderError() ?>
+                            <?php echo $form['reference']->render(array('class' => 'textfield')) ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $form['pet_problems']->renderLabel() ?></th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?php echo $form['pet_problems']->renderError() ?>
+                            <?php echo $form['pet_problems']->render(array('class' => 'textfield')) ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $form['quit_reason']->renderLabel() ?></th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?php echo $form['quit_reason']->renderError() ?>
+                            <?php echo $form['quit_reason']->render(array('class' => 'textfield')) ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $form['desired_income']->renderLabel() ?></th>
+                    <tr>
+                        <td>
+                            <?php echo $form['desired_income']->renderError() ?>
+                            <?php echo $form['desired_income']->render(array('class' => 'textfield')) ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $form['english_level']->renderLabel() ?></th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?php echo $form['english_level']->renderError() ?>
+                            <?php echo $form['english_level']->render(array('class' => 'textfield')) ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $form['cleaning_experience']->renderLabel() ?></th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?php echo $form['cleaning_experience']->renderError() ?>
+                            <?php echo $form['cleaning_experience']->render(array('class' => 'textfield')) ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $form['attendance_problems']->renderLabel() ?></th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?php echo $form['attendance_problems']->renderError() ?>
+                            <?php echo $form['attendance_problems']->render(array('class' => 'textfield')) ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $form['prev_responsibilities']->renderLabel() ?></th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?php echo $form['prev_responsibilities']->renderError() ?>
+                            <?php echo $form['prev_responsibilities']->render(array('class' => 'textfield')) ?>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </fieldset>
+        <fieldset>
+            <legend>
+                <?php echo __('Scores'); ?>
+            </legend>
+            <table class="tabel">
+                <tbody>
+                    <tr>
+                        <th><?php echo $form['likes_dislikes']->renderLabel() ?></th>
+                        <th><?php echo $form['likes_dislikes_notes']->renderLabel() ?></th>
+                        <th><?php echo __('Total score'); ?></th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?php echo $form['likes_dislikes']->renderError() ?>
+                            <?php echo $form['likes_dislikes']->render() ?>
+                        </td>
+                        <td>
+                            <?php echo $form['likes_dislikes_notes']->renderError() ?>
+                            <?php echo $form['likes_dislikes_notes']->render(array('class' => 'textfield')) ?>
+                        </td>
+                        <td rowspan="9">
+                            <?php echo $form['total_score']->renderError() ?>
+                            <?php echo $form['total_score']->render() ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $form['values_most']->renderLabel() ?></th>
+                        <th><?php echo $form['values_most_notes']->renderLabel() ?></th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?php echo $form['values_most']->renderError() ?>
+                            <?php echo $form['values_most']->render() ?>
+                        </td>
+                        <td>
+                            <?php echo $form['values_most_notes']->renderError() ?>
+                            <?php echo $form['values_most_notes']->render(array('class' => 'textfield')) ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $form['why_contacted']->renderLabel() ?></th>
+                        <th><?php echo $form['why_contacted_notes']->renderLabel() ?></th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?php echo $form['why_contacted']->renderError() ?>
+                            <?php echo $form['why_contacted']->render() ?>
+                        </td>
+                        <td>
+                            <?php echo $form['why_contacted_notes']->renderError() ?>
+                            <?php echo $form['why_contacted_notes']->render(array('class' => 'textfield')) ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $form['why_hire']->renderLabel() ?></th>
+                        <th><?php echo $form['why_hire_notes']->renderLabel() ?></th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?php echo $form['why_hire']->renderError() ?>
+                            <?php echo $form['why_hire']->render() ?>
+                        </td>
+                        <td>
+                            <?php echo $form['why_hire_notes']->renderError() ?>
+                            <?php echo $form['why_hire_notes']->render(array('class' => 'textfield')) ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $form['candidates_strengths']->renderLabel() ?></th>
+                        <th><?php echo $form['candidates_strengths_notes']->renderLabel() ?></th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?php echo $form['candidates_strengths']->renderError() ?>
+                            <?php echo $form['candidates_strengths']->render() ?>
+                        </td>
+                        <td>
+                            <?php echo $form['candidates_strengths_notes']->renderError() ?>
+                            <?php echo $form['candidates_strengths_notes']->render(array('class' => 'textfield')) ?>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>    
+        </fieldset>
+        <fieldset>
+            <legend><?php echo $form['approved']->renderLabel() ?></legend>
+            <p>
+                <?php echo $form['approved']->renderError() ?>
+                <?php echo $form['approved']->render() ?>
+            <div class="clear"></div>
+            <?php echo $form['approved_notes']->renderError() ?>
+            <?php echo $form['approved_notes']->render(array('class' => 'textfield')) ?>
+            </p>
+        </fieldset>
+        <input type="submit" value="<?php echo __('Submit'); ?>">
+
+        <?php echo $form->renderHiddenFields() ?>
+        </form>
+    </div>
+</div>

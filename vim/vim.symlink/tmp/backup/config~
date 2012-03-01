@@ -1,0 +1,26 @@
+[user]
+  name=Marcin Domański
+  email=marcin.domanski@weblify.pl
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	fetch = +refs/heads/*:refs/remotes/origin/*
+	url = git@git.assembla.com:puchatek.git
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
+[branch "staging"]
+	remote = origin
+	merge = refs/heads/staging
+[branch "production"]
+	remote = origin
+	merge = refs/heads/production
+[gui]
+	wmstate = normal
+	geometry = 1276x742+0+24 554 513
+[branch "quas"]
+	remote = origin
+	merge = refs/heads/quas

@@ -1,0 +1,3 @@
+= sortable_th("Kontrahent", 'Company')
+= sortable_th("Dokument", 'Name')
+= sortable_th("Rozmiar", 'Size')

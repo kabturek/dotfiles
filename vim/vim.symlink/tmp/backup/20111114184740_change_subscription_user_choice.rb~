@@ -1,0 +1,5 @@
+class ChangeSubscriptionUserChoice < ActiveRecord::Migration
+  def change
+    change_column :subscription, :user_choice, :integer, :default => 0
+  end
+end

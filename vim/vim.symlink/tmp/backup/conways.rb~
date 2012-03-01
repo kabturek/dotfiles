@@ -1,0 +1,27 @@
+class Cell
+  attr_writer :neighbors
+  
+  def initialize(alive)
+    @alive = alive
+  end
+  
+  def next!
+    if(@alive)
+      return true if @neighbors === (2..3)
+    else
+      return true if @neighbors == 3
+    end
+    return false
+  end
+  def alive?
+    @alive
+  end
+  
+  def to_i
+    @alive ? 1 : 0
+  end
+  
+  def to_s
+    @alive ? 'O' : '.'
+  end
+end

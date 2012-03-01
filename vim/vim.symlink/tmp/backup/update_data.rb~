@@ -1,0 +1,71 @@
+# encoding: utf-8
+# Klasa reprezentuje wniosek o aktualizację danych firmy. 
+# Wniosek nie może zostać zbudowany jeśli nie zostanie przekazany uuid konta, którego dane zmieniamy. 
+module CrmApplication
+  class UpdateData
+
+    ALLOWED_ATTRIBUTES = [
+        :sage_serial_number, :password, :user_email, :company_name, :street_name, :street_number,
+        :flat_number, :post_code, :city, :phone, :nip, :regon, :krs, :uuid
+    ]
+
+    include PuchatekApi::PuchatekJson
+    include ActiveModel::Serializers
+    include ActiveModel::Conversion
+    extend ActiveModel::Naming
+
+    attr_accessor *ALLOWED_ATTRIBUTES
+    attr_reader :representatives
+    # TODO: czemu nie ma walidacji
+
+    def initialize(args={ })
+      raise ArgumentError if args[:uuid].blank?
+      prepare_attributes(args)
+    end
+
+    def prepare_attributes(args)
+      @representatives = []
+      build_representatives(args.delete(:representatives_attributes).values) if args[:representatives_attributes]
+      self.attributes = args
+    end
+
+    def attributes
+      self.as_json.deep_symbolize_keys
+    end
+
+    def sensitive?
+      return true if !nip.empty? or !regon.empty? or !krs.empty?
+      false
+    end
+
+    # Pozwala ustawić atrybuty wniosku poprzez przekazanie hasha z parametrami
+    # Tylko parametry zawarte w ALLOWED_ATTRIBUTES zostaną ustawione
+    def attributes=(args)
+      args.each do |arg_name, arg_value|
+        self.send("#{arg_name}=", arg_value) if arg_name.to_sym.in?(ALLOWED_ATTRIBUTES)
+      end
+    end
+
+    # Tworzy i dodaje do representatives reprezentanta firmy na podstawie przekazanego hasha
+    def build_representative(rep_hash={ })
+      @representatives << CrmApplication::Representative.new(rep_hash)
+    end
+
+    # Tworzy i dodaje do representatives reprezentantów firmy na podstawie przekazanej tablicy hashów
+    def build_representatives(rep_hashes_array)
+      rep_hashes_array.each do |rep_hash|
+        build_representative(rep_hash)
+      end
+    end
+
+    # Wysyła wniosek o aktualizację danych konta
+    def submit
+      PuchatekApi::CrmForms.submit_update_data_form(self)
+    end
+
+    # http://mrjaba.posterous.com/rails-3-active-model-undefined-method-tokey-f
+    def persisted?
+      false
+    end
+  end
+end

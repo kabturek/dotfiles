@@ -1,0 +1,19 @@
+require 'spec_helper'
+
+describe Company do
+
+  before do
+    PuchatekApi::Base.credentials = {
+        :uuid => "uuid",
+        :email => "email",
+        :password => "password"
+    }
+  end
+  it "creates a valid url from an invalid nip" do
+    stub_request(:get, "http://email:password@sg1.smtsoftware.com/puchatek_development/contractor/uuid?nip=123-123-%C4%85%C4%87%25").
+      with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate'}).
+      to_return(:status => 200, :body => "{}", :headers => {})
+
+    Company.find_by_nip('123-123-ąć%', nil).empty?.should == true
+  end
+end

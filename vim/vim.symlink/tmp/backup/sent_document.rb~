@@ -1,0 +1,8 @@
+class Documents::SentDocument < Documents::Document
+  def sent_date
+    get_status_date("AcceptationStateSent")
+  end
+  def self.all(*options)
+    super(:sent, *options)
+  end
+end

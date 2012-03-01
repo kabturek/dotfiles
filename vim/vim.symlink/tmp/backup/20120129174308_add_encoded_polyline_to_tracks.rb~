@@ -1,0 +1,5 @@
+class AddEncodedPolylineToTracks < ActiveRecord::Migration
+  def change
+    add_column :tracks, :encoded_polyline, :binary
+  end
+end

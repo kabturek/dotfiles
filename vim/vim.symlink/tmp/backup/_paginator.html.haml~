@@ -1,0 +1,21 @@
+.pager
+  %ul
+    - if collection.page == 1
+      %li.prev Pierwsza strona
+    - else
+      %li.prev= link_to "Pierwsza strona", :page => 1 
+    - if collection.page > 1
+      %li.prev= link_to "Poprzednia strona", :page => collection.page - 1 
+    - else 
+      %li.prev Poprzednia strona
+    - collection.pages.each do |page|
+      - if page == collection.page
+        %li= page
+      - else
+        %li= link_to page, :page => page
+    - if !collection.last_page?
+      %li.next= link_to "Następna strona", :page => collection.page + 1
+      %li.next= link_to "Ostatnia strona", :page => collection.total_pages
+    - else 
+      %li.next Następna strona
+      %li.next Ostatnia strona

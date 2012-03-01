@@ -1,0 +1,32 @@
+# encoding: utf-8
+class DocumentsController < ApplicationController
+  before_filter :login_required!
+  before_filter :get_documents, :only => [:index]
+
+  def index
+  end
+  
+  private
+  def get_documents  
+    @documents = model_class_name.all( find_options )
+  end
+  
+  def model_class_name
+    # z nazwy kontrolera wyznaczamy odpowiedni model 
+    words = self.class.name.gsub("Controller","").split('::')
+    prefix, name = words.first, words.last 
+    model_class_name = prefix.singularize
+    model_class_name += "::#{name.underscore.split('_')[0].camelize}" if name
+    model_class_name.constantize
+  end
+  
+  def find_options
+    {:sort_dir => params[:direction], :sort_by => params[:order_by], :page => params[:page]}
+  end  
+
+  protected
+  def set_document
+    @document = model_class_name.new(:uuid => params[:id])
+  end
+    
+end

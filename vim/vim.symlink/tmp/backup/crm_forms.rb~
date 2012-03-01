@@ -1,0 +1,110 @@
+# Zawiera metody odpowiedzialne za wysyłanie do API żądań utworzenia wniosków np. wniosku o rejestrację
+# czy wniosku o usunięcie danych.
+module PuchatekApi
+  class CrmForms < PuchatekApi::Base
+    def self.submit_registration_form(registration_form)
+      result = PuchatekApi::rest_request(
+          :post,
+          '/application/contractRequest',
+          :args    => registration_form.to_puchatek_json,
+          :headers => { :content_type => :json }
+      )
+      result == ""
+    end
+
+    # Wysyła żądanie ponownej rejestracji.
+    # Dane takie same jak przy pierwszej rejestacji bez emaila/hasła 
+    #
+    # @raise [RestClient::Unauthorized] w przypadku podanie nieprawidłowych danych autentykacyjnych
+    # @return [TrueClass]
+    # API: POST "/contractor/application/contractRequest"
+    def submit_renew_registration_form(renew_registration_form)
+      credentials = self.class.credentials
+      result = PuchatekApi::rest_request(
+          :post,
+          '/contractor/application/contractRequest',
+          :args    => renew_registration_form.to_puchatek_json,
+          :login    => credentials.email,
+          :password => credentials.password,
+          :headers => { :content_type => :json }
+      )
+      result == ""
+    end
+
+    # Metoda sprawdza czy email jest unikalny w bazie Puchatka.
+    # Jeśli email jest unikalny - zwraca pusty string, w przeciwnym przypadku false.
+    # Uwaga - metoda nie waliduje maila w żaden sposób, a więc argument *email* nie musi być koniecznie poprawnym adresem email.
+    #
+    # API: GET /login/unique?email={email}
+    # @param [String] email
+    # @return [String, FalseClass]
+    def self.check_uniqueness_of_email(email)
+      return false unless email.present?
+      path = "/login/unique?email=#{email}"
+      PuchatekApi::rest_request(:get, path)
+    rescue RestClient::Conflict, RestClient::ResourceNotFound
+      false
+    end
+
+    # Wysyła do API potwierdzenie rejestracji firmy identyfikowanej przez confirmation_token.
+    #
+    # PUT /application/confirm?token={confirmationToken}
+    #
+    # @param [String] confirmation_token
+    # @raise [RestClient::ResourceNotFound] w przypadku błędnego confirmation_tokena
+    # @return [String]
+    def self.confirm_application(confirmation_token)
+      path = "/application/confirm?token=#{confirmation_token}"
+      PuchatekApi::rest_request(:put, path, :args => { })
+    rescue RestClient::ResourceNotFound, RestClient::Conflict
+      false
+    end
+
+    # Wysyła żądanie rozwiązania umowy dla firmy o podanych danych.
+    #
+    # @raise [RestClient::Unauthorized] w przypadku podanie nieprawidłowych danych autentykacyjnych.
+    # @raise [RestClient::ResourceNotFound] jeśli podano nieprawidłowy uuid lub uuid któru nie znajduje się w bazie.
+    # @return [TrueClass]
+    # API: POST "/contractor/{uuid}/application/declineContract"
+    def submit_decline_contract_form
+      credentials = self.class.credentials
+      path   = "/contractor/#{credentials.uuid}/application/declineContract"
+      result = PuchatekApi::rest_request(
+          :post,
+          path,
+          :args     => Time.now.to_json,
+          :login    => credentials.email,
+          :password => credentials.password,
+          :headers  => { :content_type => :json }
+      )
+      result == ""
+    rescue RestClient::Forbidden
+      false            
+    end
+
+    def self.submit_update_data_form(update_form)
+      result = PuchatekApi::rest_request(
+          :post,
+          '/application/contractRequest',
+          :args    => update_form.to_puchatek_json,
+          :headers => { :content_type => :json }
+      )
+      result == ""
+    rescue RestClient::Forbidden
+      false                  
+    end
+
+    # Wysyła żądanie usunięcia danych dla firmy o podanych danych.
+    #
+    # @raise [RestClient::Unauthorized] w przypadku podanie nieprawidłowych danych autentykacyjnych
+    # @return [TrueClass]
+    # API: POST "/contractor/application/removeData"
+    def submit_remove_data_form
+      credentials = self.class.credentials
+      path = "/contractor/application/removeData"
+      PuchatekApi::rest_request(:post, path, :login => credentials.email, :password => credentials.password, :headers => { :content_type => :json })
+    rescue RestClient::Forbidden
+      false      
+    end
+  end
+end

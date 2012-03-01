@@ -1,0 +1,6 @@
+# encoding: UTF-8
+class EmailUniqueValidator < ActiveModel::EachValidator
+  def validate_each(record, attribute, value)
+    record.errors[attribute] << "Ten adres email jest już zajęty." unless PuchatekApi::CrmForms.check_uniqueness_of_email(value)
+  end  
+end

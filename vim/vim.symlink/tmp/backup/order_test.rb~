@@ -1,0 +1,67 @@
+require 'test_helper'
+
+class OrderTest < ActiveSupport::TestCase
+  test "bare object should trigger validations" do
+    order = Order.new
+    assert order.invalid?
+    assert order.errors['title'].any?
+    assert order.errors['user_id'].any?
+    assert order.errors['items'].any?
+    assert !order.errors['description'].any?
+  end
+  test "should save order with minimal data" do
+    order = Order.new
+    order.items.build( items(:simple_item).attributes)
+    order.title = 'Bare order'
+    order.user = users(:john)
+    assert order.valid?
+    assert order.save
+  end
+
+  test "should show that user participates in order" do
+    order = orders(:johns_order)
+    assert order.participates?(users(:mike))
+  end
+
+  test "should find all user orders" do
+    orders = Order.find_user_orders(users(:john)) 
+    assert_equal 1, orders.count
+  end
+
+  test "should allow to participate when the order is open" do
+    assert orders(:johns_order).add_participant( users(:bob), [items(:simple_item)])
+  end
+
+  test "shouldn't allow to participate when the order isn't open" do
+    orders(:johns_order).close
+    assert !orders(:johns_order).add_participant( users(:bob), [items(:simple_item)])
+  end
+
+  # testing state machine
+  test "default state should be open" do
+    assert_equal "open", orders(:johns_order).state
+  end
+
+  test "state after closing an open order" do
+    orders(:johns_order).close
+    assert_equal "closed", orders(:johns_order).state
+  end
+
+  test "state after reopening a closed order" do
+    orders(:johns_order).close
+    orders(:johns_order).reopen
+    assert_equal "open", orders(:johns_order).state
+  end
+
+  test "state after starting shipping a closed order" do
+    orders(:johns_order).close
+    orders(:johns_order).start_shipping
+    assert_equal "shipping", orders(:johns_order).state
+  end
+
+  test "state after finishing order" do
+    orders(:johns_order).finish
+    assert_equal "finished", orders(:johns_order).state
+  end
+
+end

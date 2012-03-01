@@ -1,0 +1,5 @@
+pl:
+  goal:
+    speed:
+      completed:
+        false: "Osiągnąć średnią prędkość %{goal_value} km/h do %{end_date}"

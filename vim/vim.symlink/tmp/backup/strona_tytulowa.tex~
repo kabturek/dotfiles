@@ -1,0 +1,44 @@
+% ------------------------------------------------------------------------
+% STRONA TYTU£OWA
+% ------------------------------------------------------------------------
+
+\begin{center}
+\fontsize{15.2pt}{26pt}\sffamily\bfseries
+Wyższa Szkoła  \\
+\fontsize{10.8pt}{17pt}\sffamily\bfseries
+Informatyki Stosowanej i Zarządzania
+\vskip 1.4in
+\fontsize{15pt}{2}\sffamily\bfseries
+KONSPEKT PRACY DYPLOMOWEJ
+\end{center}
+
+\vskip0.4in
+
+\begin{flushleft}
+\fontsize{12pt}{16}\sffamily
+TEMAT PRACY: {Projekt systemu badania konwersji sklepów internetowych}
+\vskip 1.1in
+\hspace{-8pt}\begin{tabular}{ll}
+  Student:&\hspace{17pt} \bfseries Marcin Domański \\[40pt]
+  rodzaj studiów:&\hspace{17pt} niestacjonarne \\
+  kierunek:&\hspace{17pt} informatyka \\
+  specjalność:&\hspace{17pt} Inżynieria programowo-sprzętowa \\
+  rok akademicki:&\hspace{17pt} 2011/12 \\
+\end{tabular}
+\end{flushleft}
+\vskip 0.1in
+\begin{center}
+\fontsize{12pt}{27}\sffamily
+\hspace{165pt}\begin{tabular}{l}
+  promotor: \\
+  {prof. dr hab. inż. Ryszard Pełka}\\
+\end{tabular}
+\end{center}
+\begin{flushleft}
+\fontsize{12pt}{14}\sffamily
+data zgłoszenia pracy:\\
+\end{flushleft}
+\newpage
+
+\tableofcontents
+\newpage

@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+def maximum(table)
+  max_value = nil
+  table.each do |value|
+    max_value = value if value > max_value.to_f
+  end 
+  max_value
+end 
+
+puts maximum( [1, 2 ,3 ,9, 33.3])
+puts maximum( [5, 6 ,103 ,9, 33.3])
+puts maximum( [])
+puts maximum( [1])

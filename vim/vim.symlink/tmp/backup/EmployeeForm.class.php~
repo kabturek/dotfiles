@@ -1,0 +1,182 @@
+<?php
+
+/**
+ * Employee form.
+ *
+ * @package    ptclean
+ * @subpackage form
+ * @author     Your name here
+ * @version    SVN: $Id: sfDoctrineFormTemplate.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
+ */
+class EmployeeForm extends BaseEmployeeForm{
+  public function configure(){
+    $this->widgetSchema->moveField('status_id', sfWidgetFormSchema::AFTER, 'current_stage');
+    $this->widgetSchema->moveField('status_notes', sfWidgetFormSchema::AFTER, 'status_id');
+    unset($this['position']);
+    unset($this['absent_days'], $this['absent_occurences']);
+    $this->widgetSchema['category_id'] = new sfWidgetFormDoctrineChoice(array(
+      'model' => $this->getRelatedModelName('Position'), 
+      'add_empty' => false
+    ));
+    $this->widgetSchema['source'] = new sfWidgetFormChoice(array(
+      'choices'  => Employee::getSources(),
+      'expanded' => true,
+    ));
+    $this->validatorSchema['source'] = new sfValidatorChoice(array(
+      'choices' => array_keys(Employee::getSources()),
+    ));
+    $this->widgetSchema['cellphone'] = new sfWidgetJqueryMaskedInput(array('mask' => "999-999-9999"));
+    $this->widgetSchema->setHelp('cellphone', 'Phone number must be in XXX-XXX-XXXX format');
+    $this->validatorSchema['cellphone'] = new sfValidatorRegex(array(
+      'pattern' => '/^\d{3}-\d{3}-\d{4}$/'
+    ), array(
+      'invalid' => 'Phone must be in XXX-XXX-XXXX format'
+    ));
+    $this->validatorSchema['email_address'] = new sfValidatorEmail();
+
+    $this->widgetSchema['entry_date'] = new sfWidgetFormDatePickerTime();
+    $this->widgetSchema['first_day'] = new sfWidgetFormDatePicker();
+    
+    $this->widgetSchema['user_type'] = new sfWidgetFormChoice(array(
+      'choices'  => Employee::getUserTypes(),
+      'expanded' => true,
+    ));
+    
+    $this->widgetSchema['intermediate_english'] = new sfWidgetFormInputCheckbox(array('label' => 'Intermediate English'));
+    $this->validatorSchema['user_type'] = new sfValidatorChoice(array(
+      'choices' => array_keys(Employee::getUserTypes()),
+    ));
+    $this->widgetSchema['current_stage'] = new sfWidgetFormChoice(array(
+      'choices'  => Employee::getStages(),
+      'expanded' => false,
+    ));
+    $this->validatorSchema['current_stage'] = new sfValidatorChoice(array(
+      'choices' => array_keys(Employee::getStages()),
+    ));
+    $this->widgetSchema['likes_dislikes'] = new sfWidgetFormChoice(array(
+      'choices'  => array(1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5),
+      'expanded' => true,
+    ), array(
+      'class' => 'total_score'
+    ));
+    $this->validatorSchema['likes_dislikes'] = new sfValidatorInteger(array(
+      'required' => false,
+      'min' => 1,
+      'max' => 5
+    ));
+    $this->widgetSchema['values_most'] = new sfWidgetFormChoice(array(
+      'choices'  => array(1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5),
+      'expanded' => true,
+    ), array(
+      'class' => 'total_score'
+    ));
+    $this->validatorSchema['values_most'] = new sfValidatorInteger(array(
+      'required' => false,
+      'min' => 1,
+      'max' => 5
+    ));
+    $this->widgetSchema['why_contacted'] = new sfWidgetFormChoice(array(
+      'choices'  => array(1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5),
+      'expanded' => true,
+    ), array(
+      'class' => 'total_score'
+    ));
+    $this->validatorSchema['why_contacted'] = new sfValidatorInteger(array(
+      'required' => false,
+      'min' => 1,
+      'max' => 5
+    ));
+    $this->widgetSchema['why_hire'] = new sfWidgetFormChoice(array(
+      'choices'  => array(1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5),
+      'expanded' => true,
+    ), array(
+      'class' => 'total_score'
+    ));
+    $this->validatorSchema['why_hire'] = new sfValidatorInteger(array(
+      'required' => false,
+      'min' => 1,
+      'max' => 5
+    ));
+    $this->widgetSchema['candidates_strengths'] = new sfWidgetFormChoice(array(
+      'choices'  => array(1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5),
+      'expanded' => true,
+    ), array(
+      'class' => 'total_score'
+    ));
+    $this->widgetSchema['total_score'] = new sfWidgetFormInput(array(), array(
+      'readonly' =>'readonly',
+    ));
+    $this->validatorSchema['candidates_strengths'] = new sfValidatorInteger(array(
+      'required' => false,
+      'min' => 1,
+      'max' => 5
+    ));
+    $this->widgetSchema['approved'] = new sfWidgetFormChoice(array(
+      'choices'  => array(1 => 'Yes', 0 => 'No'),
+      'expanded' => true
+    ));
+    $this->validatorSchema['approved'] = new sfValidatorBoolean(array('required' => true));
+    $this->widgetSchema['first_impression'] = new sfWidgetFormChoice(array(
+      'choices'  => array(1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5),
+      'expanded' => true,
+    ), array(
+      'class' => 'interview_score'
+    ));
+    $this->validatorSchema['first_impression'] = new sfValidatorInteger(array(
+      'required' => false,
+      'min' => 1,
+      'max' => 5
+    ));
+    $this->widgetSchema['enthusiasm'] = new sfWidgetFormChoice(array(
+      'choices'  => array(1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5),
+      'expanded' => true,
+    ), array(
+      'class' => 'interview_score'
+    ));
+    $this->validatorSchema['enthusiasm'] = new sfValidatorInteger(array(
+      'required' => false,
+      'min' => 1,
+      'max' => 5
+    ));
+    $this->widgetSchema['trainable'] = new sfWidgetFormChoice(array(
+      'choices'  => array(1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5),
+      'expanded' => true,
+    ), array(
+      'class' => 'interview_score',
+    ));
+    $this->widgetSchema['birthday'] = new sfWidgetFormDate(array(
+        'years' => array_combine(range(date('Y') - 90, date('Y') - 10), range(date('Y') - 90, date('Y') - 10))
+      ));
+    $this->validatorSchema['trainable'] = new sfValidatorInteger(array(
+      'required' => false,
+      'min' => 1,
+      'max' => 5
+    ));
+    $this->widgetSchema['interview_score'] = new sfWidgetFormInput(array(), array(
+      'readonly' =>'readonly',
+    ));
+    $this->widgetSchema['interview_approved'] = new sfWidgetFormChoice(array(
+      'choices'  => array(1 => 'Yes', 0 => 'No'),
+      'expanded' => true,
+    ));
+    $this->validatorSchema['interview_approved'] = new sfValidatorBoolean(array('required' => false));
+    $this->widgetSchema['documents_list']->setOption('renderer_class', 'sfWidgetFormSelectDoubleList');
+    $this->widgetSchema['language'] = new sfWidgetFormChoice(array(
+      'choices' => array('en' => 'English', 'pl' => 'Polish'),
+      'expanded' => true,
+    ));
+    $this->validatorSchema['language'] = new sfValidatorChoice(array(
+      'choices' => array('en', 'pl'),
+    ));
+    unset($this['inquiries_list']);
+    unset($this['comments_list']);
+    unset($this['documents_list']);
+    unset($this['valid_complains'], $this['all_complains'], $this['damages_cost'], $this['damages_count']);
+    unset($this['created_at'], $this['updated_at']);
+
+  }
+
+  public function getJavaScripts(){
+    return array_merge(parent::getJavaScripts(), array('employee.js'));
+  }
+}

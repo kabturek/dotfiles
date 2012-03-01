@@ -1,0 +1,107 @@
+<!doctype html>
+<!--[if lt IE 7]>
+<html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Puchatek</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <!-- CSS concatenated and minified via ant build script-->
+  <%= stylesheet_link_tag "style", "custom" %>
+  <!-- end CSS-->
+
+  <!--[if IE]>
+  <%= stylesheet_link_tag "ie" %>
+  <![endif]-->
+
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+
+
+<body>
+
+	<div id="topOuter">
+		<div id="topBg">
+			<header id="top" class="clearfix">
+				<div id="loginPanel">
+					<div id="loginPanelInner">
+						<div id="dolaczDoNasBox">
+							<p>Nie pracujesz jeszcze<br/>
+							z e-dokumentami?<br/>
+							<strong>Przyłącz się do nas!</strong></p>
+							<a href="/crm_application/registration/new" id="linkDolaczDoNas"><span>Dołącz do nas</span></a>
+						</div>
+						
+						    <%= form_tag session_path, :id => "zalogujSie" do %>
+                    <%= text_field_tag :email, 'Email', :class => 'text default-value', :id => 'loginname', :size => 25 %>
+                    <div id="loginPassWrapper">
+
+                      <%= password_field_tag :password, '', :class => 'text', :id => 'loginpass', :size => 25 %>
+                      <input class="text" name="loginpass" id="fakeloginpass" type="text" value="Hasło" size="25" maxlength="255"/><!-- Uwaga! Input #fakeloginpass powinien być ignorowany przy submicie. -->
+                      <br/><%= link_to "nie pamiętam hasła", remind_password_path %>
+                    </div>
+                    <input class="button" id="zalogujSieButton" type="submit" value="Zaloguj się"/>
+                <% end %>
+
+              </div>
+            </div>
+            <div id="logo">
+              <h1><a href="/"><%= image_tag 'logo.png' %></a></h1>
+            </div>
+
+            <%= render :partial => 'shared/top_user' %>
+            <%= render :partial => 'shared/top_menu' %>
+				
+		
+				
+				<div id="topHowToUse">
+                	<h2><span><img src="/assets/headers/jak_to_dziala.png" width="133" height="24" alt="Jak to działa"></span></h2>
+                  <p>
+                  <strong>"Między firmami"</strong> umożliwia wymianę e-dokumentów bez konieczności posiadania elektronicznego podpisu. Za pomocą naszego serwisu możesz przesyłać je zgodnie z prawem między wieloma kontrahentami – wystarczy tylko jedna umowa. <a href="#pageTitle">Sprawdź korzyści</a>, <a href="<%= new_crm_application_registration_path %>">dołącz do nas</a> i swobodnie wysyłaj dokumenty między firmami.
+                  </p>
+					<h3><strong>Pracuj z Puchatkiem</strong> – to łatwe!</h3>
+                </div>
+                <div id="topSteps">
+                	<div id="step1">
+                    	<h3>Załóż konto</h3>
+                        <p>Rejestrując firmę w naszym serwisie, zyskujesz wolność od podpisywania wielu umów z każdym dostawcą na wymianę dokumentów online. Wystarczy jedna umowa i bez ograniczeń wymieniasz dokumenty ze swoimi kontrahentami. </p>
+                    </div>
+                    <div id="step2">
+                    	<h3>Znajdź swoich kontrahentów</h3>
+                        <p>Żeby mieć pewność, że to właściwa firma – wyszukujesz firmy wg numeru NIP. Jeśli jej tu nie znajdziesz –  za pomocą naszego serwisu możesz wysłać zaproszenie do kontrahenta, z którym chcesz wymieniać dokumenty online. </p>
+                    </div>
+                    <div id="step3">
+                    	<h3>Wymieniaj dokumenty online</h3>
+                        <p>Od teraz oszczędzasz czas i&nbsp;zmniejszasz koszty firmy związane z wysyłką dokumentów drogą tradycyjną. Ponadto zyskujesz pewność, że Twój kontrahent na pewno je otrzyma.</p>
+						<a href="#najczesciejZadawane" class="orange-button">Chcesz wiedzieć więcej?</a>
+                    </div>
+                </div>
+                <p class="center">Masz jeszcze pytania? <a href="#najczesciejZadawane">Zobacz odpowiedzi na najczęściej zadawane pytania.</a></p>
+			</header>
+		</div>
+	</div>
+	
+	<div id="mainBg">
+		<div id="main" role="main">
+			<div class="contentShTop"><div class="contentShBottom"><div class="contentSh">
+				<%= yield %>                
+			</div></div></div>
+		</div>
+	</div>
+	
+<%= render :partial => 'shared/footer' %>>
+
+</body>
+</html>

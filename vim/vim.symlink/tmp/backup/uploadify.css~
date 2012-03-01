@@ -1,0 +1,63 @@
+.uploadifyQueueItem {
+	background-color: #F5F5F5;
+	border: 2px solid #E5E5E5;
+	font: 11px Verdana, Geneva, sans-serif;
+	margin-top: 5px;
+	padding: 10px;
+}
+.uploadifyError {
+	background-color: #FDE5DD !important;
+	border: 2px solid #FBCBBC !important;
+}
+.uploadifyQueueItem .cancel {
+	float: right;
+}
+.uploadifyQueue .completed {
+	background-color: #E5E5E5;
+}
+.uploadifyProgress {
+	background-color: #E5E5E5;
+	margin-top: 10px;
+	width: 100%;
+}
+.uploadifyProgressBar {
+	background-color: #0099FF;
+	height: 3px;
+	width: 1px;
+}
+#documents-upload .uploadifyQueueItem {
+  background-color: #FFFFFF;
+  border: none;
+  border-bottom: 1px solid #E5E5E5;
+  font: 11px Verdana, Geneva, sans-serif;
+  margin-top: 0;
+  padding: 10px;
+}
+#documents-upload .uploadifyError {
+  background-color: #FDE5DD !important;
+  border: none !important;
+  border-bottom: 1px solid #FBCBBC !important;
+}
+#documents-upload .uploadifyQueueItem .cancel {
+  float: right;
+}
+#documents-upload .uploadifyQueue .completed {
+  color: #C5C5C5;
+}
+#documents-upload .uploadifyProgress {
+  background-color: #E5E5E5;
+  margin-top: 10px;
+}
+#documents-upload .uploadifyProgressBar {
+  background-color: #0099FF;
+  height: 3px;
+  width: 1px;
+}
+#documents-upload #custom-queue {
+  border: 1px solid #E5E5E5;
+  margin: 10px 0px 10px 0px;
+}		
+.new-document-modal object{
+  display:block;
+  padding: 10px;
+}

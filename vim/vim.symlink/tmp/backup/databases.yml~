@@ -1,0 +1,22 @@
+all:
+  doctrine:
+    class: sfDoctrineDatabase
+    param:
+      dsn: 'mysql:host=localhost;dbname=laktur'
+      username: laktur
+      password: dVrQ6sDjhKrK6v9v
+prod:
+  doctrine:
+  doctrine:
+    class: sfDoctrineDatabase
+    param:
+      dsn: 'mysql:host=localhost;dbname=laktur'
+      username: laktur
+      password: dVrQ6sDjhKrK6v9v
+dev:
+  doctrine:
+    class: sfDoctrineDatabase
+    param:
+      dsn: 'mysql:host=localhost;dbname=laktur'
+      username: root
+      password: 

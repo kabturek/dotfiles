@@ -1,0 +1,10 @@
+# encoding: utf-8
+
+module PuchatekApi
+  class Param < String
+    def eql?(other)
+      return false
+    end
+  end
+end
+

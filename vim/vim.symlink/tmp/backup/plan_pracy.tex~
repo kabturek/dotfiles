@@ -1,0 +1,28 @@
+
+Wstęp 
+  O sieci internet
+  O aplikacjach internetowych
+  Cele
+Analiza Dostępnych technologii celem wybrania najbardziej odpowiedniej do zrealizowania systemu
+  Opis systemu (bez technologii)
+    O GIS
+  O języku Ruby 
+  O frameworku Ruby on Rails
+  Bazy danych przechowywujące dane geograficzne
+    PostgreSQL (PostGIS)
+    Mysql (MySQL Spatial Extension)
+    Oracle
+  Prezentacja danych
+    Google Maps
+    Openstreetmap
+  Podsumowanie oraz wybór technologii
+Projekt Systemu
+  Architektura
+Realizacja 
+  Serwer
+  Warstwa Modelu (ORM)
+    opisy typow danych, tabel
+    wizualizacja tabel
+Zakończenie 
+  wnioski, dalszy rozwój systemu
+

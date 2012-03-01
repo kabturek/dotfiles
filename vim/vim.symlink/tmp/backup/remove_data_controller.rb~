@@ -1,0 +1,21 @@
+# encoding: utf-8
+# Kontroler odpowiada za wysyłanie wniosku usunięcia danych do umowy. 
+class CrmApplication::RemoveDataController < ApplicationController
+  before_filter :login_required!
+  authorize! :user_management
+
+  # /POST
+  def create
+    if CrmApplication::RemoveData.new.submit
+      flash[:success_message] = t("flashes.notice.remove_data_request")
+    else
+      flash[:error_message] = t("flashes.alert.remove_data_request_failed")
+    end
+
+    redirect_to crm_application_path
+  end
+
+  # /GET
+  def show;end
+
+end

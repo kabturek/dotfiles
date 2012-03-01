@@ -1,0 +1,74 @@
+# encoding: utf-8
+# Kontroler zarządzający dodanymi kontrahentami. Udostępnia takie akcje jak blokowanie dodanego kontrahenta, zmiana
+# nazwy kontrahenta itd.
+class BusinessPartnersController < ApplicationController
+
+  before_filter :login_required!, :set_business_partner
+
+  # /GET
+  def index    
+    @partners = BusinessPartner.find_with_params( params )
+    @partners_paginated = Kaminari.paginate_array( @partners).page( params[:page] )
+  end
+
+  # /GET
+  def block
+    if !params[:blocked] and @business_partner.block
+      notice = t("flashes.notice.blacklisted")
+      status = 'success'
+    else
+      notice = t("flashes.notice.current_blacklisted")
+      status = 'failed'
+    end
+    respond_to do |format|
+      format.html  do 
+        redirect_to business_partners_path, :notice => notice
+      end
+      format.json  do 
+        render :json => {:message => notice, :status => status}
+      end
+    end
+  end
+
+  # /DELETE
+  def unblock
+    if @business_partner.unblock
+      notice = t("flashes.notice.unblacklisted")
+      status = 'success'
+    else
+      notice = t("flashes.notice.unblacklisting_failed")
+      status = 'failed'
+    end
+    respond_to do |format|
+      format.html  do 
+        redirect_to business_partners_path, :notice => notice
+      end
+      format.json  do 
+        render :json => {:message => notice, :status => status}
+      end
+    end
+  end
+
+  # /PUT
+  def change_name
+    if @business_partner.change_name(params[:friendly_name])
+      notice = t("flashes.notice.contractor_name_changed")
+    else
+      notice = t("flashes.notice.contractor_name_failed_to_change")
+    end
+    redirect_to business_partners_path, :notice => notice    
+  end
+
+  # /POST
+  def request_contract_documents
+    @business_partner.request_contract_documents
+    redirect_to business_partners_path, :notice => t("flashes.notice.contract_document_requested")
+  end
+  
+  protected
+  # TODO: Replace params[:id] with params[:uuid]    
+  def set_business_partner
+    @business_partner = BusinessPartner.new(:uuid => params[:id])
+  end
+
+end

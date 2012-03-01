@@ -1,0 +1,4 @@
+- if current_user.can? :archive_document
+  %th.select 
+- else
+  %th.empty

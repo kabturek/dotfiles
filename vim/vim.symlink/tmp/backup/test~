@@ -1,0 +1,29 @@
+{
+  Page: 1,
+  Total: 110,
+  TotalPages: 11,
+
+  Data:
+  [
+    {
+      "UUID": "<string>",
+      "Name": "<string>",
+      "Size": "<int>",
+      "SenderUUID": "<string>",
+      "SenderNIP": "<string>",
+      "RecipientUUID": "<string>",
+      "RecipientNIP": "<string>",
+      "DownloadedByForte": "<bool>",
+      "Archived": "<bool>",
+      "Status": "Uploaded | Downloaded | Accepted | Rejected | Cancelled",
+      "History": [
+        {
+          "CreatedOn": "<date>",
+          "CreatedBy": "<login>",
+          "CreatorType": "Sender | Recipient | System",
+          "Type": "DocumentUploaded | DocumentDownloaded | NotificationSent | AcceptationStateSent | Cancelled | Archived | ContentDeleted"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+# + plus
+# - minus 
+# / slash
+# * asterisk
+# % percent
+# < less-than
+# > greater-than
+# <= less-then-equal
+# >= greater-tehn equal
+
+puts "I will now count my chickens:"
+# counts the hens
+puts "Hens", 25.0 + 30 / 6
+# counts the roosters
+puts "Roosters", 100.0 - 25 * 3 % 4
+
+puts "Now i will count the eggs: "
+#counts the eggs
+puts 3.0 + 2 + 1 - 5 + 4 & 2 - 1 / 4 + 6
+puts "Is it true that 3+ 2 < 5 -7 ?"
+#compares two operations
+puts 3.0 + 2 < 5 - 7
+
+# adds 3 to 2
+puts "What is 3 + 2?", 3.0+ 2
+# substarcts 7 from 5
+puts "What is 5-7?", 5.0 - 7
+
+puts "Oh, that's why it's false."
+
+puts "How about some more."
+
+# compares if 5 is greater than -2
+puts "Is it greater", 5.0 > -2
+# compares if 5 is greater or equal than -2
+puts "Is it greater or equal?", 5.0 >= -2
+# compares if 5 is less or equal than -2
+puts "Is it less ot equal?", 5.0 <= -2

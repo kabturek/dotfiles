@@ -1,0 +1,5 @@
+class AddDistanceToTrackPoint < ActiveRecord::Migration
+  def change
+    add_column :track_points, :distance, :decimal
+  end
+end

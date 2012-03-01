@@ -1,0 +1,49 @@
+.customer.clearfix{:id => 'company_' + company.nip}
+  .add-form.data
+    = form_tag add_to_current_account_companies_path, :method => :post, :remote => true do
+      %p
+        Zanim dodasz kontrahenta do
+        %em Moich kontrahentów
+        musisz nadać mu nazwę, które pomoże Ci go zidentyfikować
+      %fieldset.noLegend
+        %dl
+          %dt
+            %label{:for => "friendly_name"} Dodaj nazwę kontrahenta
+          %dd
+            = hidden_field_tag :nip, company.nip
+            %input.friendly_name.text{:name => "friendly_name", :type => "text"}
+              %button.gray-button{:type => "submit"}
+                %span dodaj
+              %button.reset{:type => "reset"}
+                %span Anuluj
+  .name
+    - @company_count ||= 0
+    - @company_count+=1 if !company.is_in_cooperation
+    %h3= contractor_name(@company_count, company)
+    - if company.waiting_for_removal
+      .data
+        %p
+          %span{:class => :block}= "czeka na usunięcie z czarnej listy"
+    - elsif company.waiting_for_addition
+      .data
+        %p
+          %span{:class => :block}= "czeka na dodanie do czarnej listy"
+          = link_to 'odblokuj', unblock_business_partner_path(company.uuid), :confirm => "Czy na pewno odblokować kontrahenta?", :class => "unblock_customer"
+    - elsif company.on_blacklist
+      .data
+        %p
+          %span{:class => :block}= "zablokowany"
+          = link_to 'odblokuj', unblock_business_partner_path(company.uuid), :confirm => "Czy na pewno odblokować kontrahenta?", :class => "unblock_customer"
+    - if company.is_in_cooperation
+      %span.info-ico znajduje się na liście Twoich kontrahentów
+
+  .nip
+    %p= number_to_nip(company.nip)
+  .options-1
+    %ul
+      %li.customer-block
+        - link_options = {:confirm => "Czy na pewno zablokować kontrahenta?", :title => 'Zablokuj kontrahenta'}
+        - link_options[:class] = :hidden if company.on_blacklist or company.waiting_for_addition
+        = link_to "zablokuj", block_business_partner_path(company.uuid), link_options
+      %li.customer-add{ :class => (:hidden if company.is_in_cooperation)}
+        %a.gray-button{:href => "#", :title => "Dodaj tę firmę"} dodaj   

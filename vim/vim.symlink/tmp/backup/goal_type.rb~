@@ -1,0 +1,5 @@
+class GoalType < ActiveRecord::Base
+  def short_name
+    'speed'
+  end
+end

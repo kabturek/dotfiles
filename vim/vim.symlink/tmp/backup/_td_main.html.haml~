@@ -1,0 +1,8 @@
+%td.sender
+  - if document.company.name
+    %strong= document.company.name
+  = format_nip document.company.nip 
+%td.name
+  %strong= document.name
+%td.size
+  = number_to_human_size( document.size, :precision => 2, :separator => ',', :prefix => :si)

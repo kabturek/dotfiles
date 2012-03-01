@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * EmployeeInquiry form.
+ *
+ * @package    ptclean
+ * @subpackage form
+ * @author     Marcin Domański <marcin+ptclean@kabturek.info>
+ * @version    SVN: $Id: sfDoctrineFormTemplate.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
+ */
+class EmployeeInquiryForm extends BaseEmployeeInquiryForm
+{
+  public function configure()
+  {
+    $this->disableLocalCSRFProtection();
+    $this->widgetSchema['inquiry_id'] = new sfWidgetFormDoctrineChoice(array(
+      'model' => 'Inquiry'
+    ));
+    unset($this['max_tries']);
+    $this->widgetSchema['inquiry_id']->setLabel('Test');
+    $this->widgetSchema['deadline'] = new sfWidgetFormDatePickerTime();
+    $this->validatorSchema->setPostValidator(
+      new sfValidatorDoctrineUnique(array(
+        'model' => 'EmployeeInquiry', 
+        'column' => array('employee_id', 'inquiry_id', 'is_completed')
+      ), array(
+        'invalid' => "You can't assaign the same test twice if the first one wasn't completed",
+      )
+    )
+  );
+  }
+}

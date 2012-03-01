@@ -1,0 +1,2 @@
+:javascript
+  business_partners = #{BusinessPartner.find_list.to_json}

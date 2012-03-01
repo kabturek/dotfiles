@@ -1,0 +1,10 @@
+Witaj {firstname} {lastname},
+ 
+Zamowienie #{id_order}
+ 
+Twoje zamówienie zostało zapisane. Prosze potwierdzić złożenie zamówienia klikając na poniższy link:
+{shop_url}modules/confirmorder/confirm.php?order={id_order}
+ 
+W sekcji "Historia zamowien" w "Twoim koncie" mozesz obejzec swoje zamowienie i pobrac fakture.
+ 
+{shop_name}

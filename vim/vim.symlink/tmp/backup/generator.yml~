@@ -1,0 +1,42 @@
+generator:
+  class: sfDoctrineGenerator
+  param:
+    model_class:           Employee
+    theme:                 jqgrid
+    non_verbose_templates: true
+    with_show:             true
+    singular:              ~
+    plural:                ~
+    route_prefix:          employee
+    with_doctrine_route:   true
+    actions_base_class:    sfActions
+
+    config:
+      actions: ~
+      fields:  ~
+      list:    
+        object_actions:
+          _edit: ~
+          _delete: ~
+          show: 
+            action: show
+        display: [=User, _Position, current_stage, approved, interview_approved, first_name, last_name, email_address, current_stage, entry_date]
+        fields:
+          User:
+            search: false
+            sortable: false
+          current_stage:
+            label: Stage
+            width: 50
+          approved:
+            width: 75
+          interview_approved:
+            label: Interview
+            width: 75
+          entry_date:
+            width: 150
+      filter:  
+        display: [user_id, current_stage, approved, interview_approved, first_name, last_name, email_address, user_type, current_stage, status_id, entry_date, cellphone, category_id]
+      form:    ~
+      edit:    ~
+      new:     ~

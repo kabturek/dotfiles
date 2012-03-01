@@ -1,0 +1,9 @@
+%tr.hidden-row.history{:id => "document-history-" + document.uuid}
+  %td{:colspan => 6}
+    %ul
+      - document.history.each do |history| 
+        %li 
+          %span= DateTime.parse(history[:created_on]).strftime("%d.%m.%y")
+          %strong= t("documents.history_type." + history[:type]) 
+          = ' przez '
+          =history[:created_by]

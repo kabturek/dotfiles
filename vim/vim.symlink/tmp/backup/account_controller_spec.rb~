@@ -1,0 +1,23 @@
+require 'spec_helper'
+
+describe AccountController do
+  it "should redirect to account_page with unauthorize message when the user doesnt have :manage_user permission" do
+      #set the session so that it passes logged_in restriction
+      session[:user] = {
+        :uuid => "uuid",
+        :email => "email",
+        :password => "password"
+      }
+      stub_request(:get, "http://email:password@sg1.smtsoftware.com/puchatek_development/contractor/uuid").
+         with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate'}).
+         to_return(:status => 200, :body => get_response('contractor/uuid'), :headers => {})
+
+      stub_request(:get, "http://email:password@sg1.smtsoftware.com/puchatek_development/contractor/profile").
+         with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate'}).
+         to_return(:status => 200, :body => get_response('contractor/profile_valid_user'), :headers => {})
+
+
+      get :contract
+      response.should redirect_to(account_path)
+    end
+end

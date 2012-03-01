@@ -1,0 +1,25 @@
+class Artist < ActiveRecord::Base
+  has_many :subscriptions
+  has_many :users, :through => :subscriptions
+
+  serialize :images
+
+  def self.find_by_mbid_or_name(mbid, name)
+    return artist = self.find_by_mbid(mbid) if mbid
+    return artist = self.find_by_name(name) if name
+    nil
+  end
+  def self.parse_xml(artist_xml)
+    images = {}
+    artist_xml['image'].each do |image|
+      images[image['size']] = image['content']
+    end
+    artist = {
+      :name => artist_xml['name'],
+      :mbid => artist_xml['mbid'],
+      :url => artist_xml['url'],
+      :images => images
+    }
+  end
+
+end

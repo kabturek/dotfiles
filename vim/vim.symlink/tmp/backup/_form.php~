@@ -1,0 +1,120 @@
+<?php include_stylesheets_for_form($form) ?>
+<?php include_javascripts_for_form($form) ?>
+<script type="text/javascript">
+$(function(){
+    var animation_time = 1000;
+    var effect = null;
+    function resetForm(value){
+        $(".sf_admin_form_field_min_description").hide();
+        $(".sf_admin_form_field_max_description").hide();
+        $(".sf_admin_form_field_open_description").hide();
+        $(".sf_admin_form_field_min_answers").show();
+        $(".sf_admin_form_field_max_answers").show();
+        $(".sf_admin_form_field_help").show();
+        $(".answer").show();
+        $(".sf_admin_form_field_answer").show();
+        hideScale();
+    }
+    function hideScale(){
+        $(".scale").hide();
+        $(".sf_admin_form_field_scale").hide();
+    }
+    function showScale(){
+        $(".scale").show();
+        $(".sf_admin_form_field_scale").show();
+    }
+    var min_answers = $("label[for='inquiry_question_min_answers']").text();
+    var max_answers = $("label[for='inquiry_question_max_answers']").text();
+    $("#inquiry_question_type").change(function(){
+        resetForm( $(this).val());
+        switch($(this).val()){
+        case "close":      
+            $("label[for='inquiry_question_min_answers']").text(min_answers);
+            $("label[for='inquiry_question_max_answers']").text(max_answers);
+            $(".sf_admin_form_field_min_answers").show(effect, animation_time);
+            $(".sf_admin_form_field_max_answers").show(effect, animation_time);
+            
+            break;
+        case "semiopen":
+            $("label[for='inquiry_question_min_answers']").text('Ilość odpowiedzi (min)');
+            $("label[for='inquiry_question_max_answers']").text('Ilość odpowiedzi (max)');
+            $(".sf_admin_form_field_open_description").show(effect, animation_time);
+            break;
+        case "scale":
+            $("label[for='inquiry_question_min_answers']").text('Zakres od');
+            $("label[for='inquiry_question_max_answers']").text('Zakres do');
+            
+            //$(".sf_admin_form_field_min_description").show(effect, animation_time);
+            //$("label[for='inquiry_question_min_description']").text('Opis dla skali');
+            showScale();
+            break;
+        case "range":
+            $("label[for='inquiry_question_min_answers']").text('Wartość najmniejsza');
+            $("label[for='inquiry_question_max_answers']").text('Wartość największa');
+            
+            $("label[for='inquiry_question_min_description']").text('Opis dla wartości najmniejszej');
+            $("label[for='inquiry_question_max_description']").text('Opis dla wartości największej');
+            $(".sf_admin_form_field_min_description").show(effect, animation_time);
+            $(".sf_admin_form_field_max_description").show(effect, animation_time);
+            break;
+        case "open":
+            //$(".sf_admin_form_field_min_answers").hide(effect, animation_time);
+            $("label[for='inquiry_question_min_answers']").text('Obowiązek odpowiedzi na pytanie');
+            
+            $(".sf_admin_form_field_max_answers").hide(effect, animation_time);
+            $(".answer").hide();
+            $(".sf_admin_form_field_answer").hide();
+            break;
+        case "multi_open":
+            $(".sf_admin_form_field_min_answers").show(effect, animation_time);
+            $(".sf_admin_form_field_max_answers").show(effect, animation_time);
+            $(".answer").show();
+            $("label[for='inquiry_question_min_answers']").text('Obowiązek odpowiedzi na pytanie');
+            $("label[for='inquiry_question_max_answers']").text('Ilość odpowiedzi');
+            break;
+        case "points":
+            $("label[for='inquiry_question_min_answers']").text('Minimalna suma punktów');
+            $("label[for='inquiry_question_max_answers']").text('Maksymalna suma punktów');
+            
+            
+            break;
+        case "sort":
+            $(".sf_admin_form_field_min_answers").hide(effect, animation_time);
+            $(".sf_admin_form_field_max_answers").hide(effect, animation_time);
+            
+            break;
+        case "range_weight":
+            $(".sf_admin_form_field_min_answers").hide(effect, animation_time);
+            $(".sf_admin_form_field_max_answers").hide(effect, animation_time);
+            break;
+        }
+    });
+    $("#inquiry_question_type").change();
+
+});
+
+
+</script>
+
+<?php include_partial('question/sortable', array(
+    'sortable_id' => 'div.sf_admin_form',
+    'sortable_items' => 'div.answer ,div.scale',
+    'submit_url' => url_for('question/saveAnswerOrder') . '?question_id='. $form->getObject()->getId() 
+
+)) ?>
+<div class="sf_admin_form">
+  <?php echo form_tag_for($form, '@inquiry_question_question') ?>
+    <?php echo $form->renderHiddenFields() ?>
+
+    <?php if ($form->hasGlobalErrors()): ?>
+      <?php echo $form->renderGlobalErrors() ?>
+    <?php endif; ?>
+
+    <?php foreach ($configuration->getFormFields($form, $form->isNew() ? 'new' : 'edit') as $fieldset => $fields): ?>
+      <?php include_partial('question/form_fieldset', array('inquiry_question' => $inquiry_question, 'form' => $form, 'fields' => $fields, 'fieldset' => $fieldset)) ?>
+    <?php endforeach; ?>
+    
+    <?php include_partial('question/form_actions', array('inquiry_question' => $inquiry_question, 'form' => $form, 'configuration' => $configuration, 'helper' => $helper)) ?>
+    
+  </form>
+</div>

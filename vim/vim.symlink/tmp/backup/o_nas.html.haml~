@@ -1,0 +1,14 @@
+:plain
+  <h3 id="pageTitle">
+    <span><img src="/assets/headers/o_nas_informacje.png" alt="Informacje o firmie" /></span>
+  </h3>
+  <div class="textLeft">
+    <p>Oddajemy w Twoje ręce serwis, który uprości żmudne procesy przesyłania dokumentów między firmami. Przyspieszymy wysyłkę i ułatwimy dostęp do informacji z nią związaną. </p>
+    <p>Serwis „między firmami” jest elektronicznym listonoszem, który umożliwia wymianę e-dokumentów bez konieczności posiadania elektronicznego podpisu. Możesz przesyłać je zgodnie z prawem między wieloma kontrahentami – wystarczy tylko jedna umowa. </p>
+    <p><a href="#{ url_for('jak-to-dziala')}">Sprawdź korzyści</a>,  <a href="#{ new_crm_application_registration_path}">dołącz do nas</a> i swobodnie wysyłaj dokumenty między firmami. </p>
+    <p>Właścicielem i pomysłodawcą serwisu jest firma <a href="http://www.sage.com.pl" target="_blank">Sage sp. z o.o</a>. </p>
+            <div class="signup"><div>
+              <h2>Wykorzystaj rozwiązania najlepszych w&nbsp;branży. Dołącz do nas i pracuj<br>z e-Dokumentami</h2>
+                <a href="#{ new_crm_application_registration_path}"><img src="/assets/btn-dolacz.png" alt="Dołącz do nas"></a>
+            </div></div>
+          </div>

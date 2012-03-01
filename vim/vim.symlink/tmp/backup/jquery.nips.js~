@@ -1,0 +1,11 @@
+// Numeric only control handler
+jQuery.fn.forceNumeric = function () {
+
+  return this.each(function () {
+    setInterval(function() {
+      var value = $(this).val();
+      $(this).val(value.replace.replace(/[^0-9\-,]/g, ''));
+    }
+    , 2000);
+  });
+}

@@ -1,0 +1,16 @@
+# encoding: UTF-8
+# Kontroler zawierający akcję specyficzne dla danego konta użytkownika.
+class AccountController < ApplicationController
+
+  before_filter :login_required!
+
+  # GET
+  def show
+  end
+
+  # GET
+  def contract
+    authorize! :user_management
+  end
+
+end

@@ -1,0 +1,13 @@
+# encoding: utf-8
+class Documents::Archive::RejectedDocumentsController < DocumentsController
+
+  private  
+  def find_options
+    options = { :archived => true }
+    options[:sort_by] = "SenderUUID" if options[:sort_by] == 'Company'
+    options[:recipientUuid] = current_user.account.uuid
+    options[PuchatekApi::Param.new("status")] = "Rejected"
+    super.merge(options)
+  end  
+
+end

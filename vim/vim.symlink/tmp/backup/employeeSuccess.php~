@@ -1,0 +1,24 @@
+  <h2><?php echo __('Damages'); ?> </h2>
+  <div class="block">                                        
+    <table id="damages">
+      <tr>
+        <th>Employee</th>
+        <th>Stage</th>
+        <th>Number of damages</th>
+        <th>Cost of damages</th>
+      </tr>
+      <?php foreach($employees as $employee): ?>
+        <tr>
+          <td><?php echo link_to($employee->Employee, 'employee/comments?id=' . $employee->Employee->id); ?></td>
+          <td><?php echo $employee->Employee->getCurrentStage(); ?></td>
+          <td><?php echo $employee->count; ?></td>
+          <td><?php echo $employee->total_cost; ?></td>
+        </tr>
+      <?php endforeach; ?>
+    </table>
+<table>
+
+<?php echo form_tag('employee_damage/employee'); ?>
+<?php echo $form; ?>
+</table>
+<input type="submit"  value="Filter"/>

@@ -1,0 +1,14 @@
+module I18n
+    def self.missing_translations_logger
+        @@missing_translations_logger ||= Logger.new("#{Rails.root.to_s}/log/missing_translations.log")
+    end
+
+    def self.missing_translations_log_handler(exception, locale, key, options)
+        translations = YAML.load_file( "#{Rails.root.to_s}/config/locales/en.yml" )
+        puts "logging #{exception.message}"
+        missing_translations_logger.warn(exception.message)
+        return exception.message
+    end
+end
+
+I18n.exception_handler = :missing_translations_log_handler

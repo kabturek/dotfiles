@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+johns_order_item:
+  order: johns_order
+  title: first_item
+  description: MyText
+  price: 9.99
+
+two:
+  order: johns_order
+  title: MyString
+  description: MyText
+  price: 9.99
+
+simple_item
+      title: Test item
+      description: Test description
+      price: 9.99
+

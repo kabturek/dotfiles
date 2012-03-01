@@ -1,0 +1,27 @@
+# encoding: utf-8
+# Klasa reprezentuje wniosek o ponowną rejestrację firmy. 
+module CrmApplication
+  class RenewRegistration < UpdateData
+    #potrzebujemy walidacje 
+    include ActiveRecord::Validations
+
+    validates :company_name,
+      :street_name, :street_number, :post_code, :city, :phone,
+      :nip, :regon, :krs,
+      :representatives, :presence => true
+
+    # see app/validators
+    validates :nip, :regon, :krs, :numericality => true
+    def initialize(args={ })
+      prepare_attributes args
+    end
+    # Wysyła wniosek rejestracyjny do api.
+    def submit
+      PuchatekApi::CrmForms.new.submit_renew_registration_form(self)
+    end
+
+    def new_record?
+      true
+    end
+  end
+end

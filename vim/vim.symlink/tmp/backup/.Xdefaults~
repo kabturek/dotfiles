@@ -1,0 +1,221 @@
+!This is an amalgam of settings from
+!http://forums.gentoo.org/viewtopic-t-289943.html
+
+!XTerm section starts...
+!Xterm settings (aterm/rxvt inherits, urxvt does not)
+ XTerm*faceName:   Inconsolata
+ XTerm*faceSize:      16
+ XTerm*locale: true
+ XTerm*scrollBar:   true
+ XTerm*background:   black
+ XTerm*foreground:   white
+ XTerm*cursorColor:   red
+ XTerm*saveLines:  32768 
+!XTerm*color0:           #000000
+!XTerm*color1:           #CD0000
+! XTerm*color2:           #00CD00
+! XTerm*color3:           #CDCD00
+! XTerm*color4:           #4B4BED
+! XTerm*color5:           #CD00CD
+! XTerm*color6:           #00CDCD
+! XTerm*color7:           #b3b3b3
+! XTerm*color8:           #404040
+! XTerm*color9:           #FF0000
+! XTerm*color10:          #49DC49
+! XTerm*color11:          #FFFF00
+!XTerm*color12:          #5858E5
+! XTerm*color13:          #FF00FF
+! XTerm*color14:          #00FFFF
+! XTerm*color15:          #FFFFFF
+
+! URvt section starts
+
+ urxvt*borderLess: false
+ urxvt*scrollBar: true
+ urxvt*scrollstyle: plain
+ urxvt*foreground: white
+ urxvt*background: black
+!urxvt.depth: 32
+!urxvt*background:  rgba:2121/2121/2121/eeee
+ urxvt*saveLines: 65535
+ urxvt*font: xft:Inconsolata:pixelsize=16
+ urxvt*cursorBlink:      true
+!urxvt*transparent: true
+! urxvt*inheritPixmap: true
+! urxvt*tintColor: #373C57
+URxvt.perl-ext-common : default,matcher
+
+urxvt.urlLauncher: firefox
+! -- [ From rezza on the Gentoo forums. Thanks :=) ] --
+urxvt*color0:                   #000000
+urxvt*color1:                   #a33636
+!urxvt*color1:                   #e0e0e0
+urxvt*color2:                   #558634
+urxvt*color3:                   #968724
+urxvt*color4:                   #2a2a71
+urxvt*color5:                   #962449
+urxvt*color6:                   #248175
+urxvt*color7:                   #6b6b6b
+urxvt*color8:                   #4a4a4a
+urxvt*color9:                   #a33636
+urxvt*color10:                  #83ba30
+urxvt*color11:                  #ccc029
+urxvt*color12:                  #1974be
+urxvt*color13:                  #cf48a0
+urxvt*color14:                  #239494
+urxvt*color15:                  #ffffff
+
+Xft.dpi:96
+Xft.hinting:true
+Xft.hintstyle:hint
+
+
+
+! Cursor
+urxvt.cursorColor: #DCDCCC
+!
+! Pseudo Transparency
+!urxvt.shading:     30
+!urxvt.transparent: false
+! 
+! Zenburn color-scheme
+
+
+!{{{ XTERM
+xterm*internalBorder:        0
+xterm*loginShell:         true
+xterm*scrollBar:         false
+xterm*cursorBlink:       false
+!xterm*geometry:         80x26
+xterm*saveLines:         65535
+xterm*dynamicColors:        on
+xterm*highlightSelection: true
+! Appearance
+xterm*utf8:          2
+xterm*eightBitInput: true
+xterm*faceName:      Inconsolata:pixelsize=16
+xterm*cursorColor:   #FFFFFF
+! Molokai theme
+urxvt*background: #101010
+urxvt*foreground: #d0d0d0
+urxvt*cursorColor: #d0d0d0
+urxvt*color0: #101010
+urxvt*color1: #960050
+urxvt*color2: #66aa11
+urxvt*color3: #c47f2c
+urxvt*color4: #30309b
+urxvt*color5: #7e40a5
+urxvt*color6: #3579a8
+urxvt*color7: #9999aa
+urxvt*color8: #303030
+urxvt*color9: #ff0090
+urxvt*color10: #80ff00
+urxvt*color11: #ffba68
+urxvt*color12: #5f5fee
+urxvt*color13: #bb88dd
+urxvt*color14: #4eb4fa
+urxvt*color15: #d0d0d0
+
+
+
+
+
+!{{{ XPDF
+xpdf*foreground:     black
+xpdf*background:     white
+xpdf*urlCommand:     /usr/local/bin/firefox %s
+xpdf*antialias:      yes
+xpdf*enableFreetype: yes
+!}}}
+
+
+!{{{ XCLOCK
+xclock*update:     1
+xclock*Mode:       analog
+xclock*Background: #3F3F3F
+xclock*Border:     #3F3F3F
+xclock*Foreground: #F0DFAF
+xclock*geometry:   120x120+1160+15
+!}}}
+
+
+!{{{ XDIARY
+xdiary*geometry:   220x190+1034+15
+xdiary*background: #3F3F3F
+xdiary*foreground: #F0DFAF
+!}}}
+
+
+
+
+
+!{{{ XFONTSEL
+XFontSel*menu*showUnselectable:       false
+XFontSel*sampleText.background:      TEXTBG
+XFontSel*MenuButton.shadowWidth:          0
+XFontsel*Toggle*ToggleStyle:          check
+XFontsel*MenuButton*Justify:           left
+XFontsel*MenuButton*MenuButtonStyle: select
+xfontsel.pane.commandBox.quitButton.background: #777777
+xfontsel.pane.commandBox.quitButton.foreground: snow
+xfontsel.pane.commandBox.ownButton.background:  orange3
+xfontsel.pane.commandBox.ownButton.foreground:  snow
+xfontsel.pane.commandBox.countLabel.background: snow
+xfontsel.pane.viewPort.sampleText.background:   #777777
+xfontsel.pane.viewPort.sampleText.foreground:   snow
+xfontsel.pane.fieldBox.field0.background:  #777777
+xfontsel.pane.fieldBox.field0.foreground:  snow
+xfontsel.pane.fieldBox.field1.background:  #777777
+xfontsel.pane.fieldBox.field1.foreground:  snow
+xfontsel.pane.fieldBox.field2.background:  #777777
+xfontsel.pane.fieldBox.field2.foreground:  snow
+xfontsel.pane.fieldBox.field3.background:  #777777
+xfontsel.pane.fieldBox.field3.foreground:  snow
+xfontsel.pane.fieldBox.field4.background:  #777777
+xfontsel.pane.fieldBox.field4.foreground:  snow
+xfontsel.pane.fieldBox.field5.background:  #777777
+xfontsel.pane.fieldBox.field5.foreground:  snow
+xfontsel.pane.fieldBox.field6.background:  #777777
+xfontsel.pane.fieldBox.field6.foreground:  snow
+xfontsel.pane.fieldBox.field7.background:  #777777
+xfontsel.pane.fieldBox.field7.foreground:  snow
+xfontsel.pane.fieldBox.field8.background:  #777777
+xfontsel.pane.fieldBox.field8.foreground:  snow
+xfontsel.pane.fieldBox.field9.background:  #777777
+xfontsel.pane.fieldBox.field9.foreground:  snow
+xfontsel.pane.fieldBox.field10.background: #777777
+xfontsel.pane.fieldBox.field10.foreground: snow
+xfontsel.pane.fieldBox.field11.background: #777777
+xfontsel.pane.fieldBox.field11.foreground: snow
+xfontsel.pane.fieldBox.field12.background: #777777
+xfontsel.pane.fieldBox.field12.foreground: snow
+xfontsel.pane.fieldBox.field13.background: #777777
+xfontsel.pane.fieldBox.field13.foreground: snow
+xfontsel.pane.fieldBox*foreground:         #000000
+xfontsel.pane.fieldBox.MenuButton.borderWidth:   1
+xfontsel.pane.fieldBox.MenuButton.internalHeight:1
+xfontsel.pane.fieldBox.MenuButton.internalWidth: 2
+xfontsel.pane.fieldBox.MenuButton.shapeStyle:    rectangle
+
+URxvt.tabbed.tabbar-fg: 5
+URxvt.tabbed.tabbar-bg: 0
+URxvt.tabbed.tab-fg:    14
+URxvt.tabbed.tab-bg:    0
+
+URxvt.urgentOnBell: True
+
+
+
+!!! This one matches image URLs and open them in FEH
+URxvt*matcher.pattern.2:    \\bhttps?:\/\/[\\w-.]*\/[\\w./?&@#-]*.(jpg|jpeg|png)
+URxvt*matcher.launcher.2:    feh $0
+!}}}
+  
+
+Xft.autohint: 0
+Xft.lcdfilter:  lcddefault
+Xft.hintstyle:  hintfull
+Xft.hinting: 1
+Xft.antialias: 1
+Xft.dpi: 96
+Xft.rgba: rgb

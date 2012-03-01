@@ -1,0 +1,10 @@
+%td.date
+  = document.date
+%td.sender
+  %strong= document.company[:name] 
+  %br
+  ="Nip: " + document.company[:nip]
+%td.name
+  = document.name
+%td.size
+  = document.size

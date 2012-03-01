@@ -1,0 +1,2 @@
+http://localhost:3000/crm_application/update_data/new?force_logout=true&data[company_name]=nazwa&data[street_name]=ulica&data[street_number]=4&data[flat_number]=5&data[post_code]=12-345&data[city]=warszawa&data[phone]=12345678&data[nip]=1234567891&data[regon]=12345677&data[krs]=1232323&data[representatives_attributes[0][firstname]]=imie&data[representatives_attributes[0][firstname]]=nazwisko&data[representatives_attributes[0][lastname]]=test&data[representatives_attributes[0][position]]=test
+

@@ -1,0 +1,9 @@
+#container{
+  width: 400px;
+  height: 300px;
+}
+
+#map_canvas{
+  width: 400px;
+  height: 300px;
+}

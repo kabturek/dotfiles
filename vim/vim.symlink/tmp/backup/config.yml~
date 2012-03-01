@@ -1,0 +1,30 @@
+# api_url - moved to app_config
+<% api_protocol = "https" %>
+<% api_address = "sg1.smtsoftware.com/puchatek_development" %>
+development:
+ api_protocol: <%= api_protocol %>
+ api_address: <%= api_address %>
+ api_url: <%= "#{api_protocol}://#{api_address}" %>
+ crm_login: crm
+ crm_password: crm
+
+staging:
+ api_protocol: <%= api_protocol %>
+ api_address: <%= api_address %>
+ api_url: <%= "#{api_protocol}://#{api_address}" %>
+ crm_login: crm
+ crm_password: crm
+
+production:
+ api_protocol: <%= api_protocol %>
+ api_address: <%= api_address %>
+ api_url: <%= "#{api_protocol}://#{api_address}" %>
+ crm_login: crm
+ crm_password: crm
+
+test:
+ api_protocol: <%= api_protocol %>
+ api_address: <%= api_address %>
+ api_url: <%= "#{api_protocol}://#{api_address}" %>
+ crm_login: crm
+ crm_password: crm

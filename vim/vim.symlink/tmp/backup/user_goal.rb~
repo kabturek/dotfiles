@@ -1,0 +1,8 @@
+class UserGoal < ActiveRecord::Base
+  belongs_to :goal_type
+  belongs_to :user
+  def completed?
+    false
+  end
+  
+end

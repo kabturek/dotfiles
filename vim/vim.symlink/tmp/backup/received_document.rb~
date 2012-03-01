@@ -1,0 +1,15 @@
+# encoding: utf-8
+class Documents::ReceivedDocument < Documents::Document
+  def received_date
+    status = get_status_change("AcceptationStateSent")
+    Time.parse(status[:created_on]) if status
+  end
+  def sender
+    #TODO pobranie danych
+    #test = Company.find_by_nip(@sender_uuid, nil)
+    @sender_uuid
+  end
+  def self.all(*options)
+    super(:received, *options)
+  end
+end

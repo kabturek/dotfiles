@@ -1,0 +1,25 @@
+# encoding: utf-8
+class Documents::OutgoingDocumentsController < DocumentsController
+
+  before_filter :set_document, :only => [:cancel]
+
+  # DELETE:
+  def cancel
+    if @document.cancel
+      notice = t("flashes.notice.document_canceled")
+    else
+      notice = t("flashes.notice.document_cancel_failed")
+    end
+    redirect_to documents_outgoing_documents_path, :notice => notice    
+  end
+
+  private  
+  def find_options
+    options = {}
+    options[:sort_by] = "RecipientUUID" if options[:sort_by] == 'Company'
+    options[:senderUuid] = current_user.account.uuid
+    options[PuchatekApi::Param.new("status")] = "Uploaded"
+    super.merge(options)
+  end  
+
+end

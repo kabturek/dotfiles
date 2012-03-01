@@ -1,0 +1,58 @@
+$(function() {
+  $('li.customer-block a').live('click', function(){
+    var link = $(this);
+    $.ajax({
+      url: link.attr("href"), 
+      dataType: 'json',
+      success: function(data, textStatus, jqxhr){
+        if( data.status == 'success'){
+          var customer_name = link.parents("div.customer").find("div.name .block_placeholder");
+          customer_name.append($(".waiting_blacklist").html());
+          customer_name.find('a').attr("href", link.attr("href").replace("block", "unblock"));
+          link.hide();
+        }
+        $.achtung({ message: data.message, timeout:3 });
+      },
+      complete: function(){
+        undim(link.parents('div.customer'));
+      },
+      beforeSend: function(){
+        dim(link.parents('div.customer'));
+      }
+    });
+    return false;
+  });
+  $('a.unblock_customer').live('click', function(){
+    var link = $(this);
+    var block_info = link.parents('div.data');
+    jQuery.ajax( { 
+      url: link.attr("href"), 
+      dataType: 'json',
+      type: 'DELETE',
+      success: function(data, textStatus, jqxhr){
+        if( data.status == 'success'){
+          link.parents('div.customer').find('.customer-block a').removeClass("hidden").show();
+          block_info.hide();
+        }
+        $.achtung({ message: data.message, timeout:3 });
+      },
+      complete: function(){
+        undim(link.parents('div.customer'));
+      },
+      beforeSend: function(){
+        dim(link.parents('div.customer'));
+      }
+
+    });
+    return false;
+  });
+  function dim(jq_object){
+    jq_object.animate({opacity:0.1});
+    jq_object.append('<img class="loading" src="/assets/loading.gif" style="top: 20px; left: -250px; position:relative;"/>');
+  }
+  function undim(jq_object){
+    jq_object.animate({opacity:1});
+    jq_object.find('img.loading').remove();
+  }
+});
+

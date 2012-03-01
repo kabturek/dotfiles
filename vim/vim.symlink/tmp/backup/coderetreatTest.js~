@@ -1,0 +1,9 @@
+test('is foo "bar" ?', function() {
+    equals(foo(), "bar");
+});
+test('game of life exists?', function() {
+  equals( typeof(game_of_life), "object");
+});
+test('cells exists',function(){
+  equals(typeof(cell), "object");
+});

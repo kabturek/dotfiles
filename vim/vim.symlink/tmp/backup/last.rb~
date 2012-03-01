@@ -1,0 +1,4 @@
+class Last
+  api_key = '626595de9e8e6250e2f63e517f27ed97'
+  api_secret = '3544c85c7e374b5e93960466e3521118'
+end

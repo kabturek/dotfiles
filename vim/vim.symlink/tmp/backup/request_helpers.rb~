@@ -1,0 +1,64 @@
+# encoding: utf-8
+# Różne metody przydatne przy korzystaniu z API
+module PuchatekApi
+  module RequestHelpers
+    extend ActiveSupport::Concern
+
+    module ClassMethods
+      # Metoda opakowujaca RestClienta.
+      # Wykonuje zapytanie na adres ustawiony w konfiguracji aplikacji config.yml
+      # @param [Symbol] method  :post || :get || :put itd....
+      # @param [String] path Adres zasobu na serwerze API Puchatka np. '/get/user?=1,2,3,4'
+      # @param [Hash] args w szczegolnosci: <br>login, password - do autentykacji<br>args - argumenty wyslane w body zapytania<br>headers - naglowki np. {:content_type: :json}
+      # @return [RestClient::Response]
+      def rest_request(method, path, args = { })
+        if path.class == String
+          full_path = URI(AppConfig.api_url)
+          parsed_path = URI(path) #path moze byc postaci /url?param=smth
+          full_path.path = full_path.path + parsed_path.path
+          full_path.query = parsed_path.query if parsed_path.query
+        else
+          full_path = path
+        end
+
+        if args[:login] && args[:password]
+          full_path.userinfo = "#{CGI::escape(args[:login])}:#{CGI::escape(args[:password])}"
+        end
+
+        full_path = full_path.to_s
+        
+        log       = "#{method.to_s.upcase} #{full_path}"
+        log = "#{log}\n#{args[:args]}" if args[:args].present?
+        PuchatekApi::log log
+
+        if method == :get
+          response = RestClient.send(method, full_path, args[:args])
+        elsif method == :delete
+          response = RestClient::Request.execute(:method => method, :url => full_path, :payload => args[:args], :headers => {})
+        else
+          if args[:headers].present?
+            headers = { :content_type => 'application/json;charset=utf8' }.merge!(args[:headers])
+          else
+            headers = { }
+          end
+          response = RestClient.send(method, full_path, args[:args], headers)
+        end
+        log "Response code:#{response.code}", false
+        log "Location:#{response.headers[:location]}", false if response.headers[:location]
+        response
+      rescue RestClient::InternalServerError  => e
+        file = File.new( Rails.root.join('tmp') + ('server_error_dump_' + DateTime.now.to_i.to_s) , "w+")
+        file << e.response.body
+        file.close
+        raise
+      end
+
+      def log(body, api_call = true)
+        return unless Rails.env.development? || Rails.env.test?
+        Rails.logger.info "### API BEGIN ###" if api_call
+        Rails.logger.info(body)
+        Rails.logger.info "### API END ###" if api_call
+      end
+    end
+  end
+end

@@ -1,0 +1,125 @@
+<div class="grid_5" id="polecamy">
+	<script type="text/javascript">
+		$.ready(function() {
+			$("#tabs-111").load(<?php echo url_for('attractions/recomendations?type=accomodations')
+		});
+	</script>
+    <!-- TABS -->
+    <ul class="tabs2">
+        <li><a id="tabs-222t"  class="przycisk przycisk_current"><?php echo __('Aktywności') ?> (<?php echo (count($planned_attractions)+count($planned_services)) ?>)</a></li>
+        <li><a id="tabs-111t" class="przycisk"><?php echo __('Noclegi') ?> (<?php echo count($planned_accomodations) ?>)</a></li>
+
+    </ul>
+
+    <div class="panes1" id="tabs-111" style="display: none;">
+        <div>
+            <?php if (count($planned_accomodations) > 0): ?>
+            <div class="filter-tabs"><span><?php echo __('Filtruj') ?></span><input type="text" id="filter-tabs-111" onkeyup="filter_tab('111')"/></div>
+                <?php foreach ($planned_accomodations as $service): ?>
+            <div class="box draggable_accomodation" rel="<?php echo $service->Service->id ?>" style="width: 290px;">
+                        <?php echo include_partial('services/smallItem', array('service' => $service->Service)); ?>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="blok">
+                    <p><?php echo __('Brak noclegów do wyświetlenia') ?></p>
+                </div>
+            <?php endif; ?>
+            <a href="#" class="prev">Poprzednie</a>
+            <a href="#" class="next">Następne</a>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <div class="panes2" id="tabs-222" style="display: block;">
+        <div>
+            <?php if (count($planned_attractions)+count($planned_services) > 0): ?>
+            <div class="filter-tabs"><span><?php echo __('Filtruj') ?></span><input type="text" id="filter-tabs-222" onkeyup="filter_tab('222')"/></div>
+                <?php foreach ($planned_attractions as $attraction): ?>
+            <div class="box draggable_attraction" rel="<?php echo $attraction->Attraction->id ?>" style="width: 290px;">
+                        <?php echo include_partial('attractions/smallItem', array('attraction' => $attraction->Attraction)); ?>
+                    </div>
+                <?php endforeach; ?>
+                <?php foreach ($planned_services as $service): ?>
+            <div class="box draggable_attraction" rel="s_<?php echo $service->Service->id ?>" style="width: 290px;">
+                        <?php echo include_partial('services/smallItem', array('service' => $service->Service)); ?>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="blok">
+                    <p><?php echo __('Brak usług do wyświetlenia') ?></p>
+                </div>
+            <?php endif; ?>
+            <a href="#" class="prev">Poprzednie</a>
+            <a href="#" class="next">Następne</a>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+</div>
+
+<!--
+<div class="grid_5" id="polecamy">
+    
+    <ul class="tabs2">
+        <li><a href="#" class="przycisk przycisk_current">Polecamy</a></li>
+        <li><a href="#" class="przycisk">Planuję (12)</a></li>
+
+    </ul>
+    <div class="panes2">
+        <div>
+            <?php if (count($recommended_attractions) > 0): ?>
+                <?php foreach ($recommended_attractions as $attraction): ?>
+            <div class="box draggable_attraction" rel="<?php echo $attraction->id ?>" style="width: 290px;">
+                        <?php echo include_partial('attractions/smallItem', array('attraction' => $attraction)); ?>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="blok">
+                    <p><?php echo __('Brak atrakcji do wyświetlenia') ?></p>
+                </div>
+            <?php endif; ?>
+            <a href="#" class="prev">Poprzednie</a>
+            <a href="#" class="next">Następne</a>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+-->
+
+<script>
+    $('.panes2').sortable({
+        revert: true,
+        cursor: 'move'
+    });
+    
+    $('.panes1').sortable({
+        revert: true,
+        cursor: 'move'
+    });
+
+    $('#tabs-111t').click(function() {
+        $('#tabs-222').css('display', 'none'); 
+        $('#tabs-111').css('display', 'block'); 
+        $('#tabs-222t').removeClass('przycisk_current'); 
+        $('#tabs-111t').addClass('przycisk_current')
+    });
+
+    $('#tabs-222t').click(function() {
+        $('#tabs-111').css('display', 'none'); 
+        $('#tabs-222').css('display', 'block'); 
+        $('#tabs-111t').removeClass('przycisk_current'); 
+        $('#tabs-222t').addClass('przycisk_current')
+    });
+    
+    function filter_tab(id) {
+    	var reg = new RegExp($('#filter-tabs-' + id).val(), 'i');
+
+    	$.each($('#tabs-' + id + ' .box h4'), function() {
+    		if(reg.test($(this).attr('title'))) $(this).parent().css('display', 'block');
+    		else $(this).parent().css('display', 'none');
+    	});
+    }
+    
+    
+</script>

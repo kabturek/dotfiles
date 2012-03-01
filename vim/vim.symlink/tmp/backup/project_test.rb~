@@ -1,0 +1,18 @@
+require 'test_helper'
+
+class ProjectTest < ActiveSupport::TestCase
+  # test "the truth" do
+  #   assert true
+  # end
+  test "sets commissioned_at to current date for new projects" do
+    project = Project.new
+    assert project.commissioned_at.day == Time.now.day  \
+      and project.commissioned_at.month == Time.now.month \
+      and project.commissioned_at.year == Time.now.year
+  end
+  test "leaves commissioned_at if object was saved" do
+    date = Time.new(2012, 12, 21) 
+    project = Project.create! :commissioned_at => date, :client => clients(:one), :name => "test"
+    assert project.commissioned_at == date
+  end
+end

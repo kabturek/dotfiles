@@ -1,0 +1,87 @@
+require 'spec_helper'
+
+describe Document::Incoming do
+  before do
+    @user_email                   = "email@example.com"
+    @user_password                = "password_example"
+    PuchatekApi::Base.credentials = {
+        :email    => @user_email,
+        :password => @user_password,
+        :uuid     => "12345"
+    }
+  end
+
+  it "returns list of incoming documents for the user" do
+    date = DateTime.now + 1.day
+
+    stub_request(:get, "http://email%40example.com:password_example@sg1.smtsoftware.com/puchatek_development/web/contractor/12345/document/query?archived=false&from=2000-01-01T01:01:01&page=0&per_page=10&sort_by=Date&sort_dir=asc&to=#{date.strftime("%Y-%m-%dT%H:%M:%S")}").
+      with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate'}).
+      to_return(:status => 200, :body => get_response('documents/find_document_incoming'),  :headers => {})
+
+    documents = Document::Incoming.all :to => date
+    documents.length.should == 10
+    documents.total.should == 12
+    documents[0].class.should == Document::Incoming
+  end
+
+  it "returns the sender as company" do 
+    document_data = {
+      :uuid => '123-123-123', 
+      :name => 'Dokument', 
+      :size => 200, 
+      :sender_uuid => '111-111-111', 
+      :sender_nip => '2222-222-222', 
+      :recipient_uuid => '333-333-333', 
+      :recipient_nip => '4444-444-444', 
+      :downloaded_by_forte => false, 
+      :is_archived => false, 
+      :document_status => 'Uploaded', 
+      :history => [
+        {
+          :created_on => "2011-12-28T14:52:09",
+          :created_by => 'login',
+          :created_type => 'Sender',
+          :type => 'DocumentUploaded'
+        }
+      ]
+    }
+    document = Document::Incoming.new document_data 
+    document.company.uuid.should == document_data[:sender_uuid]
+  end
+
+  it "allow to accept the incoming document" do 
+      document = Document::Incoming.new(:uuid => '123-123-123')
+
+       stub_request(:post, "http://email%40example.com:password_example@sg1.smtsoftware.com/puchatek_development/web/contractor/12345/document/status").
+         with(:body => "{\"DocumentNewStatus\":\"Accepted\",\"DocumentUUID\":\"123-123-123\"}", 
+              :headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Content-Length'=>'61', 'Content-Type'=>'application/json'}).
+         to_return(:status => 200, :body => "", :headers => {})
+
+
+      document.accept.should == true
+  end
+
+  it "allow to reject the incoming document" do 
+      document = Document::Incoming.new(:uuid => '123-123-123')
+
+      stub_request(:post, "http://email%40example.com:password_example@sg1.smtsoftware.com/puchatek_development/web/contractor/12345/document/status").
+        with(:body => "{\"RejectionReason\":\"reason\",\"DocumentNewStatus\":\"Rejected\",\"DocumentUUID\":\"123-123-123\"}", 
+             :headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Content-Length'=>'88', 'Content-Type'=>'application/json'}).
+
+        to_return(:status => 200, :body => "", :headers => {})
+
+
+      document.reject('reason').should == true
+  end
+
+  it "fails to change status of forbidden document" do 
+      document = Document::Incoming.new(:uuid => '123-123-123')
+
+      stub_request(:post, "http://email%40example.com:password_example@sg1.smtsoftware.com/puchatek_development/web/contractor/12345/document/status").
+        with(:body => "{\"DocumentNewStatus\":\"Accepted\",\"DocumentUUID\":\"123-123-123\"}", 
+             :headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Content-Length'=>'61', 'Content-Type'=>'application/json'}).
+        to_return(:status => 404, :body => "", :headers => {})
+
+      document.accept.should == false
+  end
+end

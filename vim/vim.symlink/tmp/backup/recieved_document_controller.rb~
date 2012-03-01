@@ -1,0 +1,4 @@
+class Documents::RecievedDocumentController < ApplicationController
+  def index
+  end
+end

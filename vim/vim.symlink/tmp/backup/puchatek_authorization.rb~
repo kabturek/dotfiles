@@ -1,0 +1,10 @@
+module Puchatek
+  class NotAuthorized < Exception
+  end
+
+  class IncorrectPermission < Exception
+  end
+
+  module Authorization
+  end
+end

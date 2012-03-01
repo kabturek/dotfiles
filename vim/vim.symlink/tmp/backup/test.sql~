@@ -1,0 +1,9 @@
+
+      SELECT pa.*, ag.`id_attribute_group`, ag.`is_color_group`,  al.`name` AS attribute_name, a.`id_attribute`, ag.`type`
+      FROM `ps_product_attribute` pa
+      LEFT JOIN `ps_product_attribute_combination` pac ON pac.`id_product_attribute` = pa.`id_product_attribute`
+      LEFT JOIN `ps_attribute` a ON a.`id_attribute` = pac.`id_attribute`
+      LEFT JOIN `ps_attribute_group` ag ON ag.`id_attribute_group` = a.`id_attribute_group`
+      LEFT JOIN `ps_attribute_lang` al ON (a.`id_attribute` = al.`id_attribute` AND al.`id_lang` = 3)
+      WHERE pa.`id_product` = 18 AND ag.type = 2
+      ORDER BY pa.`id_product_attribute`');

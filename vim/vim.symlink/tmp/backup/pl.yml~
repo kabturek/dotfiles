@@ -1,0 +1,5 @@
+pl:
+  goal:
+    speed:
+      completed:
+        false: Osiągnąć średnią prędkość %d km/h do $s

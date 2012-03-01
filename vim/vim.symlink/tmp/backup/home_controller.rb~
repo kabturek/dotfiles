@@ -1,0 +1,13 @@
+# encoding: utf-8
+# Kontroler wyświetlają stronę główną dla niezalogowanego użytkownika.
+class HomeController < ApplicationController
+  
+  layout 'guest'
+  
+  before_filter :logged_in_restriction, :only => [:index]
+
+  # /GET
+  def index    
+  end
+  
+end

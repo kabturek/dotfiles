@@ -1,0 +1,14 @@
+require 'test_helper'
+
+class NotificationTest < ActiveSupport::TestCase
+  test "creating notification" do
+    notification = Notification.new
+    assert notification.invalid?
+    assert notification.errors['user_id'].any?
+    assert notification.errors['order_id'].any?
+    notification.user = users(:john)
+    assert notification.invalid?
+    notification.order = orders(:johns_order)
+    assert notifcation.valid?
+  end
+end

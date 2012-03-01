@@ -1,0 +1,7 @@
+class AddWorkoutToTrace < ActiveRecord::Migration
+  def change
+    change_table :traces do |t|
+      t.references :
+    references :traces, :workout
+  end
+end

@@ -1,0 +1,74 @@
+$(function() {
+    $('.editable_default_hidden').hide();
+    $('.editable_edit').click(function(e) {
+        e.preventDefault();
+        var mainParentContainer = $(this).parents('.editable_section');
+        var buttonType = $(this).attr('id');
+
+        mainParentContainer.find('h3.editable_value').toggle();
+        mainParentContainer.find('.nip').toggle();
+        mainParentContainer.find('.options').toggle();
+
+        if (buttonType === 'customer-edit-edit') {
+            mainParentContainer.find('.editable_default_hidden.edit-form').toggle();
+        } else if (buttonType === 'customer-doc-edit') {
+            mainParentContainer.find('.editable_default_hidden.agreement-form').toggle();
+        }
+    });
+
+	$('.editable_edit.reset').click(function(e) {
+		e.preventDefault();
+		var contractorBox = $(this).parents('.editable_section');
+		var buttonType = $(this).attr('id');
+		
+		contractorBox.find('h3.editable_value').show();
+        contractorBox.find('.nip').show();
+        contractorBox.find('.options').show();
+
+        if (buttonType === 'customer-edit-edit') {
+            contractorBox.find('.editable_default_hidden.edit-form').toggle();
+        } else if (buttonType === 'customer-doc-edit') {
+            contractorBox.find('.editable_default_hidden.agreement-form').toggle();
+        }
+	});
+
+    if ($('.blocked_only_form input').length > 0) {
+        $('.blocked_only_form input').click(function() {
+            $(this).parents('form').submit();
+        });
+    }
+
+    if ($('.invite_contractor').length > 0) {
+        $('.invite_contractor form').validate({
+            rules: {
+                emails: "required"
+            },
+            messages: {
+                emails: {
+                    required: "Musisz podać przynajmniej jeden adres email"
+                }
+            },
+            errorElement: "div",
+            wrapper: "div",
+            errorPlacement: function(error, element) {
+                offset = element.offset();
+                error.insertBefore(element);
+                error.addClass('message');
+                error.css('float', 'left');
+            },
+            error: function(label) {
+                console.log(label);
+            }
+        });
+        $('div.invite_contractor').hide();
+        $('a.invite_contractor, #contractor-invite-cancel').click(function(e) {
+            e.preventDefault();
+            var contractor_wrap = $('.invite_contractor');
+            contractor_wrap.toggle();
+            if (contractor_wrap.find('form').is(':visible')) {
+                contractor_wrap.find('textarea').focus();
+            }
+        });
+    }
+
+});

@@ -1,0 +1,5 @@
+module Documents::OutgoingDocumentsHelper
+  def include_select_column
+    false
+  end
+end

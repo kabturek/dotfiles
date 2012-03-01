@@ -1,0 +1,290 @@
+<?php
+require_once(_PS_MODULE_DIR_.'export/export.php');
+class AdminExportOrders extends AdminTab {
+	public function __construct()
+	{
+		global $cookie, $currentIndex;
+
+	 	$this->table = 'order';
+	 	$this->className = 'Order';
+	 	$this->view = true;
+	 	$this->export = true;
+    $this->mass = true;
+    $this->_defaultOrderBy = 'date_add';
+		$this->colorOnBackground = true;
+	 	$this->_select = '
+			a.id_order AS id_pdf,
+			a.id_order AS id_export,
+			CONCAT(LEFT(c.`firstname`, 1), \'. \', c.`lastname`) AS `customer`,
+			osl.`name` AS `osname`,
+			os.`color`,
+			IF((SELECT COUNT(so.id_order) FROM `'._DB_PREFIX_.'orders` so WHERE so.id_customer = a.id_customer AND so.valid = 1) > 1, 0, 1) as new,
+			(SELECT COUNT(od.`id_order`) FROM `'._DB_PREFIX_.'order_detail` od WHERE od.`id_order` = a.`id_order` GROUP BY `id_order`) AS product_number';
+	 	$this->_join = 'LEFT JOIN `'._DB_PREFIX_.'customer` c ON (c.`id_customer` = a.`id_customer`)
+	 	LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON (oh.`id_order` = a.`id_order`)
+		LEFT JOIN `'._DB_PREFIX_.'order_state` os ON (os.`id_order_state` = oh.`id_order_state`)
+		LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.intval($cookie->id_lang).')';
+    $this->_where = 'AND oh.`id_order_history` = (SELECT MAX(`id_order_history`) FROM `'._DB_PREFIX_.'order_history` moh WHERE moh.`id_order` = a.`id_order` GROUP BY moh.`id_order`)
+      ';
+
+		$statesArray = array();
+		$states = OrderState::getOrderStates(intval($cookie->id_lang));
+		foreach ($states AS $state)
+			$statesArray[$state['id_order_state']] = $state['name'];
+ 		$this->fieldsDisplay = array(
+		'id_order' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
+		'new' => array('title' => $this->l('New'), 'width' => 25, 'align' => 'center', 'type' => 'bool', 'filter_key' => 'new', 'tmpTableFilter' => true, 'icon' => array(0 => 'blank.gif', 1 => 'news-new.gif'), 'orderby' => false),
+		'customer' => array('title' => $this->l('Customer'), 'widthColumn' => 160, 'width' => 140, 'filter_key' => 'customer', 'tmpTableFilter' => true),
+		'total_paid' => array('title' => $this->l('Total'), 'width' => 70, 'align' => 'right', 'prefix' => '<b>', 'suffix' => '</b>', 'price' => true, 'currency' => true),
+		'payment' => array('title' => $this->l('Payment'), 'width' => 100),
+		'osname' => array('title' => $this->l('Status'), 'widthColumn' => 250, 'type' => 'select', 'select' => $statesArray, 'filter_key' => 'os!id_order_state', 'filter_type' => 'int', 'width' => 200),
+		'date_add' => array('title' => $this->l('Date'), 'width' => 90, 'align' => 'right', 'type' => 'datetime', 'filter_key' => 'a!date_add'),
+		'id_pdf' => array('title' => $this->l('PDF'), 'callback' => 'printPDFIcons', 'orderby' => false, 'search' => false),
+		'is_exported' => array('title' => $this->l('Is exported'), 'type' => 'bool', 'filter_key' => 'is_exported', 'tmpTableFilter' => true, 'orderby' => true, 'search' => true));
+		parent::__construct();
+	}
+	public function displayListContent($token = NULL)
+	{
+		/* Display results in a table
+		 *
+		 * align  : determine value alignment
+		 * prefix : displayed before value
+		 * suffix : displayed after value
+		 * image  : object image
+		 * icon   : icon determined by values
+		 * active : allow to toggle status
+		 */
+		global $currentIndex, $cookie;
+		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+
+		$_cacheLang['View'] = $this->l('View');
+		$_cacheLang['Edit'] = $this->l('Edit');
+		$_cacheLang['Delete'] = $this->l('Delete', __CLASS__, TRUE, FALSE);
+		$_cacheLang['DeleteItem'] = $this->l('Delete item #', __CLASS__, TRUE, FALSE);		
+		$_cacheLang['Duplicate'] = $this->l('Duplicate');
+		$_cacheLang['Copy images too?'] = $this->l('Copy images too?', __CLASS__, TRUE, FALSE);
+		
+		$irow = 0;
+		if ($this->_list AND isset($this->fieldsDisplay['position']))
+		{
+			$positions = array_map(create_function('$elem', 'return intval($elem[\'position\']);'), $this->_list);
+			sort($positions);
+		}
+		if ($this->_list)
+		{
+			foreach ($this->_list AS $i => $tr)
+			{
+				$id = $tr[$this->identifier];
+				echo '<tr'.($this->identifier == 'id_product' ? ' id="tr_'.(($id_category = intval(Tools::getValue('id_category', '1'))) ? $id_category : '').'_'.$id.'_'.$tr['position'].'"' : '').($irow++ % 2 ? ' class="alt_row"' : '').' '.((isset($tr['color']) AND $this->colorOnBackground) ? 'style="background-color: '.$tr['color'].'"' : '').'>
+							<td class="center">';
+				if (($this->delete OR $this->mass) AND (!isset($this->_listSkipDelete) OR !in_array($id, $this->_listSkipDelete)))
+					echo '<input type="checkbox" name="'.$this->table.'Box[]" value="'.$id.'" class="noborder" />';
+				echo '</td>';
+				foreach ($this->fieldsDisplay AS $key => $params)
+				{
+					$tmp = explode('!', $key);
+					$key = isset($tmp[1]) ? $tmp[1] : $tmp[0];
+					echo '
+					<td '.(isset($params['position']) ? ' id="td_'.(isset($id_category) AND $id_category ? $id_category : 0).'_'.$id.'"' : '').' class="pointer'.((isset($params['position']) AND $this->_orderBy == 'position')? ' dragHandle' : ''). (isset($params['align']) ? ' '.$params['align'] : '').'" ';
+					if (!isset($params['position']))
+						echo ' onclick="document.location = \''.$currentIndex.'&'.$this->identifier.'='.$id.($this->view? '&view' : '&update').$this->table.'&token='.($token!=NULL ? $token : $this->token).'\'">'.(isset($params['prefix']) ? $params['prefix'] : '');
+					else
+						echo '>';
+					if (isset($params['active']) AND isset($tr[$key]))
+						echo '<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&'.$params['active'].
+						((($id_category = intval(Tools::getValue('id_category'))) AND Tools::getValue('id_product')) ? '&id_category='.$id_category : '').'&token='.($token!=NULL ? $token : $this->token).'">
+						<img src="../img/admin/'.($tr[$key] ? 'enabled.gif' : 'disabled.gif').'"
+						alt="'.($tr[$key] ? $this->l('Enabled') : $this->l('Disabled')).'" title="'.($tr[$key] ? $this->l('Enabled') : $this->l('Disabled')).'" /></a>';
+					elseif (isset($params['activeVisu']) AND isset($tr[$key]))
+						echo '<img src="../img/admin/'.($tr[$key] ? 'enabled.gif' : 'disabled.gif').'"
+						alt="'.($tr[$key] ? $this->l('Enabled') : $this->l('Disabled')).'" title="'.($tr[$key] ? $this->l('Enabled') : $this->l('Disabled')).'" />';
+					elseif (isset($params['position']))
+					{
+						if ($this->_orderBy == 'position')
+						{
+							echo '<a'.(!($tr[$key] != $positions[sizeof($positions) - 1]) ? ' style="display: none;"' : '').' href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&way=1&position='.intval($tr['position'] + 1).
+									($id_category = intval(Tools::getValue('id_category', 1)) ? '&id_category='.$id_category : '').'&token='.($token!=NULL ? $token : $this->token).'">
+									<img src="../img/admin/'.($this->_orderWay == 'ASC' ? 'down' : 'up').'.gif"
+									alt="'.$this->l('Down').'" title="'.$this->l('Down').'" /></a>';
+							echo '<a'.(!($tr[$key] != $positions[0]) ? ' style="display: none;"' : '').' href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&way=0&position='.intval($tr['position'] - 1).
+									($id_category = intval(Tools::getValue('id_category', 1)) ? '&id_category='.$id_category : '').'&token='.($token!=NULL ? $token : $this->token).'">
+									<img src="../img/admin/'.($this->_orderWay == 'ASC' ? 'up' : 'down').'.gif"
+									alt="'.$this->l('Up').'" title="'.$this->l('Up').'" /></a>';
+						}
+						else
+							echo intval($tr[$key] + 1);
+					}
+					elseif (isset($params['image']))
+					{
+						$image_id = isset($params['image_id']) ? $tr[$params['image_id']] : $id;
+						echo cacheImage(_PS_IMG_DIR_.$params['image'].'/'.$image_id.(isset($tr['id_image']) ? '-'.intval($tr['id_image']) : '').'.'.$this->imageType, $this->table.'_mini_'.$image_id.'.'.$this->imageType, 45, $this->imageType);
+					}
+					elseif (isset($params['icon']) AND (isset($params['icon'][$tr[$key]]) OR isset($params['icon']['default'])))
+						echo '<img src="../img/admin/'.(isset($params['icon'][$tr[$key]]) ? $params['icon'][$tr[$key]] : $params['icon']['default'].'" alt="'.$tr[$key]).'" title="'.$tr[$key].'" />';
+                    elseif (isset($params['price']))
+						echo Tools::displayPrice($tr[$key], (isset($params['currency']) ? new Currency(intval($tr['id_currency'])) : $currency), false, false);
+					elseif (isset($params['float']))
+						echo rtrim(rtrim($tr[$key], '0'), '.');
+					elseif (isset($params['type']) AND $params['type'] == 'date')
+						echo Tools::displayDate($tr[$key], $cookie->id_lang);
+					elseif (isset($params['type']) AND $params['type'] == 'datetime')
+						echo Tools::displayDate($tr[$key], $cookie->id_lang, true);
+					elseif (isset($tr[$key]))
+					{
+						$echo = ($key == 'price' ? round($tr[$key], 2) : isset($params['maxlength']) ? Tools::substr($tr[$key], 0, $params['maxlength']).'...' : $tr[$key]);
+						echo isset($params['callback']) ? call_user_func_array(array($this->className, $params['callback']), array($echo, $tr)) : $echo;
+					}
+					else
+						echo '--';
+
+					echo (isset($params['suffix']) ? $params['suffix'] : '').
+					'</td>';
+				}
+
+				if ($this->edit OR $this->delete OR $this->mass OR ($this->view AND $this->view !== 'noActionColumn'))
+				{
+					echo '<td class="center" style="white-space: nowrap;">';
+					if ($this->view)
+						echo '
+						<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&view'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'">
+						<img src="../img/admin/details.gif" alt="'.$_cacheLang['View'].'" title="'.$_cacheLang['View'].'" /></a>';
+					if ($this->edit)
+						echo '
+						<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&update'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'">
+						<img src="../img/admin/edit.gif" alt="" title="'.$_cacheLang['Edit'].'" /></a>';
+					if ($this->delete AND (!isset($this->_listSkipDelete) OR !in_array($id, $this->_listSkipDelete)))
+						echo '
+						<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&delete'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'" onclick="return confirm(\''.$_cacheLang['DeleteItem'].$id.' ?\');">
+						<img src="../img/admin/delete.gif" alt="'.$_cacheLang['Delete'].'" title="'.$_cacheLang['Delete'].'" /></a>';
+					$duplicate = $currentIndex.'&'.$this->identifier.'='.$id.'&duplicate'.$this->table;
+					if ($this->duplicate)
+						echo '
+						<a class="pointer" onclick="if (confirm(\''.$_cacheLang['Copy images too?'].'\')) document.location = \''.$duplicate.'&token='.($token!=NULL ? $token : $this->token).'\'; else document.location = \''.$duplicate.'&noimage=1&token='.($token ? $token : $this->token).'\';">
+						<img src="../img/admin/add.gif" alt="'.$_cacheLang['Duplicate'].'" title="'.$_cacheLang['Duplicate'].'" /></a>';
+					echo '</td>';
+				}
+				echo '</tr>';
+			}			
+		}
+	}
+	/**
+	 * Get the current objects' list form the database
+	 *
+	 * @param integer $id_lang Language used for display
+	 * @param string $orderBy ORDER BY clause
+	 * @param string $_orderWay Order way (ASC, DESC)
+	 * @param integer $start Offset in LIMIT clause
+	 * @param integer $limit Row count in LIMIT clause
+	 */
+	public function getList($id_lang, $orderBy = NULL, $orderWay = NULL, $start = 0, $limit = NULL)
+	{
+    global $cookie;
+		if (empty($orderBy))
+			$orderBy = $cookie->__get($this->table.'Orderby') ? $cookie->__get($this->table.'Orderby') : $this->_defaultOrderBy;
+		if (empty($orderWay))
+			$orderWay = $cookie->__get($this->table.'Orderway') ? $cookie->__get($this->table.'Orderway') : 'DESC';
+
+    return parent::getList($id_lang, $orderBy, $orderWay, $start, $limit);
+  }
+	/**
+	 * Close list table and submit button
+	 */
+	public function displayListFooter($token = NULL)
+	{
+		echo '</table>';
+		if ($this->delete)
+			echo '<p><input type="submit" class="button" name="submitDel'.$this->table.'" value="'.$this->l('Delete selection').'" onclick="return confirm(\''.$this->l('Delete selected items?', __CLASS__, TRUE, FALSE).'\');" /></p>';
+		if ($this->export)
+			echo '<p><input type="submit" class="button" name="submitExport'.$this->table.'" value="'.$this->l('Export selection').'"  /></p>';
+			echo '<p><a href="'.$this->getAllUrl().'"  class="button" name="submitExportAll'.$this->table.'" >'.$this->l('Export unexported').'"  </a></p>';
+		echo '
+				</td>
+			</tr>
+		</table>
+		<input type="hidden" name="token" value="'.($token ? $token : $this->token).'" />
+		</form>';
+		if (isset($this->_includeTab) AND sizeof($this->_includeTab))
+			echo '<br /><br />';
+	}
+	/**
+	  * @global object $cookie Employee cookie necessary to keep trace of his/her actions
+	  */
+	public function postProcess()
+	{
+		global $currentIndex, $cookie;
+
+		/* Export multiple objects */
+		if (Tools::getValue('submitExport'.$this->table))
+		{
+			if ($this->tabAccess['edit'] === '1')
+			{
+				if (isset($_POST[$this->table.'Box']))
+				{
+					$object = new export();
+					if (isset($object->noZeroObject) AND
+						// Check if all object will be exported
+						(sizeof(call_user_func(array($this->className, $object->noZeroObject))) <= 1 OR sizeof($_POST[$this->table.'Box']) == sizeof(call_user_func(array($this->className, $object->noZeroObject)))))
+						$this->_errors[] = Tools::displayError('you need at least one object').' <b>'.$this->table.'</b>'.Tools::displayError(', you cannot export all of them');
+					else
+					{
+						//if ($object->exportSelection($_POST[$this->table.'Box']))
+							//Tools::redirectAdmin($currentIndex.'&conf=2&token='.$token);
+						//$this->_errors[] = Tools::displayError('an error occurred while exporting selection');
+            $url = $this->getSelectionUrl();
+            echo '<div class="conf confirm"><img src="../img/admin/ok.gif" />&nbsp;'.$this->l('Beginning download ...').'</div>';
+            echo '<br />'.$this->l('Export file should automatically download.');
+            echo '<br /><br />'.$this->l('If not,').' <b><a href="'.$url.'">'.$this->l('please click here!').'</a></b>';
+            echo '<iframe width="0" height="0" scrolling="no" frameborder="0" src="'.$url.'"></iframe>';
+            echo '<br /><br /><br /><a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to list').'</a><br />';
+					}
+				}
+				else
+					$this->_errors[] = Tools::displayError('you must select at least one element to export');
+			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to export here.');
+		}
+		/* Export multiple objects */
+		if (Tools::getValue('submitExportAll'.$this->table))
+		{
+			if ($this->tabAccess['edit'] === '1')
+			{
+					$object = new export();
+            $url = $this->getAllUrl();
+            echo '<div class="conf confirm"><img src="../img/admin/ok.gif" />&nbsp;'.$this->l('Beginning download ...').'</div>';
+            echo '<br />'.$this->l('Export file should automatically download.');
+            echo '<br /><br />'.$this->l('If not,').' <b><a href="'.$url.'">'.$this->l('please click here!').'</a></b>';
+            echo '<iframe width="0" height="0" scrolling="no" frameborder="0" src="'.$url.'"></iframe>';
+            echo '<br /><br /><br /><a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to list').'</a><br />';
+			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to export here.');
+		}
+
+		parent::postProcess();
+	}
+	public function vieworder()
+	{
+		global $currentIndex, $cookie;
+    $url = $this->getUrl();
+			echo '<div class="conf confirm"><img src="../img/admin/ok.gif" />&nbsp;'.$this->l('Beginning download ...').'</div>';
+			echo '<br />'.$this->l('Export file should automatically download.');
+			echo '<br /><br />'.$this->l('If not,').' <b><a href="'.$url.'">'.$this->l('please click here!').'</a></b>';
+			echo '<iframe width="0" height="0" scrolling="no" frameborder="0" src="'.$url.'"></iframe>';
+			echo '<br /><br /><br /><a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to list').'</a><br />';
+  }
+  public function getUrl(){
+    $url = '/modules/export/download_csv.php';
+    return $url.'?id='.intval(Tools::getValue('id_order')).'&token='.Tools::getValue('token');
+  }
+  public function getSelectionUrl(){
+    $url = '/modules/export/download_csv.php';
+    return $url.'?'.http_build_query($_POST);
+  }
+  public function getAllUrl(){
+    $url = '/modules/export/download_csv.php';
+    return $url.'?type=all&token='.Tools::getValue('token');
+  }
+
+}
+?>

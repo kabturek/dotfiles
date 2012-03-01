@@ -1,0 +1,31 @@
+# encoding: UTF-8
+module ContractorsHelper
+
+  # def render_letters_filters
+  #   filters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "Ł", "M", "N", "Ń", "O", "Ó", "P", "R", "S", "Ś", "T", "U", "V", "W", "X", "Y", "Z", "Ź", "Ż"]
+  #   content = ""
+  #   filters.each do |filter|
+  #     content += "<li>#{link_to(filter, my_profile_contractors_path(:filter_type => :letters, :query => filter.downcase))}</li>"
+  #   end
+  #   raw content
+  # end
+  # 
+  # def link_to_block_contractor(contractor_id, blocked)
+  #   if blocked
+  #     content_tag(:div, :class => "blocked") do
+  #       "&nbsp".html_safe
+  #     end
+  #   else
+  #     link_to 'zablokuj', blacklist_my_profile_contractor_path(contractor_id), :method => :post, :confirm => "Czy na pewno zablokować kontrahenta?", :title => "Dodaj kontrahenta do czarnej listy"
+  #   end
+  # end
+  # 
+  # def contractor_name(number, contractor)
+  #   if contractor[:is_in_cooperation]
+  #     contractor[:friendly_name]
+  #   else
+  #     "Firma #{number+1}"
+  #   end
+  # end
+  
+end

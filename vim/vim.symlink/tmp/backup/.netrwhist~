@@ -1,0 +1,6 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =4
+let g:netrw_dirhist_1='/var/mail'
+let g:netrw_dirhist_2='/home/kabturek/projects/unipass/oscommerce/branches/oscommerce.emati.pl/unipass/Auth/OpenID'
+let g:netrw_dirhist_3='/etc/apt/sources.list.d'
+let g:netrw_dirhist_4='/home/kabturek/projects/trainer/tmp/pids'

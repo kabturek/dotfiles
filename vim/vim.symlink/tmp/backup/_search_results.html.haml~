@@ -1,0 +1,30 @@
+.search-results
+  .customer-header.clearfix
+    .name
+      %span
+        Kontrahentów:
+        %strong= @companies.size
+    .nip
+      %span Numer NIP
+    .options
+      %span Opcje
+  - if @companies.present?
+    = render :partial => 'company', :collection => @companies
+  - else
+    %div{:style => "font-weight: bold; padding: 10px; text-align: center;"} Brak kontrahentów
+
+.customer-header.clearfix
+  .name
+    %span
+      Kontrahentów:
+      %strong= @companies.size
+  .nip
+    %span Numer NIP
+  .options
+    %span Opcje
+
+.hidden.waiting_blacklist
+  .data
+    %p
+      %span{:class => :block}= "czeka na dodanie do czarnej listy"
+      = link_to 'odblokuj', "#", :method => :delete, :confirm => "Czy na pewno odblokować kontrahenta?", :class => :unblock_customer

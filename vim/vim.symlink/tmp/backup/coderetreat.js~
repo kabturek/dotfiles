@@ -1,0 +1,16 @@
+function foo() {
+  return "bar";
+}
+var cell = function(){
+  return {
+  }
+};
+var game_of_life = function(){
+  var cells = [];
+  var cell = {
+  
+  }
+  return {
+  }
+}();
+

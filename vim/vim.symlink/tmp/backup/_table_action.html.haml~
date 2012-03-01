@@ -1,0 +1,7 @@
+%tr
+  %th.select
+    - if current_user.can? :archive_document
+      %input{:type => 'checkbox', :id => 'select-all'}
+  %th{:colspan => 6, :class => 'table-action'}
+    - if current_user.can? :archive_document
+      %button Archiwizuj

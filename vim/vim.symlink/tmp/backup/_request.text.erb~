@@ -1,0 +1,16 @@
+* URL : <%= raw @request.url %>
+* IP address: <%= raw @request.remote_ip %>
+* Parameters: <%= raw @request.filtered_parameters.inspect %>
+* Rails root: <%= raw Rails.root %>
+* Timestamp : <%= raw Time.now %>
+
+<% if @exception.response %>
+  ----------------
+  API Request
+  ----------------
+
+  Code: <%= raw @exception.response.code %>
+  HTTP body: <%= raw @exception.http_body %>
+  Args: <%= raw @exception.response.args %>
+  http response <%= raw @exception.response.net_http_res.to_hash %>
+<% end %>

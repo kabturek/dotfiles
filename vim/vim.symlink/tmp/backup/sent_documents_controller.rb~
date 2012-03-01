@@ -1,0 +1,37 @@
+# encoding: utf-8
+class Documents::SentDocumentsController < DocumentsController
+  
+  before_filter :set_document, :only => [:archive]
+
+  def archive
+    authorize! :archive_document
+    if @document.archive
+      notice = t("flashes.notice.document_archived")
+    else
+      notice = t("flashes.notice.document_archive_failed")
+    end
+    redirect_to documents_sent_documents_path, :notice => notice    
+  end
+
+  def batch
+    authorize! :archive_document
+    if Document::Sent.archive_selected params[:documents]
+      notice = t("flashes.notice.documents_archived")
+    else
+      notice = t("flashes.notice.documents_archive_failed")
+    end
+    redirect_to documents_sent_documents_path, :notice => notice    
+  end
+  
+  private  
+  def find_options
+    options = {}
+    options[:sort_by] = "RecipientUUID" if options[:sort_by] == 'Company'
+    options[:senderUuid] = current_user.account.uuid
+    options[PuchatekApi::Param.new("status")] = "Accepted"
+    options[PuchatekApi::Param.new("status")] = "Rejected"
+    options[PuchatekApi::Param.new("status")] = "Downloaded"
+    super.merge(options)
+  end  
+
+end

@@ -1,0 +1,9 @@
+ALTER TABLE `infopages` ADD `show_sidebar` TINYINT( 1 ) NOT NULL DEFAULT '1';
+CREATE TABLE `rodziynka`.`shops` (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`name` VARCHAR( 255 ) NOT NULL ,
+`redirect` VARCHAR( 50 ) NOT NULL ,
+`modified` DATETIME NULL ,
+`created` DATETIME NULL
+) ENGINE = MYISAM ;
+

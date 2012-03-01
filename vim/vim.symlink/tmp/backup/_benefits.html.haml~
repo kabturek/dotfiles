@@ -1,0 +1,15 @@
+.border-box.info-box.info-box-right
+  %div
+    %h3 
+      Nie masz jeszcze konta w serwisie 
+      %strong "między fimami"
+      ?
+      %br
+      Korzyści, które zapewniamy:
+    %ul
+      %li oszczędność kosztów i prac
+      %li wygodny dostęp do informacji o fakturach
+      %li gwarancję prawną serwisu
+      %li bezpieczeństwo i poufność przesyłanych informacji
+    %p.center
+      =link_to "Dołącz do nas", new_crm_application_registration_path, :class => "green-button"

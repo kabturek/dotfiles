@@ -1,0 +1,56 @@
+<?php
+
+/**
+ * Message filter form.
+ *
+ * @package    ptclean
+ * @subpackage filter
+ * @author     Marcin Domański <marcin+ptclean@kabturek.info>
+ * @version    SVN: $Id: sfDoctrineFormFilterTemplate.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
+ */
+class MessageFormFilter extends BaseMessageFormFilter
+{
+  public function configure()
+  {
+    unset($this['created_at'], $this['updated_at'], $this['from_id'], $this['text'], $this['recipients_list']);
+    $this->widgetSchema['position'] = new sfWidgetFormDoctrineChoice(array(
+      'model' => 'Category', 
+      'add_empty' => true
+    ));
+    $this->validatorSchema['position']= new sfValidatorDoctrineChoice(array(
+      'model' => 'Category', 
+      'required' => false
+    ));
+    $this->widgetSchema['stage'] = new sfWidgetFormChoice(array(
+      'choices'  => Employee::getStages(" "),
+      'expanded' => false,
+    ));
+    $this->validatorSchema['stage'] = new sfValidatorChoice(array(
+      'choices' => array_keys(Employee::getStages()),
+      'required' => false
+    ));
+    $this->widgetSchema['recipient'] = new sfWidgetFormInput();
+    $this->validatorSchema['recipient'] = new sfValidatorString(array(
+      'required' => false
+    ));
+  }
+  public function buildQuery(array $values){
+    $query = Doctrine::getTable('Message')->createQuery('m')
+      ->leftJoin('m.Recipients r');
+      $query->leftJoin('r.Employee e');
+    if(!empty($values['title']['text'])){
+      $query->addWhere('m.title LIKE ?', '%'.$values['title']['text'].'%');
+    }
+    if(!empty($values['recipient'])){
+      $query->andWhere('(e.first_name LIKE ? OR e.last_name LIKE ?)', array('%'.$values['recipient'].'%', '%'.$values['recipient'].'%'));
+    }
+    if(!empty($values['stage'])){
+      $query->andWhere('e.current_Stage = ?', $values['stage']);
+    }
+    if(!empty($values['position'])){
+      $query->andWhere('e.category_id = ?', $values['position']);
+    }
+    var_dump($values);
+    return $query;
+  }
+}

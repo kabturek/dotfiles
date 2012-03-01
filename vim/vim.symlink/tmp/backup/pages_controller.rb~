@@ -1,0 +1,30 @@
+# encoding: utf-8
+# Kontroler odpowiedzialny za wyświetlanie "stron statycznych"
+# Wszystkie akcje używają GET
+class PagesController < ApplicationController
+
+  def jak_to_dziala
+    render :layout => 'jak_to_dziala'
+  end
+  
+  def o_nas
+    
+  end
+  
+  def regulamin
+    
+  end
+  
+  def cennik
+    
+  end
+  
+  def kontakt
+    
+  end
+  
+  def polityka_prywatnosci
+    
+  end
+  
+end

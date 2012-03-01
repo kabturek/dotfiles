@@ -1,0 +1,206 @@
+<div id="sf_admin_container">
+  <?php include_partial('employee', array('employee' => $employee)); ?>
+  <div class="box">
+  <h2> Field Training </h2>
+  <?php echo link_to('Add Training Report', 'employee_training/new?type=day&employee_id='. $employee->id); ?>
+    <div class="training_container">
+    <?php if(count($reports)): ?>
+      <table class="training">
+        <tr>
+          <th>
+          </th>
+          <?php $i = 1;
+          foreach ($reports as $report): ?>
+            <td>
+              <?php echo 'Day ' . $i++; ?>
+            </td>
+          <?php endforeach; ?>
+        </tr>
+        <tr>
+          <th> Day </th>
+          <?php foreach ($reports as $report): ?>
+            <td>
+              <?php echo false !== strtotime($report->getDay()) ? $report->getDay() : '&nbsp;' ?>
+            </td>
+          <?php endforeach; ?>
+        </tr>
+        <tr>
+          <th> Punctuality </th>
+          <?php foreach ($reports as $report): ?>
+            <td>
+              <?php echo $report->punctuality; ?>
+            </td>
+          <?php endforeach; ?>
+        </tr>
+        <tr>
+          <th> Attitude </th>
+          <?php foreach ($reports as $report): ?>
+            <td>
+              <?php echo $report->attitude; ?>
+            </td>
+          <?php endforeach; ?>
+        </tr>
+        <tr>
+          <th> Following directions </th>
+          <?php foreach ($reports as $report): ?>
+            <td>
+              <?php echo $report->following_directions; ?>
+            </td>
+          <?php endforeach; ?>
+        </tr>
+        <tr>
+          <th> Speed </th>
+          <?php foreach ($reports as $report): ?>
+            <td>
+              <?php echo $report->speed; ?>
+            </td>
+          <?php endforeach; ?>
+        </tr>
+        <tr>
+          <th> Quality </th>
+          <?php foreach ($reports as $report): ?>
+            <td>
+              <?php echo $report->quality; ?>
+            </td>
+          <?php endforeach; ?>
+        </tr>
+      <?php
+            $areas = array(
+              'bathroom', 
+              'kitchen',
+              'bedroom',
+              'dining_room',
+              'living_area',
+              'utility_room',
+              'dusting',
+              'vacuuming'
+            );
+      ?>
+        <?php foreach($areas as $area): ?>
+          <tr>
+            <th> <?php echo __(human($area) . ' speed');?> </th>
+            <?php foreach ($reports as $report): ?>
+              <td>
+                <?php echo $report->{$area . '_speed'}; ?>
+              </td>
+            <?php endforeach; ?>
+          </tr>
+          <tr>
+            <th> <?php echo __(human($area) . ' quality');?> </th>
+            <?php foreach ($reports as $report): ?>
+              <td>
+                <?php echo $report->{$area . '_quality'}; ?>
+              </td>
+            <?php endforeach; ?>
+          </tr>
+          <tr>
+            <th> <?php echo __(human($area) . ' comments');?> </th>
+            <?php foreach ($reports as $report): ?>
+              <td>
+                <?php echo $report->{$area . '_comments'}; ?>
+              </td>
+            <?php endforeach; ?>
+          </tr>
+        <?php endforeach;?>
+          <tr>
+            <th> <?php echo __('Notes');?> </th>
+            <?php foreach ($reports as $report): ?>
+              <td>
+                <?php echo $report->notes; ?>
+              </td>
+            <?php endforeach; ?>
+          </tr>
+          <tr>
+            <th> <?php echo __('Decision');?> </th>
+            <?php foreach ($reports as $report): ?>
+              <td>
+                <?php echo $report->decision; ?>
+              </td>
+            <?php endforeach; ?>
+          </tr>
+          <tr>
+            <th></th>
+            <?php foreach ($reports as $report): ?>
+              <td>
+                <?php echo link_to('Edit', 'employee_training/edit?id='. $report->id; ?>
+              </td>
+            <?php endforeach; ?>
+          </tr>
+      </table>
+    <?php else: ?>
+      <p> No reports</p>
+    <?php endif; ?>
+    </div>
+    <?php echo link_to('Add Training Report', 'employee_training/new?type=day&employee_id='. $employee->id); ?>
+  </div>
+  <div class="box">
+    <h2> Trial Period </h2>
+    <?php echo link_to('Add Trial Period Score', 'employee_training/new?type=week&employee_id='. $employee->id); ?>
+    <div class="training_container">
+    <?php if(count($trial_reports)): ?>
+    <table class="training">
+      <tr>
+        <th>
+        </th>
+        <?php foreach ($trial_reports as $report): ?>
+          <td>
+            <?php echo false !== strtotime($report->getDay()) ? $report->getDay() : '&nbsp;' ?>
+          </td>
+        <?php endforeach; ?>
+      </tr>
+      <tr>
+        <th> Punctuality </th>
+        <?php foreach ($trial_reports as $report): ?>
+          <td>
+            <?php echo $report->punctuality; ?>
+          </td>
+        <?php endforeach; ?>
+      </tr>
+      <tr>
+        <th> Attitude </th>
+        <?php foreach ($trial_reports as $report): ?>
+          <td>
+            <?php echo $report->attitude; ?>
+          </td>
+        <?php endforeach; ?>
+      </tr>
+      <tr>
+        <th> Following directions </th>
+        <?php foreach ($trial_reports as $report): ?>
+          <td>
+            <?php echo $report->following_directions; ?>
+          </td>
+        <?php endforeach; ?>
+      </tr>
+        <tr>
+          <th> <?php echo __('Notes');?> </th>
+          <?php foreach ($trial_reports as $report): ?>
+            <td>
+              <?php echo $report->notes; ?>
+            </td>
+          <?php endforeach; ?>
+        </tr>
+        <tr>
+          <th> <?php echo __('Decision');?> </th>
+          <?php foreach ($trial_reports as $report): ?>
+            <td>
+              <?php echo $report->decision; ?>
+            </td>
+          <?php endforeach; ?>
+        </tr>
+          <tr>
+            <th></th>
+            <?php foreach ($reports as $report): ?>
+              <td>
+                <?php echo link_to('Edit', 'employee_training/edit?id='. $report->id); ?>
+              </td>
+            <?php endforeach; ?>
+          </tr>
+    </table>
+    <?php else: ?>
+      <p> No reports</p>
+    <?php endif; ?>
+    </div>
+  </div>
+</div>
+

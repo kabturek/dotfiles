@@ -1,0 +1,8 @@
+%tr.hidden-row.document-confirm{:id => "document-confirm-" + document.uuid}
+  - if current_user.can? :accept_reject_document
+    %td{:colspan => 3} 
+      Odebrano dokument. Informacja o dokumencie została przeniesiona do Moje dokumenty - odebrane
+    %td{:colspan => 3} 
+      = link_to "Akceptuj dokument", url_for(:id => document.uuid, :action => :accept, :filename => document.name),  :method => :put
+      = link_to "Odrzuć dokument", url_for(:id => document.uuid, :action => :reject, :filename => document.name), :class => 'reject-document'
+

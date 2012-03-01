@@ -1,0 +1,16 @@
+{
+  "ValidFrom":"2011-12-08T12:12:12",
+  "ValidTo":null,
+  "CanRegisterAgain":true,
+  "CanDeclineContract":false,
+  "CanDeleteAccount":false,
+  "CanModifyData":false,
+  "Permissions": [
+    "WwwDownloadDocument" ,
+    "WwwUploadDocument" ,
+    "WwwAcceptRejectDocument", 
+    "WwwArchiveDocument"  
+    ],
+  "Contractors": 10,
+  "Documents": 2
+}

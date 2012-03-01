@@ -1,0 +1,3 @@
+jQuery(function($) {
+  $.plot($("#placeholder"), data, options);
+});

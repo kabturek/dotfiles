@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<xliff version="1.0">
+    <file orginal="global" source-language="en_US" datatype="plaintext">
+        <body>
+            <trans-unit>
+                <source>Actual Password</source>
+                <target>Current Password</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Password</source>
+                <target>Zaloguj</target>
+        </body>
+    </file>
+</xliff>

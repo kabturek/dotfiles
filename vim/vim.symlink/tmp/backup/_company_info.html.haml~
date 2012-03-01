@@ -1,0 +1,48 @@
+- if with_values
+  %fieldset
+    %legend#daneFirmy
+      %span
+        = image_tag 'headers/reg1_dane.png', :alt => "Dane firmy"
+      = link_to 'edytuj dane', '#', :class => 'edit'
+    %dl.clearfix
+      %dt
+        = f.label :nip, 'Numer NIP'.html_safe
+      %dd
+        .text= @registration_form.nip
+      %dt
+        = f.label :regon, 'REGON'.html_safe
+      %dd
+        .text= @registration_form.regon
+      %dt
+        = f.label :krs, 'Numer KRS'.html_safe
+      %dd
+        .text= @registration_form.krs
+
+
+
+%fieldset{:style => ('display: none' if with_values)}
+  %legend#daneFirmy
+    %span
+      = image_tag 'headers/reg1_dane.png', :alt => "Dane firmy"
+    - if !with_values
+      %a.question{:href => '#daneFirmyInfo'} ?
+      %span#daneFirmyInfo.tooltip{:style => "display: none; "}
+        %span.innerTooltip
+          Prosimy o podanie szczegółowych danych firmy
+        %span.tooltipPointer  
+        %a.tooltipClose{:href => "#", :rel => "close"} Zamknij
+    - else
+      = link_to 'edytuj dane', '#', :class => 'edit'
+  %dl.clearfix
+    %dt
+      = f.label :nip, 'Numer NIP <em class="asterisk">*</em>'.html_safe
+    %dd
+      = f.text_field :nip, :maxlength => 20, :size => 20, :class => 'text required number', :tabindex => 12
+    %dt
+      = f.label :regon, 'REGON <em class="asterisk">*</em>'.html_safe
+    %dd
+      = f.text_field :regon, :maxlength => 20, :size => 20, :class => 'text required number', :tabindex => 13
+    %dt
+      = f.label :krs, 'Numer KRS <em class="asterisk">*</em>'.html_safe
+    %dd
+      = f.text_field :krs, :maxlength => 20, :size => 20, :class => 'text required', :tabindex => 14

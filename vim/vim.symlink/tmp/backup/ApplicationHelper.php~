@@ -1,0 +1,46 @@
+<?php 
+function human($name){
+  $label = str_replace('_', ' ', ucfirst('_id' == substr($name, -3) ? substr($name, 0, -3) : $name));
+  return $label;
+}
+
+function show_pdf($filename){
+  $pdf = <<<PDF
+  <div>
+      <a id="viewerPlaceHolder" style="width:900px;height:480px;display:block"></a>
+      
+      <script type="text/javascript"> 
+    var fp = new FlexPaperViewer(	
+         '/FlexPaperViewer',
+         'viewerPlaceHolder', { config : {
+           SwfFile : escape('/uploads/docs/$filename'),
+           Scale : 0.6, 
+           ZoomTransition : 'easeOut',
+           ZoomTime : 0.5,
+           ZoomInterval : 0.2,
+           FitPageOnLoad : true,
+           FitWidthOnLoad : false,
+           FullScreenAsMaxWindow : false,
+           ProgressiveLoading : false,
+           MinZoomSize : 0.2,
+           MaxZoomSize : 5,
+           key : \"$d6da121e3ff658433c7\",
+           SearchMatchAll : false,
+           InitViewMode : 'Portrait',
+           FitWidthOnLoad: true,
+           
+           ViewModeToolsVisible : true,
+           PrintEnabled : false, 
+           FullScreenAsMaxWindow : false,
+           ZoomToolsVisible : true,
+           NavToolsVisible : true,
+           CursorToolsVisible : false,
+          SearchToolsVisible : false,
+          
+           localeChain: 'en_US'
+         }});
+      </script>
+    </div>
+PDF;
+  return $pdf;
+}

@@ -1,0 +1,33 @@
+# encoding: utf-8
+module PuchatekApi
+  module ApiMapping
+    extend ActiveSupport::Concern
+
+    module ClassMethods
+      # Metoda zamienia hash postaci:
+      # <pre>{"ContractorUUID" => "222", "UserName" => "name"}</pre>
+      # na hash rails way tj.:
+      # <pre>{:contractor_uuid => "222", :username => "name"}</pre>
+      # Uwaga - ta funkcja nie jest całkowicie odwrotna do map_args_for_api ponieważ nie mapuje kluczy
+      # tylko wykonuje na nich underscore i symbolize_keys
+      # @param [Hash] args
+      # @return [Hash]
+      def reverse_map_args_for_api(args)
+        args = args.inject({ }) do |options, (key, value)|
+          if value.kind_of?(Array)
+            tmp = []
+            value.each do |v|
+              tmp << reverse_map_args_for_api(v)
+            end
+            value = tmp
+          elsif value.kind_of?(Hash)
+            value = reverse_map_args_for_api(value)
+          end
+          options[(key.underscore rescue key) || key] = value
+          options
+        end.symbolize_keys
+        pp args
+      end
+    end
+  end
+end

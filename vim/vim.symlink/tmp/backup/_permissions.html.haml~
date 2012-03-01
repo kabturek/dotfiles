@@ -1,0 +1,13 @@
+- permissions = current_user.account.permissions(:www)
+- if permissions.count > 0
+  %h3 Możesz dokonywać następujacych operacji
+  %ul
+    - permissions.each do |perm|
+      %li= t("permissions." + perm)
+
+- denied_permissions = current_user.account.denied_permissions(:www)
+- if denied_permissions.count > 0
+  %h3 Masz zablokowaną możliwość:
+  %ul
+    - denied_permissions.each do |perm|
+      %li= t("permissions." + perm)

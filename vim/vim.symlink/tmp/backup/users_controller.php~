@@ -1,0 +1,145 @@
+<?php
+
+/* SVN FILE: $Id: users_controller.php 186 2008-08-13 11:12:57Z k.rakowski $ */
+
+/**
+ * Kontroler użytkownika (administratora) serwisu. W innych implementacjach mozna uzyc dla wszystkich.
+ *
+ */
+
+class UsersController extends AppController {
+
+    var $paginate = array(
+        'limit' => 25,
+        'order' => array(
+            'User.id' => 'asc'
+        ),
+        'fields' => 'User.id, User.username, User.created, User.modified',
+        'recursive' => -1 /* aby nie sciagac elementow powiazanych */
+    );
+	
+	/**
+     * Panel logowania (wyswietla jedynie formularz)
+     *
+     */
+    function login()
+	{
+    var_dump($this->params);
+    die();
+		/*  */
+    }
+	
+    /**
+     * Wylogowanie - przekierowanie do odpowiedniej funkcji komponentu Auth.
+     *
+     */
+    function logout()
+    {
+        $this->redirect($this->Auth->logout());
+    }
+    
+    /**
+     * Przekierowanie dla admina
+     *
+     */
+    function admin_login()
+    {
+    	$this->redirect('/users/login');
+    	return;
+    }
+    
+    /* FUNKCJE ADMINISTRACYJNE */
+    
+    /**
+     * Standardowa funkcja wyswietlajaca.
+     *
+     */
+    function admin_index()
+    {
+        	
+    	$items = $this->paginate('User');
+    	$this->set(compact('items'));
+
+    }
+    
+    /**
+	 * Standardowa funkcja usuwajaca uzytkownika.
+	 *
+	 * @param int $id
+	 */
+	function admin_delete($id = null)
+	{
+		if ($id == null)
+		{
+			$this->flash('Nieprawidłowy id', '/'.$this->params['prefix'].'/'.$this->params['controller']);
+			return;
+		}
+		
+		if ($this->User->del($id))
+			$this->flash('Użytkownik usunięty', '/'.$this->params['prefix'].'/'.$this->params['controller']);
+		else 
+			$this->flash('Nieprawidłowy id', '/'.$this->params['prefix'].'/'.$this->params['controller']);
+	}
+	
+	/**
+	 * Funkcja dodajaca uzytkownika.
+	 *
+	 */
+	function admin_add()
+	{
+		if (!empty($this->data))
+		{
+			$this->data['User']['password'] = $this->Auth->password($this->data['User']['new_password']);
+			if ($this->User->save($this->data))
+			{
+				$this->flash('Użytkownik dodany poprawnie.','/'.$this->params['prefix'].'/'.$this->params['controller']);
+			} else {
+				$this->data['User']['new_password'] = '';
+				$this->data['User']['password_confirm'] = '';
+			}
+		}
+	}
+	
+	/**
+	 * Edycja danych użytkownika
+	 *
+	 * @param int $id
+	 */
+	function admin_edit($id = null)
+	{	
+		
+		if ($id == null)
+		{
+			$this->flash('Nieprawidłowy id', '/'.$this->params['prefix'].'/'.$this->params['controller']);
+		}
+			
+		$this->User->id = $id;
+		if (empty($this->data))
+		{
+			if (!$this->data = $this->User->read())
+			{
+				$this->flash('Nieprawidłowy id', '/'.$this->params['prefix'].'/'.$this->params['controller']);
+			}
+		} else {
+			/* ten kod sluzy zapamietaniu id pomiedzy formularzami - rozwiazanie problemu gubienia id - uzyc gdzie indziej */
+			if (empty($this->data['User']['id']))
+			{
+				$this->data['User']['id'] = $id;
+			}
+			if (!empty($this->data['User']['new_password']))
+			{
+				$this->data['User']['password'] = $this->Auth->password($this->data['User']['new_password']);
+			}
+				
+			if ($this->User->save($this->data))
+			{
+				$this->flash('Dane użytkownika zapisane.','/'.$this->params['prefix'].'/'.$this->params['controller']);
+			} else {
+				$this->data['User']['new_password'] = '';
+				$this->data['User']['password_confirm'] = '';
+			}
+		}
+	}
+}
+
+?>

@@ -1,0 +1,21 @@
+<?php
+/**
+ * EmployeesDamagesFilter
+ **/
+class EmployeesDamagesFilter extends sfForm
+{
+  public function configure(){
+    $this->setWidgets(array(
+      'date_start'          => new sfWidgetFormDatePicker(),
+      'date_end'            => new sfWidgetFormDatePicker(),
+      'sort'       => new sfWidgetFormChoice(array('choices' => array(0 => 'cost', 'number' => 'number'))),
+    ));
+    $this->setValidators(array(
+      'date_start'          => new sfValidatorDate(array('required' => false)),
+      'date_end'            => new sfValidatorDate(array('required' => false)),
+      'sort'           => new sfValidatorChoice(array('choices' => array('cost' => 'cost', 'number' => 'number'), 'required' => false)),
+    ));
+    $this->widgetSchema->setNameFormat('damages_filter[%s]');
+  }
+  
+}

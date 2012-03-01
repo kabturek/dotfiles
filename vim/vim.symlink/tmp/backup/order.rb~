@@ -1,0 +1,66 @@
+class Order < ActiveRecord::Base
+  belongs_to :user
+  has_many :participants, :dependent => :destroy
+  has_many :items, :dependent => :destroy
+  has_many :notifications, :dependent => :destroy, :order => 'created_at DESC'
+
+  accepts_nested_attributes_for :items
+
+  has_paper_trail
+
+  # validation
+  validates :user_id, :title, :presence => true
+  # associated items
+  validates_associated :items
+  validates :items, :presence => true
+
+
+  # object states
+  # image: Order_state.png
+  state_machine :initial => :open do
+    event :close do
+      transition :open => :closed
+    end
+
+    event :reopen do
+      transition :closed => :open
+    end
+
+    event :start_shipping do
+      transition :closed => :shipping
+    end
+
+    event :finish do
+      transition all - :finished => :finished
+    end
+
+    state :open do
+      def add_participant(user, items)
+        Participant.create(
+          :order  => self,
+          :user   => user,
+          :items  => items
+        )
+      end
+    end
+
+    state :closed, :shipping, :finished do
+      def add_participant(user, items)
+        false
+      end
+    end
+  end
+
+  def participates?(user)
+    self.participants.where(:user_id => user.id).exists?
+  end
+
+  def self.find_user_orders(user)
+    self.where(:user_id => user.id)
+  end
+
+  def to_s
+    self.title
+  end
+
+end

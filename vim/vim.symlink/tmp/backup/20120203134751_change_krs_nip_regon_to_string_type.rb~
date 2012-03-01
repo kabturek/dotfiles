@@ -1,0 +1,13 @@
+class ChangeKrsNipRegonToStringType < ActiveRecord::Migration
+  def up
+    change_column :"crm_application_registrations", :regon, :string
+    change_column :"crm_application_registrations", :krs, :string
+    change_column :"crm_application_registrations", :regon, :string
+  end
+
+  def down
+    change_column :"crm_application_registrations", :regon, :integer
+    change_column :"crm_application_registrations", :krs, :integer
+    change_column :"crm_application_registrations", :regon, :integer
+  end
+end

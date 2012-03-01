@@ -1,0 +1,135 @@
+% ------------------------------------------------------------------------
+% PACZKI
+% ------------------------------------------------------------------------
+%kodowanie i obs¿uga j¿zyka
+\usepackage{textcomp}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english,polish]{babel}
+\usepackage{polski}
+%czcionki
+\usepackage{times} %Times new Romanpa
+%\usepackage[scaled]{uarial}
+%obs¿uga pdfa
+\usepackage[pdftex,usenames,dvipsnames]{color}      %Obs¿uga kolorów. Opcje usenames i dvipsnames wprowadzaj¿ 
+%bibliografia
+\usepackage{hyperref}
+\usepackage[numbers,sort&compress]{natbib} %Porz¿dkuje zawarto¿¿ odno¿ników do literatury, np. [2-4,6]. Musi by¿ pod pdf'em, a styl bibliogfafii musi mie¿ nazw¿ z dodatkiem 'nat', np. \bibliographystyle{unsrtnat} (w kolejno¿ci cytowania).
+\usepackage{hypernat} %Potrzebna pakietowi natbib do wspolpracy z pakietem hyperref (wazna kolejnosc: 1. hyperref, 2. natbib, 3. hypernat).
+%grafika i geometria strony
+\usepackage{extsizes} %Dostepne inne rozmiary czcionek, np. 14 w poleceniu: \documentclass[14pt]{article}.
+\usepackage[final]{graphicx}
+%inne
+\usepackage{expdlist}    %Zmienia definicj¿ ¿rodowiska description, daje wi¿ksze mo¿liwo¿ci wp¿ywu na wygl¿d listy.
+\usepackage{flafter}     %Wprowadza parametr [tb] do polecenia \suppressfloats[t] (polecenie to powoduje nie umieszczanie rysunkow, tabel itp. na stronach, na ktorych jest to polecenie (np. moze byc to stroma z tytulem rozdzialu, ktory chcemy zeby byl u samej gory, a nie np. pod rysunkiem)).
+\usepackage{array}       %¿adniej drukuje tabelki (np. daje wiecej miejsca w komorkach -- nie s¿ tak sciemnione, jak bez tego pakietu).
+\usepackage{listings}    %Listingi programow.
+\usepackage[format=hang,labelsep=period,labelfont={bf,small},textfont=small]{caption}   %Formatuje podpisy pod rysunkami i tabelami. Parametr 'hang' powoduje wci¿cie kolejnych linii podpisu na szerokosc nazwy podpisu, np. 'Rysunek 1.'.
+\usepackage{appendix} %za¿¿czniki.
+\usepackage{fancyhdr} %drukowanie dwustronne z lustrzan¿ numeracj¿
+\usepackage[a4paper,left=3cm,right=1.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{sectsty} %modyfikacje w sekcjach
+\usepackage{verbatim} % komentarze
+% ------------------------------------------------------------------------
+% USTAWIENIA
+% ------------------------------------------------------------------------
+% numeracja w spisie tre¿ci
+\makeatletter
+\renewcommand\l@section[2]{%
+  \ifnum \c@tocdepth >\z@
+    \addpenalty\@secpenalty
+    \addvspace{1.0em \@plus\p@}%
+    \setlength\@tempdima{1.5em}%
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      \leavevmode \bfseries
+      \advance\leftskip\@tempdima
+      \hskip -\leftskip
+      #1\nobreak\
+      \leaders\hbox{$\m@th\mkern \@dotsep mu\hbox{.}\mkern \@dotsep mu$}
+     \hfil \nobreak\hb@xt@\@pnumwidth{\hss #2}\par
+    \endgroup
+  \fi}
+\makeatother
+
+
+
+\setlength{\parskip}{6mm}
+\frenchspacing %normalne odst¿py w tekscie
+\setlength{\parskip}{3pt} %odst¿p mi¿dzy akapitami
+\setlength{\parindent}{28pt}
+\linespread{1.15} %interlinia
+\bibliographystyle{plainnat}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[LE,RO]{\thepage}
+
+%%sekcje
+\sectionfont{\Large\MakeUppercase}
+\subsectionfont{\fontsize{13}{18pt}}
+\subsectionfont{\normalsize}
+
+%cytowanie literatury
+\defcitealias{alreck_settle}{\cite{alreck_settle} Alreck et al.: Gender Effects on Internet, Catalogue and Store Shopping, 2002}
+\defcitealias{stafford}{\cite{stafford} Stafford et al.: International and Cross-Cultural Influences on Online Shopping Behavior, 2004}
+\defcitealias{susskind}{\cite{susskind} Susskind: Electronic Commerce and World Wide Web Apprehensiveness, 2004}
+\defcitealias{li}{\cite{li} Li et al.: The Impact of Perceived Channel Utilities, Shopping Orientations, and Demographics on the Consumer's Online Buying Behavior, 1999}
+\defcitealias{alsomali}{\cite{alsomali} Al-Somali et al.: An investigation into the acceptance of online banking in Saudi Arabia, 2009}
+\defcitealias{lu}{\cite{lu} Lu et al.: Technology acceptance model for wireless internet, 2003}
+\defcitealias{mahmood}{\cite{mahmood} Mahmood et al.: On-Line Shopping Behavior, 2004}
+\defcitealias{wee_ramacha}{\cite{wee_ramacha} Wee et al.: Cyberbuying in China, Hong Kong and Singapore, 2000}
+\defcitealias{park_2004}{\cite{park_2004} Park et al.: Risk-Focused E-Commerce Adoption Model, 2004}
+\defcitealias{joines}{\cite{joines} Joines et al.: Exploring Motivations for Consumer Web Use and Their Implications for E-Commerce, 2003}
+\defcitealias{garbarino}{\cite{garbarino} Garbarino et al.: Gender Differences in the Perceived Risk of Buying Online and the Effects of Receiving a Site Recommendation, 2004}
+\defcitealias{lynch}{\cite{lynch} Lynch et al.: The Global Internet Shopper, 2001}
+\defcitealias{xia}{\cite{xia} Xia: Affect As Information, 2002}
+\defcitealias{shin}{\cite{shin} Shin: Towards an understanding of the consumer acceptance of mobile wallet, 2009}
+\defcitealias{eurostat}{\cite{eurostat} Eurostat: Internet usage in 2009 ¿ households and individuals, 2009}
+\defcitealias{slyke}{\cite{slyke} Slyke: Gender Differences in Perceptions of Web-Based Shopping, 2002}
+\defcitealias{kantor}{\cite{kantor} Kantor: Electronic Data Interchange (EDI), 1996}
+\defcitealias{gate}{\cite{gate} Gate: Electronic Funds Transfer, 2004}
+\defcitealias{swatman}{\cite{swatman} Swatman: Electronic Commerce: Origins and Future Directions, 1996}
+\defcitealias{kaushik}{\cite{kaushik} Kaushik: History of E-Commerce, 2010}
+\defcitealias{census}{\cite{census} QUARTERLY RETAIL E-COMMERCE SALES 4th QUARTER 2008}
+
+\def\literatura{
+  \renewcommand*{\refname}{}
+  \section{Bibliografia}
+  \vspace{-40pt}
+    \begin{thebibliography}{5}
+      \bibitem{geoinformacja} Dariusz Felcenloben, "Geoinformacja", Katowice, Wydawnictwo Gall, 2011 %TODO
+      \bibitem{gisdlakazdego} David E. Davis, "GIS dla każdego", Warszawa, Wydawnictwo MIKOM, 2004
+      \bibitem{wprowadzeniedogis} Piotr Werner, "Wprowadzenie do Geograficznych Systemów Informacyjnych", Warszawa, Uniwersytet Warszawski, 1992
+      \bibitem{rozwazaniaogis} Roger Tomlinson, "Rozważania o GIS", Warszawa, ESRI Polska, 2008
+      \bibitem{leksykon} Jerzy Gaździcki, "Leksykon Geomatyczny", Warszawa, Wydawnictwo "Wieś Jutra" Sp. z o. o., 2001
+      \bibitem{gettingstartedgis} Keith C. Clarke, "Getting Started with Geographic Information Systems", Upper Saddle River USA, Prentice Hall, 2001
+      \bibitem{informationfusion} V. Popovich, C. Claramunt, T. Devogele, M. Schrenk, K. Korolenko, "Information Fusion and Geographic Information Systems: Towards the digital Ocean", Springer-Verlag, Berlin, 2011 
+      \bibitem{postgis} Regina O. Obe ,Leo S. Hsu : "PostGIS in Action", New York USA, Manning Publications Co., 2011
+      \bibitem{postgre} R. Stones, N. Matthew, "Bazy danych i PostgreSQL. Od podstaw", Gliwice, Helion, 2002
+      \bibitem{postgrewww} http://www.postgresql.org/ , Strona domowa projektu PostgreSQL należąca do PostgreSQL Global Development Group, zawiera oficjalna dokumentacje projektu 
+      \bibitem{internetchmura}  ``Internet jest chmurą''. „CHIP”. 03/2009, s. 38. Warszawa, Burda Communications sp. z o.o.
+      \bibitem{serwisweb2.0} G. Vossen, S. Hagemann, ``Serwis Web 2.0 : od pomysłu do realizacji'', Gliwice , Helion,  2010
+      \bibitem{railssztuka} E. Benson, ``Rails Sztuka Programowania'', Gliwice, Helion, 2009
+      \bibitem{rorwprowadzanie} B. A. Tate, C. Hibbs, ``Ruby on Rails Wprowadzenie'', Gliwice, Helion, 2007
+
+      \bibitem{gps} J. Narkiewicz, ``GPS Globalny System Pozycyjny'', Warszawa, Wydwanictwa Komunikacji i Łączności sp. z o.o., 2003 %TODO
+      \bibitem{systemysatgps} J. Januszewski, ``Systemy satelitarne GPS, Galileo i inne'', Warszawa, Wydawnictwo Naukowe PWN, 2006 %TODO
+      \bibitem{navstargps} J. Lamparski, ``Navstar GPS. Od teorii do praktyki'', Olsztyn, Wydawnictwo Uniwersytetu Warmińsko-Mazurskiego, 2001
+
+
+
+
+  \end{thebibliography}
+  %\renewcommand*{\refname}{}
+  %\subsection{¿ród¿a internetowe}
+  %\vspace{-40pt}
+  %\begin{thebibliography}{5}
+  %  \bibitem{census} QUARTERLY RETAIL E-COMMERCE SALES 4th QUARTER 2008, http://www.census.gov/mrts/www/data/html/08Q4.html, dost¿p 17.09.2011
+  %\end{thebibliography}
+  \newpage
+}
+
+

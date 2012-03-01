@@ -1,0 +1,4 @@
+module Puchatek
+  class NotAuthorized < StandardError
+  end
+end

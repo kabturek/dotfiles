@@ -1,0 +1,118 @@
+# encoding: UTF-8
+class ApplicationController < ActionController::Base
+  protect_from_forgery
+
+  helper_method :logged?, :current_user
+
+  before_filter :http_basic_auth, :set_api_credentials, :check_force_logout, :refresh_session, :last_deploy, :check_authorization
+
+  rescue_from  RestClient::Request::Unauthorized, :with => :access_denied
+
+  rescue_from  RestClient::Forbidden, :with => :forbidden
+  rescue_from  Puchatek::NotAuthorized, :with => :forbidden
+
+  class << self
+    attr_accessor :authorization
+  end
+
+  def is_it_working
+    render :text => "true"
+  end
+
+  protected
+
+  def http_basic_auth 
+    #dla developmentu wyłącz basic auth i dla akcji flash upload/create
+    if Rails.env == 'development' or Rails.env == 'test' or (params[:controller] == 'upload' and params[:action] == "create")
+      return true
+    end
+    unless authenticate_with_http_basic { |u, p| u == 'puchatek' and p == 'sage'}
+      request_http_basic_authentication
+    end
+  end
+
+  def refresh_session
+    get_new_session_data if logged? and session_created_yesterday 
+  end
+
+  def session_created_yesterday
+    # potrzebne gdy sesja byla zainicializowana przed przechowywaniem creation_date
+    # w takim wypadku stawiamy ja na utworzoną wczoraj, bo user mógł sie nie
+    # logować wczoraj
+    session[:user][:creation_date] ||= Time.now - 1.day
+    session[:user][:creation_date].day != Time.now.day
+  end
+  # ponownie ładuje UUID
+  def get_new_session_data
+    email, password = session[:user][:email], session[:user][:password]
+    company_uuid    = User.authenticate(email, password)
+    if company_uuid
+      session[:user] = { :uuid => company_uuid, :email => email, :password => password, :creation_date => Time.now }
+      set_api_credentials
+    end
+  end
+  # Metoda ustawia GLOBALNE credentials dla aplikacji w ramach jednego requestu. Dzięki temu nie ma potrzeby
+  # przekazywania tych danych każdej metodzie api z osobna.
+  def set_api_credentials
+    PuchatekApi::Base.credentials = session[:user] if session[:user]
+  end
+
+  def current_user
+    @current_user ||= User.new if session[:user]
+  end
+
+  def logged?
+    current_user
+  end
+
+  def login_required!
+    redirect_to(root_path, :notice => t('flashes.alert.login_required')) unless logged?
+  end
+
+  def full_login_required!
+    redirect_to(account_path, :notice => t('flashes.alert.active_account_required')) unless logged? and current_user.account_active?
+  end
+  
+  def last_deploy
+    @last_deploy ||= File.new(Rails.root + "tmp/last_deploy").atime 
+  rescue 
+    nil
+  end
+
+  def self.authorize!(permission, *options)
+    @authorization = permission
+  end
+
+  def authorize!(permission)
+    raise Puchatek::NotAuthorized if !current_user.can? permission
+  end
+
+  def check_authorization
+    raise Puchatek::NotAuthorized if !self.class.authorization.nil? and !current_user.nil? and !current_user.can? self.class.authorization
+    true
+  end
+
+  def check_force_logout
+    if params.delete(:force_logout)
+      reset_session
+      redirect_to new_session_path(:redirect_to => params), :notice => t('flashes.alert.log_in')
+    end
+    true
+  end
+
+  private
+  def logged_in_restriction
+    if logged?
+      redirect_to account_path, :notice => t('flashes.notice.registration_restricted')
+    end
+  end
+
+  def access_denied
+    reset_session
+    redirect_to new_session_path, :notice => t('flashes.alert.wrong_email_or_password')
+  end
+
+  def forbidden
+    redirect_to account_path, :notice => t('flashes.alert.forbidden')
+  end
+end

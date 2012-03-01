@@ -1,0 +1,23 @@
+require 'spec_helper'
+
+describe CompaniesController do
+  describe "handling RestClient::Request::Unathorized exceptions" do
+    it "should redirect to session/new_page when the request returns 401" do
+      #set the session so that it passes logged_in restriction
+      session[:user] = {
+        :uuid => "uuid",
+        :email => "email",
+        :password => "password"
+      }
+      stub_request(:get, "http://email:password@sg1.smtsoftware.com/puchatek_development/contractor/uuid").
+        with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate'}).
+        to_return(:status => 401, :body => "", :headers => {})
+      stub_request(:get, "http://email:password@sg1.smtsoftware.com/puchatek_development/contractor/uuid?nip=test").
+        with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate'}).
+        to_return(:status => 401, :body => "", :headers => {})
+
+      get :search, :query => 'test', :nip => nil
+      response.should redirect_to(new_session_path)
+    end
+  end
+end

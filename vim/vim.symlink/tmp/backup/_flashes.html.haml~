@@ -1,0 +1,6 @@
+- unless flash.empty?
+
+ :javascript
+   $(document).ready(function(){
+     #{ [:success, :notice].collect { |type| "$.achtung({ message: '#{escape_javascript(h(flash[type]))}', timeout: 10 });" unless flash[type].blank? }.join(' ') }
+   });

@@ -1,0 +1,69 @@
+# encoding: utf-8
+
+class Document
+  attr_reader :uuid, :name, :size, :sender_uuid, :sender_nip, :recipient_uuid, :recipient_nip, 
+              :recipient_friendly_name, :sender_friendly_name,
+              :downloaded_by_forte, :is_archived, :document_status, :history, :created_at,
+              :download_available
+
+  include ActiveModel::Conversion
+  extend ActiveModel::Naming
+
+  API_PROXY = PuchatekApi::Document.new
+  API_DOC_TYPE = "" # ustaw to w klasie dziedziczącej
+
+  def initialize(args)
+    args.each do |key, value|
+      instance_variable_set("@#{key}", value) unless value.nil?
+    end
+    extract_document_date if @history and not @history.empty?
+    set_recipient_and_sender if @recipient_uuid and @sender_uuid
+  end
+
+  def accept_reject_allowed?
+    false
+  end
+  
+  def history_available?
+    @history and !@history.empty?
+  end
+
+  def company 
+    @recipient
+  end
+  
+  def download
+    API_PROXY.download(@uuid)
+  end
+
+  def self.all(options = {})
+    API_PROXY.all( self.name, options )
+  end
+
+  def self.factory(type, args)
+    type.camelize.constantize.new( args )
+  # rescue
+  #   raise "Bad document type: #{type}"
+  end
+
+  private
+  def extract_document_date
+    @created_at = Time.parse(current_state[:created_on]) || Time.now
+  end
+  
+  def set_recipient_and_sender
+    @recipient = BusinessPartner.new :uuid => @recipient_uuid, "FriendlyName" => @recipient_friendly_name, "NIP" => @recipient_nip
+    @sender = BusinessPartner.new :uuid => @sender_uuid, "FriendlyName" => @sender_friendly_name, "NIP" => @sender_nip
+  end
+      
+  def current_state
+    @history.first
+    # @history.select {|processing| processing[:type] == API_DOC_TYPE }[0] || {}
+  end
+
+  def persisted?
+    true
+  end
+    
+  
+end

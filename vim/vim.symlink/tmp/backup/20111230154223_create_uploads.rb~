@@ -1,0 +1,11 @@
+class CreateUploads < ActiveRecord::Migration
+  def change
+    create_table :uploads do |t|
+      t.string :sender_uuid
+      t.string :recipient_uuid
+      t.string :upload_url
+
+      t.timestamps
+    end
+  end
+end

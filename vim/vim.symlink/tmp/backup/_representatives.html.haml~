@@ -1,0 +1,85 @@
+- if with_values
+  
+  %fieldset.leftfield
+    %legend#osobaReprezentujacaFirme
+      %span
+        = image_tag "headers/reg1_osoby.png", :alt => "Osoby reprezentujące firmę"
+      = link_to 'edytuj dane', '#', :class => 'edit edit_data'
+    - @registration_form.representatives.each do |person|
+      %dl
+        %dt
+          %label{:for => "firstname"} Imię
+        %dd
+          .text= person.firstname
+        %dt
+          %label{:for => "lastname"} Nazwisko
+        %dd
+          .text= person.lastname
+        %dt
+          %label{:for => "position"} Stanowisko
+        %dd
+          .text= person.position
+  
+  %fieldset.leftfield{:style => 'display: none'}
+    %legend#osobaReprezentujacaFirme
+      %span
+        = image_tag "headers/reg1_osoby.png", :alt => "Osoby reprezentujące firmę"
+      = link_to 'edytuj dane', '#', :class => 'edit edit_data'
+    = f.fields_for :representatives do |representative_form|  
+      %dl
+        %dt
+          %label{:for => "firstname"} Imię
+          %em.asterisk *
+        %dd
+          = representative_form.text_field :firstname, :class => "inline text address required"
+        %dt
+          %label{:for => "lastname"} Nazwisko
+          %em.asterisk *
+        %dd
+          = representative_form.text_field :lastname, :class => "inline text address required"
+        %dt
+          %label{:for => "position"} Stanowisko
+          %em.asterisk *
+        %dd
+          = representative_form.text_field :position, :class => "inline text address required"
+        %dt
+          = link_to "Usuń osobę", "#", :class => "removePerson"
+        %dd
+    %a.addEmployee{:href => "#"}
+      %span dodaj kolejnego reprezentanta firmy
+- else
+  %fieldset
+    %legend#osobaReprezentujacaFirme
+      %span
+        = image_tag 'headers/reg1_osoby.png', :alt => "Osoby reprezentujące firmę"
+      %a.question{:href => '#osobaReprezentujacaFirmeInfo'} ?
+      %span#osobaReprezentujacaFirmeInfo.tooltip{:style => "display: none; "}
+        %span.innerTooltip
+          Prosimy o podanie danych osoby, która jest uprawniona do reprezentowania firmy.
+        %span.tooltipPointer  
+        %a.tooltipClose{:href => "#", :rel => "close"} Zamknij
+    -# [:empty] in order to render partial at least once
+    = f.fields_for :representatives do |representative_form|
+      %dl
+        %dt
+          = representative_form.label :firstname, "Imię"
+          %em.asterisk *
+        %dd
+          = representative_form.text_field :firstname, :size => 60, :class => [:text, :required], :maxlength => 30
+        %dt
+          = representative_form.label :lastname, "Nazwisko"
+          %em.asterisk *
+        %dd
+          = representative_form.text_field :lastname, :size => 60, :class => [:text, :required], :maxlength => 255
+        %dt
+          = representative_form.label :position, "Stanowisko"
+          %em.asterisk *
+        %dd
+          = representative_form.text_field :position, :size => 60, :class => [:text, :required], :maxlength => 50
+        %dt
+          = link_to "Usuń osobę", '#', :class => "removePerson"
+        %dd
+    %a.addEmployee{:href => "#"}
+      %span dodaj kolejnego reprezentanta firmy
+    
+    

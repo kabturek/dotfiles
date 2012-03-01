@@ -1,0 +1,25 @@
+- @page_title = t ".page_title"
+
+- if @participants.count
+  %table
+    %thead
+      %tr
+        %th= t "order"
+        %th= t "state"
+        %th= t "comment"
+        %th
+
+    - @participants.each do |participant|
+      %tr
+        %td= link_to participant.order, participant
+        %td= t "participants.states." + participant.state
+        %td= participant.comment
+        %td 
+          = link_to t('show'), participant
+          = link_to t('edit'), edit_participant_path(participant)
+          = link_to t('destroy'), participant, :confirm => 'Are you sure?', :method => :delete
+
+  %br
+- else
+  %p= t ".no_participations"
+

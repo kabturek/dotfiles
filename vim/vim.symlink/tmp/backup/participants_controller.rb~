@@ -1,0 +1,112 @@
+class ParticipantsController < ApplicationController
+    before_filter :authenticate_user!
+
+  # GET /participants
+  # GET /participants.xml
+  def index
+    if !current_user.is_admin?
+      return redirect_to :action => "mine"
+    end
+    @participants = Participant.all
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @participants }
+    end
+  end
+
+  def mine
+    @participants = Participant.where(:user_id => current_user.id).all
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @participants }
+    end
+  end
+
+  # GET /participants/1
+  # GET /participants/1.xml
+  def show
+    @participant = Participant.find(params[:id])
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.xml  { render :xml => @participant }
+    end
+  end
+
+  # GET /participants/new
+  # GET /participants/new.xml
+  def new
+    @participant = Participant.where(:order_id => params[:order_id], :user_id => current_user.id).first
+    return redirect_to(edit_participant_path(@participant)) if !@participant.nil?
+    @participant = Participant.new
+    @order = Order.find(params[:order_id])
+    for item in @order.items do 
+        @participant.participant_items.build(:item => item)
+    end
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.xml  { render :xml => @participant }
+    end
+  end
+
+  # GET /participants/1/edit
+  def edit
+    @participant = Participant.find(params[:id])
+  end
+
+  # POST /participants
+  # POST /participants.xml
+  def create
+    @participant = Participant.new(params[:participant])
+    @participant.order = Order.find(params[:order_id])
+    @participant.user = current_user
+    @participant.role = @participant.default_role
+
+    respond_to do |format|
+        begin
+          if @participant.save
+            format.html { redirect_to(@participant.order, :notice => 'flash.joined_order') }
+            format.xml  { render :xml => @participant, :status => :created, :location => @participant }
+          else
+            format.html { render :action => "new" }
+            format.xml  { render :xml => @participant.errors, :status => :unprocessable_entity }
+          end
+        rescue ActiveRecord::RecordNotUnique
+            @participant = Participant.where({:user_id => current_user.id, :order_id => params[:order_id]}).first
+            format.html { redirect_to( edit_participant_path @participant, :notice => t('flash.already_joined')) }
+            format.xml  { render :xml => @participant.errors, :status => :unprocessable_entity } # TODO: poprpawic- inny status XML
+        end
+    end
+  end
+
+  # PUT /participants/1
+  # PUT /participants/1.xml
+  def update
+    @participant = Participant.find(params[:id])
+
+    respond_to do |format|
+      if @participant.update_attributes(params[:participant])
+        format.html { redirect_to(@participant, :notice => 'Participant was successfully updated.') }
+        format.xml  { head :ok }
+      else
+        format.html { render :action => "edit" }
+        format.xml  { render :xml => @participant.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /participants/1
+  # DELETE /participants/1.xml
+  def destroy
+    @participant = Participant.find(params[:id])
+    @participant.destroy
+
+    respond_to do |format|
+      format.html { redirect_to(order_path(params[:order_id])) }
+      format.xml  { head :ok }
+    end
+  end
+end

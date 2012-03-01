@@ -1,0 +1,11 @@
+<div class="container_24">
+            <div class="grid_24">
+                <div class="stopka">
+<?php include_component('language', 'language') ?>
+<p>&copy; 2011 My Perfect Touch Cleaning, Inc. All rights reserved. Any reproduction, copying, or redistribution, in whole or in part, is prohibited without written permission from My Perfect Touch Cleaning Inc., 236 Egidi Drive, Suite A, Wheeling, Il 60090 or www.myperfecttouchcleaning.com</p>
+                    <div class="clear"></div>  
+                </div> <!--end stopka-->
+
+            </div><!--end grid_24-->
+        </div>
+<div class="clear"></div>

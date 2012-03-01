@@ -1,0 +1,200 @@
+require 'spec_helper'
+
+describe CrmApplication::UpdateData do
+  before do
+    @test_uuid = "1234"
+    @update_form = CrmApplication::UpdateData.new(:uuid => @test_uuid)
+
+    @fullfilled_attributes = {
+        :uuid => @test_uuid,
+        :company_name => "Puchatek Sp. z o.o.",
+        :user_email => "email@example.com",
+        :password => "12345",
+        :street_number => "10",
+        :flat_number => "10",
+        :street_name => "Krucza",
+        :post_code => "22-222",
+        :city => "Londek zdroj",
+        :phone => "+48 22 555-22-22-11",
+        :nip => "222233445",
+        :krs => "221231122",
+        :regon => "123456789",
+        :representatives_attributes => {
+            0 => {:firstname => "Onufry", :lastname => "Pentelka", :position => "Capo"},
+            1 => {:firstname => "Konik", :lastname => "Nabiegunach", :position => "Szef dzialu transportu"}
+        }
+    }
+    @update_form_fullfilled = CrmApplication::UpdateData.new(@fullfilled_attributes)
+  end
+
+  it "is able to instantiate representatives from params" do
+    representatives_attributes = {
+        0 => {:firstname => "Name", :lastname => "Surname", :position => "Boss"},
+        1 => {:firstname => "Imie", :lastname => "Nazwisko", :position => "Chief"}
+    }
+    update_form = CrmApplication::UpdateData.new(:uuid => @test_uuid, :representatives_attributes => representatives_attributes)
+    update_form.representatives.size.should == 2
+    update_form.representatives.each do |representative|
+      representative.kind_of?(CrmApplication::Representative).should be_true
+    end
+  end
+
+  it "returns empty array when no representative added" do
+    @update_form.representatives.should == []
+  end
+
+  it "returns empty array in puchatek_json when no VALID representative added" do
+    expected_puchatek_json = {
+        "PersonList" => [],
+        "ContractorUUID" => "1234"
+    }.to_json
+
+    @update_form.representatives << CrmApplication::Representative.new()
+    @update_form.to_puchatek_json.should == expected_puchatek_json
+  end
+
+  it "sets representatives from params via builder method" do
+    @update_form.build_representative({:firstname => "Imie", :lastname => "Nazwisko", :position => "Stanowisko"})
+    @update_form.representatives.size.should == 1
+    @update_form.representatives.first.kind_of?(CrmApplication::Representative).should be_true
+  end
+
+  it "raises and exception when no uuid set on create" do
+    expect { CrmApplication::UpdateData.new(:something => "") }.to raise_error(ArgumentError)
+  end
+
+  context "submit method" do
+    it "sends the registration request" do
+      PuchatekApi.should_receive(:rest_request).with(
+          :post,
+          '/application/contractRequest',
+          :args => @update_form.to_puchatek_json,
+          :headers => {:content_type => :json}).and_return("")
+      @update_form.submit
+    end
+  end
+
+  it "can be created with parameters" do
+    expected_attributes = {
+        :uuid => @test_uuid,
+        :company_name => "Puchatek Sp. z o.o.",
+        :user_email => "email@example.com",
+        :password => "12345",
+        :street_number => "10",
+        :flat_number => "10",
+        :street_name => "Krucza",
+        :post_code => "22-222",
+        :city => "Londek zdroj",
+        :phone => "+48 22 555-22-22-11",
+        :nip => "222233445",
+        :krs => "221231122",
+        :regon => "123456789"
+    }
+    @update_form_fullfilled.representatives.size.should == 2
+    @update_form_fullfilled.representatives.each do |representative|
+      representative.kind_of?(CrmApplication::Representative).should be_true
+    end
+
+    attributes_without_representatives = @update_form_fullfilled.attributes.dup
+    attributes_without_representatives.delete(:representatives)
+    attributes_without_representatives.should == expected_attributes
+  end
+
+  it "updates attributes with attribute=" do
+    changed_attributes = {:user_email => "Adres@email.com", :company_name => "Nazwa"}
+    @update_form.attributes=(changed_attributes)
+    @update_form.attributes.should == {:user_email => "Adres@email.com", :company_name => "Nazwa", :uuid => @test_uuid, :representatives => []}
+  end
+
+  context "to_puchatek_json" do
+    it "generates json string that is understood by puchatek API" do
+      expected_json = {"ContractorUUID" => 1234, "Name" => "Imie", "FlatNo" => "Numer budynku"}.to_json
+      update_form = CrmApplication::UpdateData.new(:uuid => 1234, :company_name => "Imie", :flat_number => "Numer budynku")
+      update_form.to_puchatek_json.should == expected_json
+    end
+  end
+
+  context "as_puchatek_json" do
+    it "generates json that is undestood by puchatek API from attributes of form" do
+      expected_json = {
+          "PersonList" => [
+              {
+                  "FirstName" => "Onufry",
+                  "LastName" => "Pentelka",
+                  "Position" => "Capo"
+              },
+              {
+                  "FirstName" => "Konik",
+                  "LastName" => "Nabiegunach",
+                  "Position" => "Szef dzialu transportu"
+              }
+          ],
+          "ContractorUUID" => "1234",
+          "Name" => "Puchatek Sp. z o.o.",
+          "Email" => "email@example.com",
+          "Password" => "12345",
+          "StreetNo" => "10",
+          "FlatNo" => "10",
+          "Street" => "Krucza",
+          "PostCode" => "22-222",
+          "City" => "Londek zdroj",
+          "Phone" => "+48 22 555-22-22-11",
+          "NIP" => "222233445",
+          "KRS" => "221231122",
+          "REGON" => "123456789"
+      }
+      @update_form_fullfilled.as_puchatek_json.should == expected_json
+    end
+
+    it "generates json that is understood by puchatek API even when only representatives set" do
+      expected_json = {
+          "ContractorUUID" => nil,
+          "Name"           => nil,
+          "Email"          => nil,
+          "Street"         => nil,
+          "Password"       => nil,
+          "StreetNo"       => nil,
+          "FlatNo"         => nil,
+          "PostCode"       => nil,
+          "City"           => nil,
+          "Phone"          => nil,
+          "NIP"            => nil,
+          "REGON"          => nil,
+          "KRS"            => nil,
+          "SageSerialNumber" => nil,
+          "SageSerialNumberHash" => nil,
+          "PersonList" => [
+              {"FirstName" => "Imie", "LastName" => "Nazwisko", "Position" => "Stanowisko"}
+          ]
+      }
+      update_form = CrmApplication::Registration.new(
+          :representatives_attributes => [
+              {:firstname => "Imie", :lastname => "Nazwisko", :position => "Stanowisko"}
+          ]
+      )
+      update_form.as_puchatek_json.should == expected_json
+    end
+
+    it "generates json for puchatek API when only one or two attributes are set" do
+      expected_json = {
+          "ContractorUUID" => nil,
+          "Name"           => nil,
+          "Email"          => nil,
+          "Street"         => nil,
+          "Password"       => nil,
+          "StreetNo"       => "22",
+          "FlatNo"         => nil,
+          "PostCode"       => "22-222",
+          "City"           => nil,
+          "Phone"          => nil,
+          "NIP"            => nil,
+          "REGON"          => nil,
+          "KRS"            => nil,
+          "SageSerialNumber" => nil,
+          "SageSerialNumberHash" => nil
+      }
+      update_form = CrmApplication::Registration.new(:street_number => 22, :post_code => "22-222")
+      update_form.as_puchatek_json.should == expected_json
+    end
+  end
+end

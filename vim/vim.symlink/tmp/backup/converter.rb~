@@ -1,0 +1,23 @@
+require 'nokogiri'
+#item, currency = ARGV
+
+class Converter
+  attr_accessor :rates
+  def initialize(xml_file = nil, transactions_file = nil)
+    @rates = []
+    load_rates(xml_file) if xml_file
+    load_transactions(transactions_file) if transactions_file
+  end
+  def load_rates(xml_file)
+    xml = Nokogiri.parse(File.read(xml_file))
+    xml.xpath('//rates/rate').each do |rate|
+      rates<< rate
+    end
+    rates
+  end
+  def load_transactions(file)
+    CSV.foreach(file) do |row|
+    end
+    transactions
+  end
+end

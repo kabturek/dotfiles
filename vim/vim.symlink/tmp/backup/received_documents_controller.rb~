@@ -1,0 +1,17 @@
+# encoding: utf-8
+class Documents::Archive::ReceivedDocumentsController < Documents::ReceivedDocumentsController
+
+  undef_method :archive, :batch
+
+
+  private  
+  def find_options
+    options = { :archived => true }
+    options[:sort_by] = "SenderUUID" if options[:sort_by] == 'Company'
+    options[:recipientUuid] = current_user.account.uuid
+    options[PuchatekApi::Param.new("status")] = "Accepted"
+    options[:status] = "Downloaded"
+    super.merge(options)
+  end  
+
+end

@@ -1,0 +1,24 @@
+# encoding: utf-8
+# Kontroler odpowiada za obsługę wniosku o zerwanie umowy.
+class CrmApplication::DeclineContractController < ApplicationController
+  before_filter :login_required!
+
+  authorize! :user_management
+
+  # /POST
+  # Wysyła wniosek o zerwanie umowy.
+  def create
+    if CrmApplication::DeclineContract.new.submit
+      flash[:success_message] = t("flashes.notice.contract_decline_request")
+    else
+      flash[:error_message] = t("flashes.alert.contact_decline_failed")
+    end
+    
+    redirect_to crm_application_path
+  end
+
+  # /GET
+  # Wyświetla podsumowanie po wysłaniu wniosku
+  def show;end
+
+end

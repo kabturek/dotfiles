@@ -1,0 +1,84 @@
+# encoding: utf-8
+# Klasa reprezentująca kontrahenta dodanego do aktualnego konta. Pozwala m.in. blokować kontrahenta, zmianiać jego nazwę
+# wysłać wniosek o przesłania dokumentów kontaktowych itd. Pozwala też pobrać listę kontrahentów według zadanych kryteriów.
+class BusinessPartner
+  API_PROXY = PuchatekApi::BusinessPartner.new
+  
+  attr_reader :uuid, :name, :status, :nip, :waiting_for_removal, :waiting_for_addition, :on_blacklist, :args
+  
+  def initialize(args)
+    @args   = args
+    @uuid   = args["ID"] || args[:uuid]
+    @name   = args["FriendlyName"]
+    @status = args[:status]
+    @nip    = args["NIP"]
+    @waiting_for_removal = args["WaitingForRemoval"]
+    @waiting_for_addition = args["WaitingForAddition"]
+    @on_blacklist = args["OnBlacklist"]
+  end
+    
+  def block
+    API_PROXY.block(self)
+  end
+
+  def unblock
+    API_PROXY.unblock(self)    
+  end
+  
+  def change_name(new_name)
+    return false if new_name.empty?
+    API_PROXY.change_name(self, new_name)
+  end
+  
+  def request_contract_documents
+    API_PROXY.request_contract_documents(self)
+  end
+  
+  class << self
+
+    def all( options = {} )
+      API_PROXY.find_all( options )
+    end
+
+    def find_by_phrase( phrase, options = {} )
+      phrase = phrase.gsub('-', '').gsub(' ', '') if phrase
+      API_PROXY.find_by_phrase( phrase, options )
+    end
+
+    def find_by_letter( letter, options = {} )
+      API_PROXY.find_by_first_letter( letter, options )
+    end
+
+    def find_by_numbers( options = {} )
+      API_PROXY.find_by_first_numbers( options )
+    end
+
+    def find_with_params( params )
+      params = params.dup
+      filter_type = params.delete(:filter_type)
+      query = params.delete(:query)
+      letter = params.delete(:letter)
+      case filter_type
+        when "phrase"
+          find_by_phrase( query, params )      
+        when "letters"
+          find_by_letter( letter, params )
+        when "numbers"
+          find_by_numbers( params )        
+        else
+          BusinessPartner.all( params )
+      end
+    end
+
+    def find_list(with_blocked = true)
+      options = {}
+      options[:blocked] = with_blocked
+      business_partners = self.all options
+      business_partners.reduce([]) do |partners_list,bp|
+        partners_list<< { :label => bp.name + ' (NIP: ' + bp.nip + ')', :value => bp.uuid } if !bp.on_blacklist and !bp.waiting_for_addition
+        partners_list
+      end
+    end
+  end
+
+end

@@ -1,0 +1,23 @@
+<?php
+class ShopsController extends AppController {
+
+	var $name = 'Shops';
+	var $helpers = array('Html', 'Form');
+  public function select($id){
+    if (!empty($this->data)){
+      $id = $this->data['Shop']['shop_id'];
+    } 
+      $shop = $this->Shop->read('redirect', $id);
+    $redirect = $shop['Shop']['redirect'];
+      if($redirect == 'stary program'){
+        $this->redirect('/');
+      } else if($redirect == 'nowy program'){
+        $this->redirect('/nowy');
+      } else if($redirect == 'start programu'){
+        $this->redirect('/start');
+      } else {
+        $this->redirect('/');
+      }
+  }
+}
+?>

@@ -1,0 +1,296 @@
+<?php
+/**
+ * Export module class
+ **/
+class export extends Module
+{
+  
+  function __construct()
+  {
+		$this->name = 'export';
+		$this->tab = 'Tools';
+		$this->version = '1';
+		
+		/* The parent construct is required for translations */
+		parent::__construct();
+		
+		$this->page = basename(__FILE__, '.php');
+		$this->displayName = $this->l('Export Orders');
+		$this->description = $this->l('A module to export orders');
+	}
+
+	function install()
+	{
+		if (!parent::install())
+			return false;
+    $query = 'INSERT INTO '._DB_PREFIX_.'tab 
+      (id_parent, class_name, module, position)
+      VALUES ( 3, "AdminExportOrders", "export", 8)';
+    if (!Db::getInstance()->Execute($query)){
+      return false;
+    }
+    $query = 'ALTER TABLE '._DB_PREFIX_.'order_detail 
+      ADD `subscription_date` VARCHAR( 7 ) NULL DEFAULT NULL';
+    if (!Db::getInstance()->Execute($query)){
+      return false;
+    }
+    $query = 'ALTER TABLE '._DB_PREFIX_.'cart_product
+      ADD `subscription_date` VARCHAR( 7 ) NULL DEFAULT NULL';
+    if (!Db::getInstance()->Execute($query)){
+      return false;
+    }
+    $query = 'ALTER TABLE '._DB_PREFIX_.'product
+      ADD `is_subscription` int( 1 ) NOT NULL DEFAULT 0';
+    if (!Db::getInstance()->Execute($query)){
+      return false;
+    }
+    $query = 'ALTER TABLE '._DB_PREFIX_.'product
+      ADD `subscription_length` int( 1 ) NULL DEFAULT NULL';
+    if (!Db::getInstance()->Execute($query)){
+      return false;
+    }
+    $query = 'ALTER TABLE '._DB_PREFIX_.'orders
+      ADD `is_exported` INT( 1 ) NULL DEFAULT 0';
+    if (!Db::getInstance()->Execute($query)){
+      return false;
+    }
+    return true;
+  }
+
+  public function uninstall(){
+    parent::uninstall();
+  }
+  public function header(){
+    $header = array(
+      'nazwa skrócona','nazwa pełna','ulica','miasto','kod_pocztowy','województwo','kraj',
+      'NIP','email','telefon','serwis','ilosc','abonament','cena','od_numeru','forma_platnosci','gadzet','abonament_gadzety','serwis+numer',
+      'imie_odp', 'nazwisko_odp','ulica_odp','miasto_odp','kod_pocztowy_odp','województwo_odp','kraj_odp',
+      #'cena_netto','dokument_platniczy','forma_zgloszenia','imie_dom','Serwis+abo'
+    );
+    return $this->format_csv_line($header, ';');
+  }
+  public function exportSelection($selection)
+  {
+		if (!is_array($selection))
+			die(Tools::displayError());
+		$result = $this->header();
+		foreach ($selection AS $id)
+		{
+			$result.= $this->export($id);
+		}
+		return $result;
+  }
+  public function exportOne($order_id)
+  {
+    $result = $this->header();
+    $result.=$this->export($order_id);
+		return $result;
+  }
+  public function exportUnexported(){
+    $orders= Db::getInstance()->ExecuteS('
+      SELECT id_order,is_exported 
+      FROM '._DB_PREFIX_.'orders s
+      WHERE `is_exported` = false OR `is_exported` IS NULL;');
+    if (is_array($orders) AND sizeof($orders)) {
+      $result = $this->header();
+    } else {
+      return 'Brak niewyeksportowanych zamówień';
+    }
+    foreach($orders as $order){
+      $result.= $this->export($order['id_order']);
+    }
+    return $result;
+  }
+
+  public function export($order_id){
+		global $cookie;
+    //get order
+    $order = new Order($order_id);
+		$customer = new Customer($order->id_customer);
+		$customerStats = $customer->getStats();
+		$addressInvoice = new Address($order->id_address_invoice, intval($cookie->id_lang));
+		if (Validate::isLoadedObject($addressInvoice) AND $addressInvoice->id_state)
+      $invoiceState = new State(intval($addressInvoice->id_state));
+    $invoiceCountry= new Country(intval($addressInvoice->id_country), $cookie->id_lang);
+		$addressDelivery = new Address($order->id_address_delivery, intval($cookie->id_lang));
+		if (Validate::isLoadedObject($addressDelivery) AND $addressDelivery->id_state)
+			$deliveryState = new State(intval($addressDelivery->id_state));
+    $deliveryCountry= new Country(intval($addressDelivery->id_country), $cookie->id_lang);
+		$carrier = new Carrier($order->id_carrier);
+		$history = $order->getHistory($cookie->id_lang);
+		$products = $order->getProducts();
+		$customizedDatas = Product::getAllCustomizedDatas(intval($order->id_cart));
+		Product::addCustomizationPrice($products, $customizedDatas);
+		$discounts = $order->getDiscounts();
+		$messages = Message::getMessagesByOrderId($order->id, true);
+		//$states = OrderState::getOrderStates(intval($cookie->id_lang));
+		$currency = new Currency($order->id_currency);
+		$currentLanguage = new Language(intval($cookie->id_lang));
+		$currentState = OrderHistory::getLastOrderState($order->id);
+		$sources = ConnectionsSource::getOrderSources($order->id);
+		$cart = Cart::getCartByOrderId($order->id);
+    //get data
+    $product_rows = '';
+    //od teraz bede uzywac zmiennych zgodnych z nazwami pol do eksportu aby 
+    //uproscic wszystko
+    //DANE PODSTAWOWE
+    $order_info['nazwa_skrocona'] = $customer->lastname . " " .  $addressInvoice->city;
+    $order_info['nazwa_pelna'] = $customer->firstname. " " .$customer->lastname . " " . $addressInvoice->company;
+    $order_info['ulica'] = $addressInvoice->address1;
+    $order_info['miasto'] = $addressInvoice->city;
+    $order_info['kod_pocztowy'] = $addressInvoice->postcode;
+    $order_info['wojewodztwo'] = isset($invoiceState->name) ? $invoiceState->name : "";
+    $order_info['kraj'] = $invoiceCountry->name;
+    $order_info['nip'] = $addressInvoice->address2;
+    $order_info['email'] = $customer->email;
+    $order_info['telefon'] = $addressInvoice->phone;
+    //DANE WYSYLKI
+    $different_address = false;
+
+    if($order->id_address_invoice != $order->id_address_delivery){
+      $address = array();
+      $address['imie_odb'] = $addressDelivery->firstname;
+      $address['nazwisko_odb'] = $addressDelivery->lastname;
+      $address['ulica_odb'] = $addressDelivery->address1;
+      $address['kod_odb'] = $addressDelivery->postcode;
+      $address['miejscowosc_odb'] = $addressDelivery->city;
+      $address['kraj_odb'] = $deliveryCountry->name;
+    }
+
+    foreach($products as $product){
+      $list = $order_info;
+      //jesli paczka
+      if(Pack::isPack($product['product_id'])){
+        $pack_products = Pack::getItems($product['product_id'], $cookie->id_lang);
+        foreach($pack_products as $pack_product){
+          if(is_array($pack_product->name)){
+            $list['serwis'] = array_pop($pack_product->name);
+          } else{
+            $list['serwis'] = $pack_product->name;
+          }
+          //pobierz kombinacje produktu
+          //pobierz atrybuty kombinacji razem z grupami
+          //przy towrzeniu paczki nie mozna uzywac atrybutow w prescie
+          //$attributes = Db::getInstance()->ExecuteS('
+            //SELECT a.*, ag.`type`, al.name AS name
+            //FROM '._DB_PREFIX_.'attribute a
+            //LEFT JOIN '._DB_PREFIX_.'product_attribute_combination pac ON (pac.`id_attribute` = a.`id_attribute`)
+            //LEFT JOIN '._DB_PREFIX_.'attribute_group ag ON (a.`id_attribute_group` = ag.`id_attribute_group`)
+            //LEFT JOIN '._DB_PREFIX_.'attribute_lang al ON (a.`id_attribute` = al.`id_attribute`)
+            //WHERE pac.`id_product_attribute` = '.$product['product_attribute_id'].' AND al.`id_lang` = '.$cookie->id_lang
+          //);
+          ////ustaw gadget/abonament zgodnie z atrybutami
+          //$length = '';
+          //$gadget = '';
+          //foreach($attributes as $attribute){
+            //if($attribute['type'] == 1){
+              //$length = $attribute['length'];
+            //} elseif($attribute['type'] == 2){
+              //$gadget = $attribute['name'];
+            //}
+          //}
+
+          $list['ilosc']= $pack_product->pack_quantity;
+          $list['abonament'] = 'pojedyńcze';
+          $list['cena'] = $pack_product->getPrice();
+          $list['od_numeru'] = '';
+          $list['forma_platnosci'] = $order->payment;
+
+          $list['gadget'] = '';
+          $list['abonament_gadget'] = "bezemi";
+          $list['serwis_numer'] = $list['serwis'] . " " . $list['od_numeru'];
+          if($order->id_address_invoice != $order->id_address_delivery){
+            $list = array_merge($list, $address);
+          }
+          $product_rows .= $this->format_csv_line($list, ";");
+        }
+      } else {
+        //pobierz produkt
+        $list = array_merge($list, $this->parseProduct($product, $order));
+        //dodaj adres
+        if($order->id_address_invoice != $order->id_address_delivery){
+          $list = array_merge($list, $address);
+        }
+        $product_rows .= $this->format_csv_line($list, ";");
+      }
+    }
+    //dodaj koszty wyslki
+    $list = $order_info;
+    //dodaj adres
+		$carrier = new Carrier($order->id_carrier, intval($cookie->id_lang));
+    $list['serwis'] = $carrier->name;
+
+    $list['ilosc']= 1;
+    $list['abonament'] = "pojedyńcze";
+    $list['cena'] = $order->total_shipping;
+    $list['od_numeru'] = "";
+    $list['forma_platnosci'] = $order->payment;
+
+    $list['gadget'] = "";
+    $list['abonament_gadget'] = "bezemi";
+    $list['serwis_numer'] = $list['serwis'] . " " . $list['od_numeru'];
+    if($order->id_address_invoice != $order->id_address_delivery){
+      $list = array_merge($list, $address);
+    }
+    $product_rows .= $this->format_csv_line($list, ";");
+    $order->is_exported = true;
+    $order->save();
+    return $product_rows;
+    
+  }
+  private function parseProduct($product, $order){
+    global $cookie;
+    $p = new Product($product['product_id'], $cookie->id_lang);
+    $list = array();
+    if(is_array($p->name)){
+      $list['serwis'] = array_pop($p->name);
+    } else{
+      $list['serwis'] = $p->name;
+    }
+    $length = '';
+    $gadget = '';
+    //pobierz kombinacje produktu
+    //pobierz atrybuty kombinacji razem z grupami
+    if($product['product_attribute_id']){
+      $attributes = Db::getInstance()->ExecuteS('
+        SELECT a.*, ag.`type`, al.name AS name
+        FROM '._DB_PREFIX_.'attribute a
+        LEFT JOIN '._DB_PREFIX_.'product_attribute_combination pac ON (pac.`id_attribute` = a.`id_attribute`)
+        LEFT JOIN '._DB_PREFIX_.'attribute_group ag ON (a.`id_attribute_group` = ag.`id_attribute_group`)
+        LEFT JOIN '._DB_PREFIX_.'attribute_lang al ON (a.`id_attribute` = al.`id_attribute`)
+        WHERE pac.`id_product_attribute` = '.$product['product_attribute_id'].' AND al.`id_lang` = '.$cookie->id_lang
+      );
+      //ustaw gadget/abonament zgodnie z atrybutami
+      foreach($attributes as $attribute){
+        if($attribute['type'] == 1){
+          $length = $attribute['length'];
+        } elseif($attribute['type'] == 2){
+          $gadget = $attribute['name'];
+        }
+      }
+    }
+    if(empty($length)){
+      $length = 'pojedyńcze';
+    }
+
+    $list['ilosc']= $product['product_quantity'];
+    $list['abonament'] = $length;
+    $list['cena'] = $product['product_price_wt'];
+    $list['od_numeru'] = $product['subscription_date']? $product['subscription_date'] : "";
+    $list['forma_platnosci'] = $order->payment;
+
+    $list['gadget'] = $gadget;
+    $list['abonament_gadget'] = "bezemi";
+    $list['serwis_numer'] = $list['serwis'] . " " . $list['od_numeru'];
+    return $list;
+  }
+	private function format_csv_line($list, $seperator = "\t"){
+		$s='';
+		foreach($list as &$l){
+			$l=''.addslashes($l).'';
+		}
+		
+		return implode($seperator, $list)."\r\n";
+	}
+}
+?>

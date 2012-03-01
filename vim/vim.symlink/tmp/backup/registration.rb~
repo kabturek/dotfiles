@@ -1,0 +1,87 @@
+# encoding: utf-8
+# Klasa reprezentuje wniosek o rejestrację danych firmy.
+# Rejestracja zbudowana jest na podstawie automatu skończonego ze stanami: 
+# [:new_form, :data_confirmation_form, :edit_form, :thank_you_message]
+# Rejestracja przebiega w kilku krokach. Na początku wniosek o rejestrację ustawiony ma stan :new_form
+# W tym stanie nie ma włączonych walidacji, ponieważ celem tego stanu jest umożliwienie zapisania rejestracji w bazie i 
+# pobranie jej ID do zapisania w sesji.
+# Wszystkie pozostałe stany mają ustawione walidacje.
+# Stan :data_confirmation_form reprezentuje wniosek w momencie kiedy wszystkie pola zostały zwalidowane poprawnie. 
+# Stan :edit_form reprezentuje wniosek po próbie potwierdzenia danych, która nie powiodłą się z powodu niespełnienia walidacji
+# lub wniosek który użytkownik postanowił poprawić.
+# Stan :thank_you_message reprezentuje formularz w momencie tuż przed wysłaniem go do API. Z tego stanu nie można już wrócić
+# do poprzednich stanów (wniosek powinien zostać usunięty z bazy).
+module CrmApplication
+  class Registration < ActiveRecord::Base
+
+    include PuchatekApi::PuchatekJson
+
+    state_machine :initial => :new_form do
+
+      state all - :new_form do
+        validates :company_name, :user_email,
+                  :street_name, :street_number, :post_code, :city, :phone,
+                  :nip, :regon, :krs,
+                  :representatives, :presence => true
+
+        # see app/validators
+        validates :user_email, :email => true, :email_unique => true
+        validates :password, :confirmation => true, :presence => true
+        validates :nip, :regon, :krs, :numericality => true
+      end
+
+      event :display_data_confirmation do
+        transition :new_form => :data_confirmation_form, :edit_form => :data_confirmation_form, :data_confirmation_form => :data_confirmation_form
+      end
+
+      event :correct_data do
+        transition :data_confirmation_form => :edit_form
+      end
+
+      event :confirm_data do
+        transition :data_confirmation_form => :thank_you_message
+      end
+    end
+
+    has_many :representatives, :class_name => "CrmApplication::Representative", :dependent => :destroy
+
+    scope :unfinished, where('updated_at < ?', Time.now - 1.hour)
+
+    accepts_nested_attributes_for :representatives
+
+    # Wysyła wniosek rejestracyjny do api.
+    def submit
+      PuchatekApi::CrmForms.submit_registration_form(self)
+    end
+
+    # Przyjmuje token wysłany do użytkownika po rejestracji i aktywuje konto.
+    def self.confirm_application(token)
+      PuchatekApi::CrmForms.confirm_application(token)
+    end
+
+    # Waliduje pola regulations i agreement
+    def validate_agreements
+      regulations_result = validate_regulations
+      agreement_result   = validate_agreement
+      regulations_result && agreement_result
+    end
+
+    # Czyści bazę ze wszystkich niedokończonych rejestracji (tj. takich które zostają zwrócone przez scope :unfinished)
+    # Używana przez whenever. 
+    def self.clean_unfinished_registration
+      self.class.unfinished.destroy_all
+    end
+
+    private
+    def validate_regulations
+      errors.add(:regulations, I18n.t('activerecord.errors.models.crm_application/registration.attributes.regulations.accepted')) unless regulations.present?
+      regulations.present?
+    end
+
+    def validate_agreement
+      errors.add(:agreement, I18n.t('activerecord.errors.models.crm_application/registration.attributes.agreement.accepted')) unless agreement.present?
+      agreement.present?
+    end
+
+  end
+end

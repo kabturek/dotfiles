@@ -1,0 +1,13 @@
+# encoding: utf-8
+
+#klasa służąca jako klucz w tablicy wartosci przesyłanej do API
+#potrzebna ponieważ chcemy przesyłac klucze o takich samych nazwach
+#dwie wartosci Param nigdy nie są równe
+module PuchatekApi
+  class Param < String
+    def eql?(other)
+      return false
+    end
+  end
+end
+

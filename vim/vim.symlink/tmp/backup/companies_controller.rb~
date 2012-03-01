@@ -1,0 +1,46 @@
+# encoding: utf-8
+# Kontroler pozwala wyszukiwać i dodawać firmy do kontrahentów. Również pozwala zapraszać
+# inne firmy do udziału w serwisie poprzez wysłanie do nich zaproszenia na email
+class CompaniesController < ApplicationController
+  
+  before_filter :full_login_required!
+
+  # /GET
+  def index    
+  end
+
+  # /GET & /POST
+  def search
+    @companies = Company.find_by_nip(params[:query], params[:file])
+    render :index
+  end
+
+  # /POST
+  def add_to_current_account
+    company = Company.new(:nip => params[:nip], :name => params[:friendly_name])
+    if company.add_to_current_account
+      notice = t('flashes.notice.contractor_added')
+    else
+      notice = t('flashes.notice.contractor_name_failed_to_change')
+    end
+    if request.xhr?
+      @companies = Company.find_by_nip(params[:nip], nil)
+      @partial = render_to_string :partial => "company", :collection => @companies
+    else
+      redirect_to search_companies_path(company), :notice => notice
+    end
+  end
+
+  # /POST
+  def invite
+    emails = parse_emails(params[:emails])
+    Company.invite(emails)
+    redirect_to companies_path, :notice => t("flashes.notice.contractors_invited")
+  end
+  
+  private
+  def parse_emails(emails)
+    emails.split(',').map(&:strip)
+  end
+  
+end

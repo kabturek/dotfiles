@@ -1,0 +1,19 @@
+# SVN FILE: $Id: .htaccess 6 2008-07-21 11:22:27Z k.rakowski $
+# AuthName "Podaj haslo"
+# AuthType Basic
+# AuthUserFile /www/sites/rodziynka.plum.com.pl/htdocs/.htpasswd
+# Require valid-user
+
+<IfModule mod_rewrite.c>
+   RewriteEngine On
+   RewriteCond %{HTTPS} off
+   RewriteRule ^/admin/(.*)$ https://%{SERVER_NAME}/admin/$1 [R,L]
+   RewriteRule ^/accounts/(.*)$ https://%{SERVER_NAME}/accounts/$1 [R,L]
+   RewriteRule ^/users/(.*)$ https://%{SERVER_NAME}/users/$1 [R,L]
+   RewriteRule ^/customers/(.*)$ https://%{SERVER_NAME}/customers/$1 [R,L]
+   RewriteRule ^/register_customers/(.*)$ https://%{SERVER_NAME}/register_customers/$1 [R,L]
+   RewriteRule ^/register_forms/(.*)$ https://%{SERVER_NAME}/register_forms/$1 [R,L]
+   RewriteCond %{REQUEST_FILENAME} !-d
+   RewriteCond %{REQUEST_FILENAME} !-f
+   RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+</IfModule>

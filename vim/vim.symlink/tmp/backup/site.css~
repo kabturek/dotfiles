@@ -1,0 +1,1681 @@
+@charset "utf-8";
+
+/* SVN FILE: $Id: site.css 403 2008-10-03 14:28:09Z o.grabek $ */
+
+
+/* CSS Document */
+
+/**************************
+strona: Rodziynka - strona główna
+data: 25.08.2008
+autor: Olga Grabek
+
+**************************/
+
+/* style ogólne css 10.12.2010 */
+
+*
+{
+	padding:0;
+	margin:0;
+}
+
+p, h1, h2, h3, h4, h5, h6
+{
+	font-size:1em;
+}
+
+a
+{
+	text-decoration:none;
+	color: #00a0de;
+}
+
+a:visited
+{
+	color: #c551c5;
+}
+
+a img
+{
+	border:0;
+}
+
+.clear {
+	clear: both;
+}
+
+/* body */
+body
+{
+	font-size:100%;
+    line-height:1.125em;
+	font-family:Tahoma, Arial, Helvetica, sans-serif;
+	/* background:#fff url(img/body_bg.gif) 0 286px repeat-x; */
+	/* background-attachment: scroll; */
+}
+
+p
+{
+	font-size:0.75em;
+	color: #3B464E;
+}
+
+#main-content ol li
+{
+	margin-left: 50px;
+	font-size: 0.75em;
+	color: #3B464E;
+}
+
+#main-content a
+{
+	text-decoration: underline;
+}
+
+/* wrapper */
+#wrapper
+{
+	left:50%;
+	width: 1000px;
+	margin-left:-500px;
+	border: 0px solid red;
+	overflow: hidden;
+	padding-top: 2px;
+	position: absolute;
+}
+
+#wrapper ul.tt-menu {background: #1ea0dc;}
+#wrapper ul.tt-logo {background: #fff; height:82px;}
+    #wrapper ul.tt-logo li {
+        display: block;
+        float: left;
+        height: 80px;
+        padding: 20px 0 0; }
+
+#wrapper ul#top-menu, #wrapper ul.tt-menu, #wrapper ul.tt-logo
+{
+	list-style: none;
+	float: right;
+	margin-bottom:4px;
+	width: 100%;
+}
+
+#wrapper ul#top-menu li
+{
+	float: right;
+	padding: 1px 26px 3px 15px;
+	margin-left: 2px;
+}
+
+#wrapper ul.tt-menu, #wrapper ul.tt-logo
+{
+	float: left;
+	padding: 1px 0px 3px 5px;
+	margin-left: 0px;
+}
+
+#wrapper ul.tt-menu li
+{
+	display: inline;
+	padding: 0px 2px 0px 10px;
+}
+
+#wrapper ul.tt-logo li a {display:block;}
+
+#wrapper ul#top-menu li#account
+{
+	background: #6fc2e8 url(img/top_menu_account_pointer_03.gif) 86px 7px no-repeat;
+	border-top: 2px solid #5c9bc9;
+}
+
+#wrapper ul#top-menu li#login
+{
+	background: #1ea0db url(img/top_menu_login_pointer_05.gif) 83px 7px no-repeat;
+	border-top: 2px solid #1b8ec2;
+}
+
+#wrapper ul#top-menu li#user-name
+{
+	font-size: 0.75em;
+	padding-top: 5px;
+	color: #0084C8;
+	font-weight: bold;
+}
+
+#wrapper ul#top-menu li a, #wrapper ul.tt-menu li a
+{
+	color: #fff;
+	font-size:0.8em;
+}
+
+/* content */
+#content
+{
+	background: #fff url(img/content_bg_2_03.gif) top left no-repeat;
+	clear: right;
+	overflow: hidden;
+	width: 100%;
+	padding-bottom: 80px;
+}
+
+/* header */
+#content #header
+{
+	overflow: hidden;
+	width: 100%;
+	padding: 3px 10px 41px 0;
+	position: relative;
+
+}
+
+#content #header #flash
+{
+	float: right;
+	width: 570px;
+	height: 180px;
+}
+
+#wrapper #rodziynka{
+	position:absolute;
+	top:0;
+	margin-top:111px;
+	left:22px}
+
+/* main-menu(glowne menu) */
+
+#content #main-menu
+{
+	height: 30px;
+	background: #0e98d6 url(img/main_menu_bg_03.gif) top left repeat-x;
+	border-top: 3px solid #fddc01;
+	border-bottom: 3px solid #e7c002;
+	width: 100%;
+}
+
+#content #main-menu ul
+{
+	list-style: none;
+	float: left;
+	width: 700px;
+	overflow: hidden;
+}
+
+#content #main-menu ul li
+{
+	float: left;
+	overflow: hidden;
+	padding: 0px 18px;
+	border-right: 3px solid #fddc01;
+	height: 25px;
+}
+
+#content #main-menu ul li a
+{
+	display: block;
+	height: 30px;
+}
+
+#content #main-menu ul li a#main-menu-home-page
+{
+	background: transparent url(img/home_page_2_bg.gif) top left no-repeat;
+	text-indent: -666em;
+	width: 109px;
+}
+
+#content #main-menu ul li a#main-menu-home-page:hover,
+#content #main-menu ul li a#main-menu-about-rodziynka:hover,
+#content #main-menu ul li a#main-menu-promotions:hover,
+#content #main-menu ul li a#main-menu-gifts:hover,
+#content #main-menu ul li a#main-menu-my-account:hover,
+#content #main-menu ul li a#main-menu-contact:hover
+{
+	background-position: 0 -30px;
+}
+
+#content #main-menu ul li a#main-menu-home-page.active,
+#content #main-menu ul li a#main-menu-about-rodziynka.active,
+#content #main-menu ul li a#main-menu-promotions.active,
+#content #main-menu ul li a#main-menu-gifts.active,
+#content #main-menu ul li a#main-menu-my-account.active,
+#content #main-menu ul li a#main-menu-contact.active
+{
+	background-position: 0 -30px;
+}
+
+#content #main-menu ul li a#main-menu-about-rodziynka
+{
+	background: transparent url(img/about_rodziynka_2_bg.gif) top left no-repeat;
+	text-indent: -666em;
+	width: 80px;
+}
+
+#content #main-menu ul li a#main-menu-promotions
+{
+	background: transparent url(img/promotions_2_bg.gif) top left no-repeat;
+	text-indent: -666em;
+	width: 62px;
+}
+
+#content #main-menu ul li a#main-menu-gifts
+{
+	background: transparent url(img/gifts_2_bg.gif) top left no-repeat;
+	text-indent: -666em;
+	width: 58px;
+}
+
+#content #main-menu ul li a#main-menu-my-account
+{
+	background: transparent url(img/my_account_2_bg.gif) top left no-repeat;
+	text-indent: -666em;
+	width: 76px;
+}
+
+#content #main-menu ul li a#main-menu-contact
+{
+	background: transparent url(img/contact_2_bg.gif) top left no-repeat;
+	text-indent: -666em;
+	width: 53px;
+}
+
+
+#content #main-menu #search-form fieldset
+{
+	border: 0;
+	height: 30px;
+}
+
+#content #main-menu #search-form fieldset legend
+{
+	display: none;
+}
+
+#content #main-menu #search-form label
+{
+	display: none;
+}
+
+#content #main-menu #search-form fieldset ol
+{
+	list-style: none;
+}
+
+#content #main-menu #search-form fieldset ol li
+{
+	float: left;
+	margin-right: 10px;
+	height: 30px;
+}
+
+
+#content #main-menu #search-form fieldset ol li.search-window input
+{
+	height:15px;
+	font-size: 0.7em;
+	width: 200px;
+	background: #fff url(img/search_window_bg.gif) 187px 4px no-repeat;
+	margin-top: 4px;
+}
+
+.display-none
+{
+	display: none;
+}
+
+div#authMessage.message
+{
+	color: #e11023;
+	font-size: 0.75em;
+	font-weight: bold;
+}
+
+
+/* information - prawa szpalta */
+
+#content #informations
+{
+	float: right;
+	width: 357px;
+	background: transparent url(img/informations_top_bg_3.gif) top left no-repeat;
+}
+
+#content #informations div.catalog
+{
+	padding: 20px 0 20px 20px;
+	width: 337px;
+}
+
+#content #informations div.catalog img, #content #informations div.promotions img
+{
+	float: right;
+	margin-right: 9px;
+}
+
+#content #informations div.catalog p, #content #informations div.promotions p
+{
+	margin: 0 169px 0 50px;
+	color: #61889c;
+}
+
+#content #informations div.catalog a.link-more, #content #informations div.promotions a.link-more
+{
+	margin:0 169px 0 99px;
+	color: #4aa7d8;
+	font-size: 0.75em;
+	font-weight: bold;
+	display: block;
+	background: #fff url(img/catalog_link_more_pointer.gif) 59px 8px no-repeat;
+}
+
+#content #informations div.catalog h3, #content #informations div.promotions h3, #content #program #login-form h3
+{
+	color: #40a3d4;
+	font-size: 1.3em;
+	font-weight: normal;
+	padding: 10px;
+}
+
+#content #informations div.promotions
+{
+	background: transparent url(img/informations_bottom_bg.gif) left bottom no-repeat;
+	padding:20px 0 20px 20px;
+	clear: right;
+	overflow: hidden;
+	width: 337px;
+}
+
+
+#content #informations div.promotions a.see-prices
+{
+	color: #ff0000;
+	margin: 0 169px 0 50px;
+	font-size: 0.75em;
+	font-weight: bold;
+	background: #fff url(img/promotions_see_prices_pointer.gif) 109px 6px no-repeat;
+	display: block;
+}
+
+
+
+
+/* program - lewa szpalta */
+#content #program
+{
+	float: left;
+	width: 640px;
+	overflow: hidden;
+
+}
+
+#content #program h2
+{
+	color: #fff;
+	font-size: 2.0em;
+	line-height: 1.2em;
+	font-weight: normal;
+	margin: 10px 0 0 254px;
+}
+
+#content #program h2 span
+{
+	margin-left: 24px;
+}
+
+#content #program #login-form
+{
+
+	background: transparent url(img/program_login_form_top_bg.gif) top left no-repeat;
+	width: 256px;
+	position: absolute;
+	top: 411px;
+	left: 0;
+	overflow: hidden;
+}
+
+#content #program #login-form div#bottom-wrapper
+{
+	background: transparent url(img/program_login_form_bottom_bg.gif) bottom left no-repeat;
+	width: 256px;
+
+}
+
+#MessageContactFormForm
+{
+    padding-left: 50px;
+}
+
+#CustomerLoginForm .input input,
+#CustomerLoginLayerForm .input input
+{
+	color: #919191;
+	font-size: 0.7em;
+	padding: 2px;
+	width: 150px;
+}
+
+#MessageContactFormForm .input input,
+#MessageContactFormForm .input select
+{
+    clear: both;
+    display: block;
+	font-size: 0.7em;
+	padding: 2px;
+	width: 300px;
+}
+
+#MessageContactFormForm .input textarea
+{
+    clear: both;
+    display: block;
+	padding: 2px;
+	width: 300px;
+}
+
+#CustomerLoginForm label,
+#CustomerLoginLayerForm label
+{
+	float: left;
+	font-size: 0.8em;
+	color: #919191;
+	width: 5em;
+	text-align: right;
+	padding: 0 5px 0 13px;
+}
+
+#MessageContactFormForm label
+{
+	float: none;
+	font-size: 0.7em;
+	color: #919191;
+	text-align: left;
+	padding: 1px;
+}
+
+#CustomerLoginForm .submit,
+#CustomerLoginLayerForm .submit,
+#MessageContactFormForm .submit
+{
+	margin: 8px 0 0 147px;
+}
+
+#content #program #login-form p
+{
+	color: #919191;
+	font-size: 0.7em;
+	margin-left: 11px;
+}
+
+#content #program #login-form p a
+{
+	color: #919191;
+}
+
+#content #program #login-form p.get-account, #content #program #login-form p.forgot-password
+{
+	padding-bottom: 5px;
+	display: block;
+}
+
+#content #program #login-form p.get-account
+{
+    background: transparent url(img/promotions_see_prices_pointer.gif) 176px 7px no-repeat;
+    padding-bottom:10px;
+}
+
+#content #program #login-form p.forgot-password
+{
+	background: transparent url(img/promotions_see_prices_pointer.gif) 98px 7px no-repeat;
+	margin-top: 10px;
+}
+
+/* card - pudelko z karta */
+
+#content #program #card
+{
+	width: 139px;
+	background: transparent url(img/card_top_bg.gif) top left no-repeat;
+	position: absolute;
+	top:395px;
+	left: 485px;
+}
+
+#content #program #card h3
+{
+	font-size: 0.7em;
+	padding-left: 9px;
+}
+
+#content #program #card h3 a
+{
+	color: #fff;
+}
+
+#content #program #card h4
+{
+	background: transparent url(img/card_bottom_bg_final_05.gif) bottom left no-repeat;
+	font-size: 0.75em;
+	padding: 10px 0 8px 6px;
+	clear: right;
+}
+
+#content #program #card h4 a
+{
+	color: #50abd9;
+}
+
+#content #program #card p
+{
+	margin: 10px 15px 0px 15px;
+	color: #024c71;
+	font-size: 0.7em;
+	line-height: 1.3em;
+}
+
+#content #program #card a.link-more
+{
+	color: #024c71;
+	font-size: 0.7em;
+	font-weight: bold;
+	float: right;
+	display: block;
+	padding-right:22px;
+	background: transparent url(img/catalog_link_more_pointer.gif) 50px 8px no-repeat;
+}
+
+#content #program #card img.card-image
+{
+	position: relative;
+	top: 9px;
+	left: -201px;
+}
+
+/* sidebar-menu -> lewe menu na podstronach */
+#content #sidebar-menu
+{
+	float: left;
+	width: 200px;
+}
+
+#content #sidebar-menu ul
+{
+	list-style: none;
+	float: left;
+	margin-top: 20px;
+	width: 100%;
+}
+
+#content #sidebar-menu ul li
+{
+	float: left; /* naprawiamy buga pod IE6 */
+	width: 190px;
+	background: url(img/sidebar_menu_bg-trans.png);
+	margin-bottom: 2px;
+	/*height: 20px;*/
+}
+
+#content #sidebar-menu ul li.first-child
+{
+	background: url(img/gif/sidebar_menu_first_child_bg-trans.gif) no-repeat;
+	font-weight: bold;
+}
+
+#content #sidebar-menu li a
+{
+	display: block;
+	font-size: 0.8em;
+	color: #198fc9;
+	padding-left: 19px;
+	width: 100%;
+	position: relative;
+        line-height: 22px;
+}
+
+/* lewa szpalta na stronie wyszukiwania */
+#sidebar-menu-search
+{
+	float: left;
+	width: 200px;
+	background: transparent url(img/sidebar_menu_search_form_bg-trans.png) 2px 2px no-repeat;
+	margin-top: 16px;
+}
+
+#sidebar-menu-search h2
+{
+	color: #40A3D4;
+	font-size: 1.3em;
+	font-weight: normal;
+	padding: 10px 0px 10px 10px;
+}
+
+#sidebar-menu-search form
+{
+	margin-left: 10px;
+}
+
+#sidebar-menu-search form fieldset
+{
+	border: 0;
+}
+
+#sidebar-menu-search form legend
+{
+	display: none;
+}
+
+#sidebar-menu-search form ol
+{
+	list-style: none;
+}
+
+#sidebar-menu-search form label
+{
+	color: #919191;
+	font-size: 0.7em;
+	display: block;
+	margin: 10px 0;
+}
+
+#sidebar-menu-search form #search-window-two
+{
+	width: 142px;
+	position: relative;
+	background: transparent url(img/gif/sidebar_menu_search_window_bg-trans.gif) repeat;
+}
+
+#sidebar-menu-search form #search-button-two
+{
+	margin: 20px 0pt 0pt 63px;
+}
+
+/* main-content -> glowna tresc na podstronie */
+#content #main-content
+{
+	padding: 21px 0 0 0px;
+	float: left;
+	margin:10px 0 0 15px;
+	min-height: 300px;
+	position:relative;
+	z-index:3;
+}
+.main-content-narrow
+{
+	width: 566px;
+	background: transparent url(img/main_content_bg-trans.png) 0 0 no-repeat;
+}
+.main-content-wide
+{
+	width: 700px;
+	background: none;
+}
+
+
+#content #main-content ul
+{
+	list-style: none;
+	font-size: 0.75em;
+	color:#3b464e;
+}
+
+#content #main-content ul li
+{
+	background: transparent url(img/main_content_list_pointer.gif) 0px 6px no-repeat;
+	padding-left: 18px;
+	margin-left: 30px;
+}
+
+#content #main-content h1
+{
+	color: #00aae3;
+	margin: 10px 20px 25px 20px;
+}
+
+#content #main-content h2
+{
+	color: #00aae3;
+	text-transform: uppercase;
+	font-size: 0.75em;
+	margin: 10px 20px 5px;
+	display: block;
+}
+
+#content #main-content p
+{
+	margin: 0 20px;
+	color: #3b464e;
+	font-size: 0.75em;
+}
+
+#content #main-content img
+{
+	float: left;
+	margin: 0 10px 0 30px;
+}
+
+#content #main-content ul#about-rodziynka-list
+{
+
+	margin: 10px 0 53px 306px;
+}
+
+#content #main-content ul#about-rodziynka-list li
+{
+	color: #3b464e;
+	font-size: 0.75em;
+}
+
+/* style dotyczace tresc poszczegolnych podstron */
+#content #main-content a.red-button
+{
+	display: block;
+	width: 50px;
+	height: 20px;
+	background:#e11023 url(img/main_content_red_button_pointer.gif) 63px 50% no-repeat;;
+	float: leftt;
+	position: relative;
+	color: #fff;
+	font-size: 0.75em;
+	margin: 20px 0 0pt 364px;
+	padding: 0 20px;
+	text-decoration: none;
+}
+
+#content #main-content #gifts-column-one
+{
+	float:left;
+	margin-left:10px;
+	width:260px;
+}
+
+#content #main-content #gifts-column-one ul, #content #main-content #gifts-column-two ul
+{
+	width: 260px;
+	margin: 0;
+	list-style: none;
+	overflow: hidden;
+}
+
+#content #main-content #gifts-column-one li,
+#content #main-content #gifts-column-two li
+{
+	background:#fff url(img/main_content_gifts_list_bg.gif) top right no-repeat;
+	overflow: hidden;
+	padding: 0 75px 0 0;
+	position: relative;
+	margin: 0 0 20px 0;
+	height: 81px;
+}
+
+#content #main-content #gifts-column-one li a,
+#content #main-content #gifts-column-two li a
+{
+	display: block;
+	width: 260px;
+	height: 81px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: transparent url(img/gifts_a_background-trans.gif) repeat;
+}
+
+#content #main-content #gifts-column-one li h3,
+#content #main-content #gifts-column-two h3
+{
+	font-size: 1.1em;
+	color: #00aae3;
+	padding-top: 5px;
+}
+
+#content #main-content #gifts-column-one li p,
+#content #main-content #gifts-column-two li p
+{
+	color: #000;
+	font-size: 1em;
+	margin:0;
+}
+
+#content #main-content #gifts-column-one li p.gifts-points,
+#content #main-content #gifts-column-two li p.gifts-points
+{
+	position: absolute;
+	top: 29px;
+	left: 195px;
+	color: #0084c8;
+	font-size: 1em;
+	font-weight: bold;
+	line-height: 0.9em;
+}
+
+#content #main-content #gifts-column-one li p.gifts-points span,
+#content #main-content #gifts-column-two li p.gifts-points span
+{
+	font-size: 0.9em;
+	margin-left: 10px;
+}
+
+#content #main-content #gifts-column-one li img,
+#content #main-content #gifts-column-two li img
+{
+	margin-right: 0;
+	margin-left: 0px;
+}
+
+#content #main-content #gifts-column-one li div.img-points,
+#content #main-content #gifts-column-two li div.img-points
+{
+	height:81px;
+	left:180px;
+	margin:auto;
+	opacity:0.8;
+	overflow:hidden;
+	position:absolute;
+	text-align:center;
+	top:0;
+	width:82px;
+}
+
+#content #main-content #gifts-column-one li div.img-points img,
+#content #main-content #gifts-column-two li div.img-points img
+{
+	float: none;
+	margin-top: 21px;
+}
+
+#content #main-content #gifts-column-two
+{
+	float: right;
+	width: 260px;
+	margin-right: 10px;
+}
+
+#content #main-content .blue-paragraph
+{
+	color: #0084c8;
+	font-weight: bold;
+}
+
+#content #main-content #search-list
+{
+	list-style: none;
+	margin-top: 20px;
+}
+
+#content #main-content #search-list li
+{
+	margin-bottom: 15px;
+	background: none;
+}
+
+#content #main-content #search-list li p.blue-paragraph-pointer
+{
+	color: #0084c8;
+	font-weight: bold;
+	background: transparent url(img/main_content_search_list_pointer_bg.png) 0 50% no-repeat;
+	padding-left: 12px;
+	margin-bottom: 10px;
+	margin-left:-20px;
+}
+
+#content #main-content #search-list li a
+{
+	color: #0084c8;
+	font-weight: bold;
+}
+
+#content #main-content #map-list {
+	list-style: none;
+	margin: 3px 0 10px 0;
+}
+
+#content #main-content #map-list li
+{
+	background: none;
+	font-size: 1em;
+}
+
+#content #main-content #map-list li p.blue-paragraph-pointer
+{
+	color: #0084c8;
+	background: transparent url(img/main_content_search_list_pointer_bg.png) 0 50% no-repeat;
+	padding-left: 12px;
+}
+
+#content #main-content #map-list li a
+{
+	color: #0084c8;
+    font-size: 1.4em;
+    line-height:1.5em;
+}
+
+#content #main-content h3.header-points
+{
+	color: #e11023;
+	font-size: 1.5em;
+	margin-left: 382px;
+	padding: 10px 0;
+}
+
+/* login-sidebar -> prawa szpalta na podstronach */
+#content #login-sidebar
+{
+	float: right;
+	width: 202px;
+	margin-top: 7px;
+	padding-left: 8px;
+}
+
+#content #login-sidebar h2
+{
+	color: #40A3D4;
+	font-size: 1.6em;
+	font-weight: normal;
+	padding: 7px 0;
+	margin-top: 2px;
+}
+/*mkmk*/
+#content #login-sidebar h2.sidebar-login-header-log
+{
+	background: transparent url(img/login_sidebar_bg1-trans.png) 0 0 no-repeat;
+	color: #40A3D4;
+	font-size: 1.2em;
+	font-weight: normal;
+	padding: 30px 0 10px 10px;
+}
+
+#content #login-sidebar h2 a
+{
+	color: #40A3D4;
+}
+
+#content #login-sidebar p.get-account
+{
+	background: transparent url(img/promotions_see_prices_pointer.gif) no-repeat scroll 146px 6px;
+	margin-left: 10px;
+}
+
+#content #login-sidebar p.forgot-password
+{
+	background: transparent url(img/promotions_see_prices_pointer.gif) no-repeat scroll 120px 6px;
+	margin-left: 10px;
+}
+
+#content #login-sidebar p.forgot-password a
+{
+	color: #919191;
+	font-size: 1.1em;
+}
+
+#content #login-sidebar p.get-account a
+{
+	color: #919191;
+	font-size: 1.1em;
+}
+
+#login-sidebar #CustomerLoginForm
+{
+	margin-left: 10px;
+}
+
+#login-sidebar #CustomerLoginForm label
+{
+	float: none;
+	display: block;
+	width: 2em;
+	padding: 0;
+}
+
+#login-sidebar #CustomerLoginForm .submit
+{
+	margin: 14px 0px 10px 101px;
+}
+
+#login-sidebar #CustomerLoginForm .input input
+{
+	width: 178px;
+}
+
+#content #login-sidebar #login-form legend
+{
+	display: none;
+}
+
+#content #login-sidebar #login-form label
+{
+	display: block;
+	color: #919191;
+	font-size: 0.75em;
+}
+
+#content #login-sidebar #login-form ol
+{
+	list-style: none;
+}
+
+#content #login-sidebar #login-form input.text
+{
+	width: 142px;
+	color: #919191;
+	font-size: 0.7em;
+	padding: 2px;
+}
+
+#content #login-sidebar #login-form input#submit-button
+{
+	margin: 30px 0 0 68px;
+}
+
+#content #login-sidebar #gifts
+{
+	background: #fff url(img/gifts_bg_18.gif) 72px 18px no-repeat;
+	margin: 15px 0 30px 0;
+}
+
+#content #login-sidebar #gifts h2
+{
+	margin-left: 46px;
+}
+
+#content #login-sidebar #gifts h2 span
+{
+	font-size: 0.6em;
+	margin-left: 10px;
+	font-weight: bold;
+}
+
+#content #login-sidebar #gifts img
+{
+	margin-left: 42px;
+}
+
+#content #login-sidebar #catalog
+{
+	background: transparent url(img/gif/catalog_bg-trans.gif) 10px 2px no-repeat;
+	margin: 15px 0 30px 0;
+}
+
+#content #login-sidebar #catalog h2
+{
+	margin-left: 57px;
+	padding-top: 17px;
+}
+
+#content #login-sidebar #catalog h2 span
+{
+	font-size: 0.6em;
+	margin-left: -14px;
+	font-weight: bold;
+}
+
+#content #login-sidebar #catalog img
+{
+	margin:5px 0 0 48px;
+}
+
+/* footer - stopka */
+#wrapper #footer
+{
+	clear: both;
+	background: #fff url(img/footer_pointer.gif) 665px 1px no-repeat;
+	overflow: hidden;
+	width:100%;
+	font-size: 0.85em;
+	padding: 55px 0pt;
+
+}
+
+#wrapper #footer-home
+{
+	clear: both;
+	overflow: hidden;
+	width:100%;
+	font-size: 0.85em;
+	background-color: #00a0de;
+}
+
+#wrapper #footer #footer-color
+{
+	background-color: #00a0de;
+	overflow: hidden;
+	height: 100%;
+}
+
+#wrapper #footer #footer-wrapper, #wrapper #footer-home #footer-wrapper
+{
+	margin-top: 2px;
+	border-top: 1px solid #fff;
+	overflow: hidden;
+}
+
+#wrapper #footer #footer-wrapper a,
+#wrapper #footer-home #footer-wrapper a
+{
+	color: #fff;
+}
+
+#wrapper #footer #footer-wrapper ul,
+#wrapper #footer-home #footer-wrapper ul
+{
+	list-style: none;
+	float: left;
+	width: 270px;
+	margin-left: 179px;
+}
+
+#wrapper #footer #footer-wrapper ul li,
+#wrapper #footer-home #footer-wrapper ul li
+{
+	float: left;
+	font-size: 0.8em;
+	padding-left: 16px;
+}
+
+#wrapper #footer #footer-wrapper div.copyright,
+#wrapper #footer-home #footer-wrapper div.copyright
+{
+	float: left;
+	width: 200px;
+}
+
+#wrapper #footer #footer-wrapper div.copyright p,
+#wrapper #footer-home #footer-wrapper div.copyright p
+{
+	color: #fff;
+	margin-left: 20px;
+}
+
+#wrapper #footer #footer-wrapper div.plum,
+#wrapper #footer-home #footer-wrapper div.plum
+{
+	float: right;
+	width: 200px;
+	text-align: right;
+}
+
+#wrapper #footer #footer-wrapper div.plum a,
+#wrapper #footer-home #footer-wrapper div.plum a
+{
+	font-size: 0.75em;
+	margin-right: 20px;
+}
+
+/* zakladanie konta */
+#content #main-content #smaller-info {
+	font-size: 0.7em;
+}
+
+#main-content form
+{
+	margin: 15px 5px 0 15px;
+}
+
+#main-content form label
+{
+	font-size: 0.75em;
+	color: #3B464E;
+}
+
+#main-content form .input
+{
+	margin-bottom: 10px;
+}
+
+#main-content form .text label,
+#main-content form .password label,
+#main-content form .date label,
+#main-content form .select label
+{
+	float: left;
+	width: 14em;
+	text-align: right;
+	padding-right: 5px;
+}
+
+#main-content form .text input,
+#main-content form .password input
+{
+	width: 200px;
+	position: relative;
+}
+
+#main-content form .error input
+{
+	border: 1px solid #E11023;
+}
+
+#main-content form .radio
+{
+	margin-left:173px;
+}
+
+#main-content form .radio fieldset
+{
+	padding: 10px;
+}
+
+#main-content form .checkbox
+{
+	/*margin-left: 174px;*/
+	width:19px;
+	float:left;
+	position: relative;
+}
+
+#main-content form .checkbox label
+{
+	margin-left: 5px;
+}
+
+#main-content form div.case {
+	height: 83px;
+	width: 500px;
+	overflow: auto;
+	font-size:0.9em;
+	margin-bottom: 20px;
+	border: 1px solid #919191;
+}
+
+#main-content form div.case-small {
+	height: 20px;
+	overflow: hidden;
+	border-bottom: none;
+	margin-bottom: 30px;
+}
+
+#main-content form div.error-message,
+#login-sidebar form div.error-message,
+#login-form form div.error-message,
+#layer-form form div.error-message
+{
+	color: #E11023;
+	font-size: 0.75em;
+}
+
+form .error {
+    color: #E11023;
+}
+
+#login-form form div.error-message
+{
+	margin-left: 5px;
+}
+
+#main-content form u
+{
+	font-size: 0.8em;
+	color: #3B464E;
+	margin-left: 18px;
+	line-height: 3em;
+}
+
+#main-content form select#RegisterFormBirthDateDay,
+#main-content form select#RegisterFormBirthDateMonth,
+#main-content form select#RegisterFormNameDayDay,
+#main-content form select#RegisterFormNameDayMonth
+{
+	width: 43px;
+}
+
+#main-content form select#RegisterFormBirthDateYear
+{
+	width: 57px;
+}
+
+#main-content form div.submit
+{
+	float: right;
+	margin-right: 35px;
+}
+
+/* formualarz logowania na warstwie */
+#layer-form,
+#dialog-window
+{
+	padding: 0 156px 0 30px;
+	position: relative;
+}
+
+#layer-form h2
+{
+	color: #40A3D4;
+	font-size: 1.5em;
+	font-weight: normal;
+	padding: 30px 0 10px;
+}
+
+#layer-form p,
+#dialog-window p
+{
+	font-size: 0.9em;
+	color: #3b464e;
+}
+
+#layer-form p.get-account
+{
+	background: transparent url(img/promotions_see_prices_pointer.gif) no-repeat scroll 141px 11px;
+}
+
+#layer-form p.get-account a
+{
+	color: #00b8e6;
+	font-weight: bold;
+}
+
+#layer-form form label
+{
+	display: block;
+	padding: 2px 5px 0 0;
+	text-align: left;
+	font-size: 0.9em;
+	color: #3b464e;
+	text-align: left;
+}
+
+#layer-form #CustomerLoginForm,
+#layer-form #CustomerLoginLayerForm
+{
+	position: relative;
+}
+
+#layer-form #CustomerLoginForm .input input,
+#layer-form #CustomerLoginLayerForm .input input
+{
+	height: 1.4em;
+	font-size: 0.8em;
+}
+
+#layer-form #CustomerLoginForm .text,
+#layer-form #CustomerLoginLayerForm .text
+{
+	margin-bottom: 5px;
+	float: left;
+	width: 160px;
+}
+
+#layer-form #CustomerLoginForm .password,
+#layer-form #CustomerLoginLayerForm .password
+{
+	width: 180px;
+	float: left;
+}
+
+#layer-form #CustomerLoginForm .submit,
+#layer-form #CustomerLoginLayerForm .submit
+{
+	clear: both;
+	padding: 11px 0 0 86px;
+}
+
+
+#layer-form p.forgot-password
+{
+	background: transparent url(img/promotions_see_prices_pointer.gif) no-repeat scroll 101px 11px;
+}
+
+#layer-form p.forgot-password a
+{
+	color: #00b8e6;
+}
+
+#layer-form #close-button,
+#gift-layer #close-button
+{
+	position: absolute;
+	top: 5px;
+	left: 535px;
+}
+#layer-form #close-button-wide,
+#gift-layer #close-button-wide
+{
+	position: absolute;
+	top: 5px;
+	left: 680px;
+}
+
+
+#layer-form .button-blue1 img
+{
+	margin: 16px 17px 0 0;
+}
+
+/* okno dialogowe */
+#dialog-window
+{
+	padding: 20px 60px;
+}
+
+#dialog-window h2
+{
+	color: #40A3D4;
+	font-size: 1.5em;
+	font-weight: normal;
+	padding: 15px 0 10px;
+}
+
+#dialog-window .ok-button
+{
+	position: absolute;
+	top: 180px;
+	left: 263px;
+}
+
+/* prezent na warstwie */
+
+#gift-layer
+{
+	position: relative;
+	overflow: hidden;
+}
+
+#gift-layer #gift-layer-image
+{
+	float: left;
+	margin: 30px;
+	overflow: hidden;
+	width: 300px;
+	height: 300px;
+	border: 1px solid #d5d5d3;
+}
+
+#gift-layer #gifts-content
+{
+	background:transparent url(img/gifts_layer_bg.gif) left top repeat-x;
+	margin-top: 141px;
+	padding-right: 10px;
+}
+
+#gift-layer #gifts-content h1
+{
+	color: #00aae3;
+	font-size: 1.7em;
+	font-weight: normal;
+	padding: 0 0 0 0;
+}
+
+
+#gift-layer #gifts-content h2
+{
+	font-size: 1.1em;
+	color: #0084c8;
+	font-weight: normal;
+	margin: 0 0 6px;
+}
+
+#gift-layer #gifts-content h3
+{
+	background: #fff url(img/gifts_layer_points_bg_09.gif) no-repeat;
+	margin: 10px 0 0 336px;
+	padding: 5px 9px 5px 5px;
+	color: #0084c8;
+	font-size: 1.6em;
+	width: 56px;
+	text-align: center;
+}
+
+#gift-layer #gifts-content h3 span
+{
+	font-size: 0.8em;
+}
+
+#gift-layer #gifts-content p
+{
+	font-size: 0.9em;
+	color: #3b464e;
+}
+
+
+/* formularz zmiany hasla */
+#main-content #CustomerEditPasswordForm,
+#main-content #CustomerEditEmailForm
+{
+	margin-left: 18px;
+	overflow: hidden;
+	zoom: 1; /* hack dla ie6 */
+}
+
+#main-content #CustomerEditPasswordForm label,
+#main-content #CustomerEditEmailForm label
+{
+	display: block;
+	float:none;
+	width: 11em;
+	text-align: left;
+	color: #3B464E;
+}
+
+#main-content #CustomerEditPasswordForm label.error-label,
+#layer-form #CustomerLoginForm label.error-label,
+#layer-form #CustomerLoginLayerForm label.error-label,
+#main-content #CustomerEditEmailForm label.error-label,
+#CustomerLoginForm div.text label.error-label,
+#CustomerLoginForm div.password label.error-label
+{
+	color: #E11023;
+	font-weight: bold;
+}
+
+#main-content #CustomerEditPasswordForm div.password,
+#main-content #CustomerEditEmailForm div.text
+{
+	float: left;
+	width: 230px;
+}
+
+#main-content #CustomerEditPasswordForm div.submit
+{
+	clear: left;
+	margin-left: 331px;
+}
+
+#main-content #CustomerEditEmailForm div.submit
+{
+	clear: left;
+	margin-left: 312px;
+}
+
+#main-content #CustomerEditPasswordForm div.password input,
+#main-content #CustomerEditEmailForm div.text input
+{
+	width: 100px;
+	margin-left: 0;
+	padding-left: 0;
+	width: 180px;
+}
+
+#login-sidebar #CustomerLoginForm div.text input.error-text,
+#login-sidebar #CustomerLoginForm div.password input.error-pass,
+#main-content #CustomerEditPasswordForm div.password input.error-pass,
+#layer-form #CustomerLoginForm div.text input.error-pass,
+#layer-form #CustomerLoginForm div.password input.error-pass,
+#layer-form #CustomerLoginLayerForm div.text input.error-text,
+#layer-form #CustomerLoginLayerForm div.password input.error-pass,
+#main-content #CustomerEditEmailForm div.text input.error-pass input.error-text,
+#login-form #CustomerLoginForm div.text input.error-text,
+#login-form #CustomerLoginForm div.password input.error-pass
+{
+	border: 1px solid #E11023;
+}
+
+/* katalog na warstwie */
+#catalog-layer
+{
+	position: relative;
+	background: transparent url(img/catalog_layer_bg.gif) top right no-repeat;
+	margin-left: 55px;
+	padding: 0;
+	z-index: 10;
+
+}
+
+#catalog-layer #catalog-content-page
+{
+	width: 868px;
+	overflow: auto;
+	height: 613px;
+}
+
+
+#TB_ajaxContent #close-wrapper
+{
+	background: transparent url(img/gif/catalog_layer_close_bg-trans.gif) 0 0 no-repeat;
+	width: 67px;
+	height: 89px;
+	position: absolute;
+	top: -32px;
+	left: 954px;
+	z-index: 150;
+}
+
+#TB_ajaxContent  a#close-button-catalog
+{
+	display: block;
+	width: 18px;
+	height: 18px;
+	position: absolute;
+	top: -9px;
+	right: 2px;
+	z-index: 160;
+}
+
+#TB_ajaxContent #next-button-right
+{
+	position: absolute;
+	top: 279px;
+	left: 946px;
+	z-index: 180;
+}
+
+#TB_ajaxContent #next-button-left
+{
+	position: absolute;
+	top: 279px;
+	left: -13px;
+}
+
+/* formularz  */
+#main-content #CustomerResetPasswordForm div.submit
+{
+	margin-left: 230px;
+}
+
+/* nowe komunikaty bledu */
+#main-content div.error-message-1 {
+	font-size: 0.75em;
+	color: #E11023;
+	margin-left:175px;
+}
+
+#main-content div.error-message-chkbox {
+	font-size: 0.75em;
+	color: #E11023;
+	position: absolute;
+	top: 22px;
+	left: 0;
+	width: 400px;
+}
+
+#main-content div.error-message-chkbox2 {
+	font-size: 0.75em;
+	color: #E11023;
+	position: absolute;
+	width: 400px;
+	top: -19px;
+}

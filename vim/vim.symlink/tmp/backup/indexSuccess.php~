@@ -1,0 +1,304 @@
+<?php use_helper('Text'); ?>
+<h2><?php echo __('Welcome!'); ?> </h2>
+<div class="block">                                        
+
+    <?php if ($sf_user->hasEmployee()): ?>
+        <?php if ($sf_user->getEmployee()->current_stage > 4): ?>
+            <?php if ($sf_user->getEmployee()->highAbsency()): ?>
+                <div class="employee-alert alerts">
+                    <h2>Alert - high absency</h2>
+                    <p><?php echo 'Day to end of the year: ' . $sf_user->getEmployee()->getToYearEnd() . '
+          Time off remaining: ' . $sf_user->getEmployee()->gettimeOffRemaining() . '
+          Occurences remaining: ' . $sf_user->getEmployee()->getOccurencesRemaining(); ?>
+                    </p>
+                </div>
+            <?php endif; ?>
+            <?php if ($sf_user->getEmployee()->highComplains()): ?>
+                <div class="employee-alert alerts">
+                    <h2>Alert - high number of complaints</h2>
+                    <p>
+                        <?php echo 'You have received: ' . $sf_user->getEmployee()->getValidComplains() . ' valid complaints within the last 3 months.' ?>
+                        </br>
+                        <?php echo 'You have received: ' . $sf_user->getEmployee()->getAllComplains() . ' complaints within the last 3 months.' ?>
+                    </p>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+    <?php endif; ?>
+    <ul class="shortcut-buttons-set"> <!-- Replace the icons URL's with your own -->
+        <?php if ($sf_user->hasCredential('recruit')): ?>
+            <li><?php
+        echo link_to(
+                '<span><img src="/images/icons/addusers.png" alt="icon" /><br />' .
+                __('New Candidate') . '</span>', 'candidate/new', array('class' => 'shortcut-button'));
+            ?>
+            </li>
+        <?php endif; ?>
+
+        <li><?php
+        if ($sf_user->hasNewMessages()) {
+            echo link_to(
+                    '<span><img src="/images/icons/messaging.png" alt="icon" /><br />' .
+                    __('Messages') . " (" . $sf_user->hasNewMessages() . "&nbsp;" . __("new") . ")" . '</span>', 'messages/index', array('class' => 'shortcut-button'));
+        }
+        ?>
+        </li>
+        <?php if ($sf_user->hasEmployee()): ?>
+            <li><?php
+        if ($sf_user->hasNewTests()) {
+            echo link_to(
+                    '<span><img src="/images/icons/addedit.png" alt="icon" /><br />' .
+                    __('Tests') . " (" . $sf_user->hasNewTests() . "&nbsp;" . __("new") . ")" . '</span>', 'default/tests', array('class' => 'shortcut-button'));
+        }
+            ?>
+            </li>
+            <li><?php
+            if ($sf_user->hasNewMaterials()) {
+                echo link_to(
+                        '<span><img src="/images/icons/generic.png" alt="icon" /><br />' .
+                        __('Materials') . " (" . $sf_user->hasNewMaterials() . "&nbsp;" . __("new") . ")" . '</span>', 'document/index', array('class' => 'shortcut-button'));
+            }
+            ?>
+            </li>
+        <?php endif; ?>
+    </ul>
+    <div class="clear"></div>
+</div>
+<script>
+    $(function() {
+        $( "#tabs" ).tabs();
+    });
+</script>
+<div id="tabs">
+    <ul>
+        <?php if ($sf_user->hasCredential('recruit')): ?>
+            <li><a href="#tabs-alerts"><?php echo __('Alerts'); ?></a></li>
+            <li><a href="#tabs-absenteeism"><?php echo __('Absenteeism'); ?></a></li>
+            <li><a href="#tabs-clients_comments"><?php echo __('Clients comments'); ?></a></li>
+            <li><a href="#tabs-damages"><?php echo __('Damages'); ?></a></li>
+        <?php endif; ?>
+        <?php if ($sf_user->hasEmployee()): ?>
+            <?php if ($sf_user->getEmployee()->current_stage > 4): ?>
+                <li><a href="#tabs-my_absenteeism"><?php echo __('My absenteeism'); ?></a></li>
+                <li><a href="#tabs-clients_comments_history"><?php echo __('Client\'s comments history'); ?></a></li>
+            <?php endif; ?>
+        <?php endif; ?>
+    </ul>
+
+    <?php if ($sf_user->hasCredential('recruit')): ?>
+        <div class="block alerts" id="tabs-alerts">
+            <p> 
+                <?php echo link_to('History', 'alerts/index'); ?>
+
+            </p>
+            <?php foreach (Doctrine::getTable('Alert')->getLast() as $alert): ?>
+                <div class="notification attention png_bg">
+                    <?php echo $alert->is_read ? '' : link_to(image_tag('icons/cross_grey_small.png', array('alt' => __('Close this notification'))), 
+                            'alerts/show?return=true&id=' . $alert->id, array('class'=>'close')); ?>
+                    <div><?php
+            echo $alert->created_at . ' ';
+            echo link_to($alert->Employee, 'employee/show?id=' . $alert->Employee->id) . ' ' . $alert->title . '. ' . $alert->text . ' ';
+                    ?></div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <div class="block" id="tabs-absenteeism">                                        
+            <table id="absenteeism">
+                <tr>
+                    <th>Employee</th>
+                    <th>Days to calculated year end</th>
+                    <th>Time off remaining</th>
+                    <th>Time off used</th>
+                    <th>Occurences remaining</th>
+                    <th>Occurences used</th>
+                </tr>
+                <?php foreach (Doctrine::getTable('Employee')->findAbsenteeism() as $employee): ?>
+                    <tr<?php echo $employee->highAbsency() ? ' class="low"' : '' ?>>
+                        <td><?php echo link_to($employee, 'employee/absence?id=' . $employee->id); ?></td>
+                        <td><?php echo $employee->getToYearEnd() . ' ' . __('days'); ?></td>
+                        <td><?php echo $employee->getTimeOffRemaining() . ' ' . __('days'); ?></td>
+                        <td><?php echo $employee->absent_days . ' ' . __('days'); ?> </td>
+                        <td><?php echo $employee->getOccurencesRemaining(); ?></td>
+                        <td><?php echo $employee->absent_occurences; ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </div>
+        <div class="block" id="tabs-clients_comments">
+            <p> 
+                <?php echo link_to('Filter', 'client_comment/employees'); ?>
+                &nbsp;|&nbsp;
+                <?php echo link_to('Add new', 'client_comment/new'); ?>
+
+            </p>
+            <table id="clients_coments">
+                <tr>
+                    <th>Employee</th>
+                    <th>Stage</th>
+                    <th>
+                        <?php
+                        $image = '';
+                        if ($sf_request->getParameter('sort_complaints', 'all') == 'all') {
+                            $image = image_tag('arrow.png');
+                        }
+                        ?>
+                        <?php echo link_to('Valid complaints - last 3 months' . $image, '@homepage?sort_complaints=valid'); ?>
+                    </th>
+                    <th>
+                        <?php
+                        $image = '';
+                        if ($sf_request->getParameter('sort_complaints', 'all') == 'valid') {
+                            $image = image_tag('arrow.png');
+                        }
+                        ?>
+                        <?php echo link_to('All complaints - last 3 months' . $image, '@homepage?sort_complaints=all'); ?>
+                    </th>
+                </tr>
+                <?php foreach (Doctrine::getTable('Employee')->findCommentsEmployees($sf_request->getParameter('sort_complaints', 'valid')) as $employee): ?>
+                    <tr>
+                        <td><?php echo link_to($employee, 'employee/comments?id=' . $employee->id); ?></td>
+                        <td><?php echo $employee->getCurrentStage(); ?></td>
+                        <td><?php echo $employee->getValidComplains(); ?></td>
+                        <td><?php echo $employee->getAllComplains(); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </div>
+        <div class="block" id="tabs-damages">    
+            <p> 
+                <?php echo link_to('Filter', 'employee_damage/employee'); ?>
+                &nbsp;|&nbsp;
+                <?php echo link_to('Add new', 'employee_damage/new'); ?>
+
+            </p>
+            <table id="employee_damages">
+                <tr>
+                    <th>Employee</th>
+                    <th>Number of damages</th>
+                    <th>Cost of damages</th>
+                </tr>
+                <?php foreach (Doctrine::getTable('Employee')->findDamagesEmployees() as $employee): ?>
+                    <tr>
+                        <td><?php echo link_to($employee, 'employee/damages?id=' . $employee->id); ?></td>
+                        <td><?php echo $employee->getDamagesCount(); ?></td>
+                        <td><?php echo $employee->getDamagesCost(); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </div>
+    <?php endif; ?>
+
+    <?php if ($sf_user->hasEmployee()): ?>
+        <?php if ($sf_user->getEmployee()->current_stage > 4): ?>
+            <div class="block" id="tabs-my_absenteeism">                                        
+                <table>
+                    <tr>
+                        <th class="half">Days to calculated year end</th>
+                        <td class="half"><?php echo $sf_user->getEmployee()->getToYearEnd() . ' ' . __('days'); ?></td>
+                    </tr>
+                    <tr>
+                        <th class="half">Time off remaining</th>
+                        <td class="half"><?php echo $sf_user->getEmployee()->getTimeOffRemaining() . ' ' . __('days'); ?></td>
+                    </tr>
+                    <tr>
+                        <th class="half">Time off used</th>
+                        <td class="half"><?php echo $sf_user->getEmployee()->absent_days . ' ' . __('days'); ?> </td>
+                    </tr>
+                    <tr>
+                        <th class="half">Occurences remaining</th>
+                        <td class="half"><?php echo $sf_user->getEmployee()->getOccurencesRemaining(); ?></td>
+                    </tr>
+                    <tr>
+                        <th class="half">Occurences used</th>
+                        <td class="half"><?php echo $sf_user->getEmployee()->absent_occurences; ?></td>
+                    </tr>
+                </table>
+                <?php echo link_to('Show my history', 'default/absence'); ?>
+
+                <div class="clear"></div>
+                <table>
+                    <legend>My calculated year</legend>
+                    <tr>
+                        <th class="half">Begin</th>
+                        <td class="half"><?php echo $sf_user->getEmployee()->getYearStart(); ?></td>
+                    </tr>
+                    <tr>
+                        <th class="half">End</th>
+                        <td class="half"><?php echo $sf_user->getEmployee()->getYearEnd(); ?></td>
+                    </tr>
+                </table>
+                <div class="clear"></div>
+            </div>
+
+            <div class="block" id="tabs-clients_comments_history">                                        
+                <table>
+                    <tr>
+                        <th class="half">Number of valid complaints within the last 3 months</th>
+                        <td class="half"><?php echo $sf_user->getEmployee()->getValidComplains(); ?></td>
+                    </tr>
+                    <tr>
+                        <th class="half">Number of all complaints within the last 3 months</th>
+                        <td class="half"><?php echo $sf_user->getEmployee()->getAllComplains(); ?></td>
+                    </tr>
+                </table>
+                <div class="clear"></div>
+                <table>
+                    <tr>
+                        <th>
+                            <?php echo __('Date'); ?>
+                        </th>
+                        <th>
+                            <?php echo __('Clients address'); ?>
+                        </th>
+                        <th>
+                            <?php echo __('Type'); ?>
+                        </th>
+                        <th>
+                            <?php echo __('Subject'); ?>
+                        </th>
+                        <th>
+                            <?php echo __("Client's comments"); ?>
+                        </th>
+                        <th>
+                            <?php echo __('Valid?'); ?>
+                        </th>
+                        <th>
+                            Actions
+                        </th>
+                    </tr>
+                    <?php foreach ($sf_user->getEmployee()->getOrderedComments() as $comment): ?>
+                        <tr<?php echo $comment->is_read ? '' : ' class="unread"'; ?>>
+                            <td>
+                                <?php echo $comment->ClientComment->date; ?>
+                            </td>
+                            <td>
+                                <?php echo $comment->ClientComment->address; ?>
+                            </td>
+                            <td>
+                                <?php echo $comment->ClientComment->type; ?>
+                            </td>
+                            <td>
+                                <?php
+                                foreach ($comment->ClientComment->getAreas() as $area) {
+                                    echo $area->name . ' ';
+                                }
+                                ?>
+                            </td>
+                            <td>
+                                <?php echo truncate_text($comment->ClientComment->comment); ?>
+                            </td>
+                            <td>
+                                <?php echo $comment->ClientComment->is_valid ? 'Yes' : 'No'; ?>
+                            </td>
+                            <td>
+                                <?php echo link_to('Show', 'client_comment/show?id=' . $comment->ClientComment->id); ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </table>
+                <div class="clear"></div>
+            </div>
+
+        <?php endif; ?>
+    <?php endif; ?>
+</div>

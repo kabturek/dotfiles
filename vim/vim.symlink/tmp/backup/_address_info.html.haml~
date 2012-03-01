@@ -1,0 +1,66 @@
+- if with_values
+  %fieldset
+    %legend#daneTeleadresoweFirmy
+      %span
+        = image_tag 'headers/reg1_adres.png', :alt => "Dane teleadresowe firmy"
+      = link_to 'edytuj dane', '#', :class => 'edit'
+    %dl
+      %dt
+        = f.label :street_name, 'Ulica'.html_safe
+      %dd
+        .text= @registration_form.street_name
+      %dt
+        = f.label :street_number, 'Nr domu'.html_safe
+        \/
+        = f.label :flat_number, 'lokalu'
+      %dd
+        .text= @registration_form.street_number
+        \/
+        .text= @registration_form.flat_number
+        = f.label :post_code, 'Kod pocztowy'.html_safe, :style => 'margin-left: 30px;'
+        .text= @registration_form.post_code
+      %dt
+        = f.label :city, 'Miasto'.html_safe
+      %dd
+        .text= @registration_form.city
+      %dt
+        = f.label :city, 'Telefon'.html_safe
+      %dd
+        .text= @registration_form.phone
+
+%fieldset{:style => ('display: none' if with_values)}
+  %legend#daneTeleadresoweFirmy
+    %span
+      = image_tag 'headers/reg1_adres.png', :alt => "Dane teleadresowe firmy"
+    - if !with_values
+      %a.question{:href => '#daneTeleadresoweFirmyInfo'} ?
+      %span#daneTeleadresoweFirmyInfo.tooltip{:style => "display: none; "}
+        %span.innerTooltip
+          Prosimy o podanie adresu korespondencyjnego firmy
+        %span.tooltipPointer  
+        %a.tooltipClose{:href => "#", :rel => "close"} Zamknij
+    - else
+      = link_to 'edytuj dane', '#', :class => 'edit'
+  %dl
+    %dt
+      = f.label :password_confirmation, 'Ulica <em class="asterisk">*</em>'.html_safe
+    %dd
+      = f.text_field :street_name, :size => 60, :maxlength => 255, :class => 'text required', :tabindex => 6
+    %dt
+      = f.label :street_number, 'Nr domu <em class="asterisk">*</em>'.html_safe
+      \/
+      = f.label :flat_number, 'lokalu'
+    %dd
+      = f.text_field :street_number, :size => 3, :maxlength => 11, :class => "inline text address required", :tabindex => 7
+      \/
+      = f.text_field :flat_number,   :size => 3, :maxlength => 10, :class => "inline text address", :tabindex => 8
+      = f.label :post_code, 'Kod pocztowy <em class="asterisk">*</em>'.html_safe, :style => 'margin-left: 30px;'
+      = f.text_field :post_code,     :size => 7, :maxlength => 10, :class => "inline text address required", :tabindex => 9
+    %dt
+      = f.label :city, 'Miasto <em class="asterisk">*</em>'.html_safe
+    %dd
+      = f.text_field :city, :maxlength => 255, :size => 20, :class => 'text required', :tabindex => 10
+    %dt
+      = f.label :city, 'Telefon <em class="asterisk">*</em>'.html_safe
+    %dd
+      = f.text_field :phone, :maxlength => 255, :size => 20, :class => 'text required', :tabindex => 11

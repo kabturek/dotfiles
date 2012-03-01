@@ -1,0 +1,8 @@
+= semantic_form_for @user_goal do |f|
+  = f.semantic_errors
+  = f.inputs do
+    = f.input :goal_type, :hint => "Typ celu"
+    = f.input :goal_value, :hint => "Wartość jaką chcesz osiągnać"
+    = f.input :end_date, :hint => "Do kiedy chcesz osiągnąc cel?", :as => :string, input_html: { class: "ui-datepicker" }
+  = f.buttons do
+    = f.commit_button  :button_html => {:class => "primary"}

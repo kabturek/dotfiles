@@ -1,0 +1,5 @@
+- if current_user.can? :archive_document
+  %td.select
+    %input{:type => 'checkbox', :name => 'documents[]', :value => document.uuid}  
+- else 
+  %td.empty

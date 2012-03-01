@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+require 'test/unit'
+require_relative 'test_helper'
+require 'trade'
+
+include Test::Unit
+
+class TradeTest < TestCase
+  def setup
+    @trade = Trade.new
+    @trade.load_rates('test_data/SAMPLE_RATES.xml')
+    @trade.load_transactions('test_data/SAMPLE_TRANS.csv')
+  end
+  def test_rates_are_loaded
+    assert !@trade.rates.empty?
+  end
+  def test_transactions_are_loaded
+    assert !@trade.transactions.empty?
+  end
+  def test_get_conversion
+    assert_equal 1.0079, @trade.get_rate(:aud, :cad)
+  end
+  def test_get_backward_conversion
+    assert_equal 0.9922, @trade.get_rate(:cad, :aud)
+  end
+
+end
+  

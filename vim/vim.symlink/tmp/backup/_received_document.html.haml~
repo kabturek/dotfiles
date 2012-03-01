@@ -1,0 +1,14 @@
+%tr
+  %td.select
+    %input{:type => 'checkbox'}
+  %td
+    = received_document.received_date
+  %td
+    = received_document.sender
+  %td
+    = received_document.name
+  %td
+    = received_document.size
+  %td
+    %a.show_history Historia dokumentu
+

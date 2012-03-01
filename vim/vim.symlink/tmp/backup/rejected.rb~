@@ -1,0 +1,13 @@
+# encoding: utf-8
+class Document::Rejected < Document
+  API_DOC_TYPE = "DocumentRejected"
+    
+  def date
+    @created_at
+  end
+
+  def company
+    @sender
+  end
+
+end

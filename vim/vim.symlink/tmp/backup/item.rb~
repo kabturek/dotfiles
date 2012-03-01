@@ -1,0 +1,7 @@
+class Item < ActiveRecord::Base
+  belongs_to :order
+  has_many :participant_item
+  validates :order_id, :title, :presence => true
+
+  has_paper_trail
+end

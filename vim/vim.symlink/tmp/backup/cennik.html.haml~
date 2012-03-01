@@ -1,0 +1,51 @@
+:plain
+    <h3 id="pageTitle">
+      <span><img src="/assets/headers/cennik.png" alt="Cennik" /></span>
+        </h3>
+          <div class="textIndent">
+            <h2><strong>Do 15 lipca br.</strong> możesz <strong><span>bezpłatnie</span></strong> korzystać <strong><span>z pełnej</span></strong> funkcjonalności serwisu.</h2>
+              <p>Po tym okresie oferujemy bezpłatnie:</p>
+                <ul>
+                  <li>wysyłkę 5 dokumentów miesięcznie</li>
+                    <li>odbiór nieograniczonej ilości dokumentów w nielimitowanym czasie</li>
+                      </ul>
+                        <table class="priceList">
+                          <tr class="wPakiecie">
+                            <th>Liczba dokumentów<br>w pakiecie</th>
+                              <td>100</td>
+                                <td>500</td>
+                                <td>1 000</td>
+                                <td>5 000</td>
+                                <td>10 000</td>
+                                <td>25 000</td>
+                            </tr>
+                            <tr class="kosztWysylki">
+                              <th>Koszt wysyłki <br>e-dokumentu</th>
+                                <td>0,16 zł</td>
+                                <td>0,15 zł</td>
+                                <td>0,14 zł</td>
+                                <td>0,13 zł</td>
+                                <td>0,12 zł</td>
+                                <td>0,11 zł</td>
+                            </tr>
+                            <tr class="cenaNetto">
+                              <th>Cena pakietu<br>netto</th>
+                                <td>16 zł</td>
+                                <td>75 zł</td>
+                                <td>140 zł</td>
+                                <td>650 zł</td>
+                                <td>1200 zł</td>
+                                <td>2700 zł</td>
+                            </tr>
+                            <tr class="dolaczDoNas">
+                              <td></td>
+                                <td colspan="7">
+                                  <div>
+                                  <p>Zapoznaj się z <a href="/regulamin">regulaminem</a> serwisu <a href="#{new_crm_application_registration_path}"><img src="/assets/btn-dolacz-1.png" width="117" height="33" alt="Dołącz do nas"></a></p>
+                                  </div>
+                                  <p>Oferujemy również możliwość wykupienia <strong><span>nielimitowanej</span></strong> ilości <strong><span>wysyłanych dokumentów.</span></strong><br>Cenę ustalimy z Tobą indywidualnie - <a href="/kontakt">Skontaktuj się z nami &raquo;</a></p>
+                                </td>
+                            </tr>
+                        </table>
+                  </div>
+

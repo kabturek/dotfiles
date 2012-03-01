@@ -1,0 +1,18 @@
+\documentclass[a4paper,12pt, twoside,openright]{article}
+\input{settings.tex}
+
+\begin{document}
+%strona tytu¿owa i spis tre¿ci
+%\input{strona_tytulowa.tex}
+
+\input{1.tex}
+\input{2.tex}
+\input{3.tex}
+\input{4.tex}
+\input{5.tex}
+%\input{bibliografia.tex}
+\literatura
+
+\end{document}
+
+

@@ -1,0 +1,31 @@
+# encoding: utf-8
+# Kontroler odpowiada za wysłanie wniosku o zmianę danych umowy.
+class CrmApplication::UpdateDataController < ApplicationController
+  before_filter :login_required!
+  authorize! :user_management
+
+  # /GET
+  def new
+    params[:data] ||= {}
+    @update_form = CrmApplication::UpdateData.new(params[:data].merge(:uuid => current_user.account_uuid))
+  end
+
+  # /POST
+  def create
+    @update_form = CrmApplication::UpdateData.new(params[:crm_application_update_data])
+    @update_form.submit
+    if @update_form.sensitive?
+      flash[:success_message] = t("flashes.notice.update_data_request")
+    else
+      flash[:success_message] = t("flashes.notice.updated_data")
+    end
+
+    redirect_to crm_application_path
+  end
+
+  # /GET
+  # Wyświetla podsumowanie pod wysłaniu wniosku o zmianę danych.
+  def show
+  end
+
+end

@@ -1,0 +1,3 @@
+<?php foreach($postions as $id => $name){
+  echo '<option value="'. $id .'">' . $name . '</option>';
+} ?>

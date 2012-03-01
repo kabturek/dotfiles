@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require 'test/unit'
+require_relative 'test_helper'
+require 'converter'
+
+include Test::Unit
+
+class ConverterTest < TestCase
+end
+  

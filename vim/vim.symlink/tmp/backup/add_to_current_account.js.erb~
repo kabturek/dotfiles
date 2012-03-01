@@ -1,0 +1,1 @@
+$('#company_<%=@companies[0].nip.gsub('-', '')%>').replaceWith('<%= escape_javascript(raw @partial)%>');

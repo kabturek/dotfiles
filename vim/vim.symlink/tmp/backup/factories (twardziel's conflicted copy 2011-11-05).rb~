@@ -1,0 +1,12 @@
+Factorygirl.define do 
+  factory :user do
+    username 'john'
+    email     'john@example.com'
+    fullname 'John Doe'
+  end
+  factory :workout do
+    title 'First workout'
+    association :user
+  end
+end
+
