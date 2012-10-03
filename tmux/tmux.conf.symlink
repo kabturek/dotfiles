@@ -86,8 +86,8 @@ bind-key * list-clients
 # Split windows like vim
 
 # vim's definition of a horizontal/vertical split is reversed from tmux's
-#bind-key s split-window -v
-#bind-key v split-window -h
+bind-key s split-window -v
+bind-key v split-window -h
 
 # alternatively, use better mnemonics for horizontal/vertical splits
 bind-key - split-window -v

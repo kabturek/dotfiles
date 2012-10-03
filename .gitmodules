@@ -54,7 +54,16 @@
 	url = https://github.com/millermedeiros/vim-statline.git
 [submodule "vim/vim.symlink/bundle/vim-showmarks"]
 	path = vim/vim.symlink/bundle/vim-showmarks
-	url = https://github.com/garbas/vim-showmarks.git
+	url = https://github.com/zakj/vim-showmarks.git
 [submodule "vim/vim.symlink/bundle/vim-yankring"]
 	path = vim/vim.symlink/bundle/vim-yankring
 	url = https://github.com/chrismetcalf/vim-yankring.git
+[submodule "vim/vim.symlink/bundle/lusty"]
+  path = vim/vim.symlink/bundle/lusty
+  url = https://github.com/sjbach/lusty.git 
+[submodule "vim/vim.symlink/bundle/scss-syntax"]
+  path = vim/vim.symlink/bundle/scss-syntax
+  url = https://github.com/cakebaker/scss-syntax.vim.git
+[submodule "vim/vim.symlink/bundle/ctrlp.vim"]
+	path = vim/vim.symlink/bundle/ctrlp.vim
+	url = https://github.com/kien/ctrlp.vim.git

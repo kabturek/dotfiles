@@ -2,6 +2,7 @@
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
 
+
 " indents
 filetype plugin on
 filetype indent on
@@ -138,7 +139,8 @@ nnoremap <C-l> <C-w>l
 "nmap <leader>R :RainbowParenthesesToggle<CR>
 
 "command-T becomes commandG
-nmap <silent> <Leader>g :CommandT<CR>
+"nmap <silent> <Leader>g :CommandT<CR>
+let g:ctrlp_map = '<c-g>'
 let g:CommandTMaxFiles=30000
 
 
