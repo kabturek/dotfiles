@@ -1,6 +1,7 @@
 " pathogen
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
+call pathogen#infect()
 
 
 " indents
@@ -166,7 +167,6 @@ noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
 " Color scheme (terminal)
 syntax on
-set t_Co=256
 
 set background=dark
 let g:solarized_contrast='high'
@@ -266,3 +266,4 @@ nmap <C-Down> ddp
 vmap <C-Up> xkP`[V`]
 vmap <C-Down> xp`[V`]
 
+filetype plugin indent on

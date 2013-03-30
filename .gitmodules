@@ -67,3 +67,15 @@
 [submodule "vim/vim.symlink/bundle/ctrlp.vim"]
 	path = vim/vim.symlink/bundle/ctrlp.vim
 	url = https://github.com/kien/ctrlp.vim.git
+[submodule "vim/vim.symlink/bundle/csapprox"]
+	path = vim/vim.symlink/bundle/csapprox
+	url = https://github.com/godlygeek/csapprox.git
+[submodule "vim/vim.symlink/bundle/easymotion"]
+	path = vim/vim.symlink/bundle/easymotion
+	url = https://github.com/Lokaltog/vim-easymotion.git
+[submodule "vim/vim.symlink/bundle/coffeescript"]
+	path = vim/vim.symlink/bundle/coffeescript
+	url = https://github.com/kchmck/vim-coffee-script.git
+[submodule "vim/vim.symlink/bundle/puppet"]
+	path = vim/vim.symlink/bundle/puppet
+	url = git://github.com/rodjek/vim-puppet.git
