@@ -1,6 +1,4 @@
 " pathogen
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
 call pathogen#infect()
 
 
@@ -35,7 +33,7 @@ set hid
 
 "set iskeyword+=_,$,@,%,# " none of these are word dividers
 "TEST: _ is a word divider ( good for vars like "is_in_cooperation"
-set iskeyword-=_
+"set iskeyword-=_
 
 " no error indicators/blinking lights etc
 set noerrorbells
@@ -142,6 +140,8 @@ nnoremap <C-l> <C-w>l
 "command-T becomes commandG
 "nmap <silent> <Leader>g :CommandT<CR>
 let g:ctrlp_map = '<c-g>'
+let g:ctrlp_cmd = 'CtrlPMixed'
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|dist'
 let g:CommandTMaxFiles=30000
 
 
